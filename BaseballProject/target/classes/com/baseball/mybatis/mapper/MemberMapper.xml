@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Member">
+	
+	<select id="selectAll" resultType="Member">
+		select * from member order by member_id desc;
+	</select>
+
+	<select id="memberAll" resultType="MemberDetail">
+		select member_id, id, nickname, levelname, username, email, point, t.name as teamname from member m, level l, team t
+		where m.level_id = l.level_id and m.team_id = t.team_id
+		order by member_id; 
+	</select>
+		
+	<select id="selectOne" resultType="Member" parameterType="int">
+		select * from member where member_id={member_id}
+	</select>
+	
+	<insert id="insert" parameterType="Member">
+		insert into member(id, nickname, pwd, username, email, team_id)
+		values(#{id}, #{nickname}, #{pwd}, #{username}, #{email}, #{team_id})
+	</insert>
+	
+	<update id="update" parameterType="Member">
+		update member set id=#{id}, nickname=#{nickname}, pwd=#{pwd}, username=#{username}, email=#{email}, team_id=#{team_id} 
+		where member_id=#{member_id}
+	</update>
+	
+	<update id="updateLevel" parameterType="Member">
+		update member set level_id=#{level_id} where member_id=#{member_id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from member where member_id=#{member_id}
+	</delete>
+	
+	<select id="login" parameterType="Member" resultType="Member">
+		select * from member where id=#{id}
+	</select>
+	
+	<select id="getId" resultType="String">
+		select id from member 
+	</select>
+	
+	<select id="getNickname" resultType="String">
+		select nickname from member 
+	</select>
+</mapper>

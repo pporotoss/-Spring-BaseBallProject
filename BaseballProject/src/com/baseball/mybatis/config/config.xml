@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<typeAliases>
+		<typeAlias type="com.baseball.board.model.domain.Board" alias="Board"/>
+		<typeAlias type="com.baseball.board.model.domain.BoardDetail" alias="BoardDetail"/>
+		<typeAlias type="com.baseball.board.model.domain.Comment" alias="Comment"/>
+		<typeAlias type="com.baseball.board.model.domain.CommentDetail" alias="CommentDetail"/>
+		<typeAlias type="com.baseball.team.model.domain.Team" alias="Team"/>
+		<typeAlias type="com.baseball.member.model.domain.Member" alias="Member"/>
+		<typeAlias type="com.baseball.member.model.domain.MemberDetail" alias="MemberDetail"/>
+		<typeAlias type="com.baseball.member.model.domain.Level" alias="Level"/>
+		<typeAlias type="com.baseball.notice.model.domain.Notice" alias="Notice"/>
+	</typeAliases>
+	
+	
+	<mappers>
+		<mapper resource="com/baseball/mybatis/mapper/BoardMapper.xml"/>
+		<mapper resource="com/baseball/mybatis/mapper/TeamMapper.xml"/>
+		<mapper resource="com/baseball/mybatis/mapper/MemberMapper.xml"/>
+		<mapper resource="com/baseball/mybatis/mapper/CommentMapper.xml"/>
+		<mapper resource="com/baseball/mybatis/mapper/NoticeMapper.xml"/>
+		<mapper resource="com/baseball/mybatis/mapper/LevelMapper.xml"/>
+	</mappers>
+	
+</configuration>

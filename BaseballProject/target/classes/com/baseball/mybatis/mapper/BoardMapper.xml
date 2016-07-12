@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Board">
+	
+	<select id="countAll" resultType="int">
+		select count(board_id) from board;
+	</select>
+	
+	<select id="selectAll" resultType="BoardDetail" parameterType="int">
+		select b.board_id as board_id, title, count(c.board_id) as count, b.content, hit, b.regdate as regdate, family, depth, b.rank as rank, ishidden, b.member_id as member_id, nickname, levelname
+		from board b left outer join comment c on b.board_id = c.board_id
+		left outer join member m on b.member_id = m.member_id
+		left outer join level l on m.level_id = l.level_id
+		where m.member_id is not null group by b.title order by b.family desc, b.rank asc limit #{start}, #{pagesize}
+	</select>
+	
+	<select id="selectOne" parameterType="int" resultType="BoardDetail">
+		select board_id, title, content, hit, regdate, family, depth, b.rank as rank, ishidden, b.member_id as member_id, nickname, levelname
+		from board b, member m, level l
+		where board_id=#{board_id} and b.member_id = m.member_id and m.level_id = l.level_id
+	</select>
+	
+	<!-- 히트수 증가!!  -->
+	<update id="updateHit" parameterType="int">
+		update board set hit=hit+1 where board_id=#{board_id}
+	</update>
+	
+	<!--  글 삽입  -->
+	<insert id="insert" parameterType="Board">
+		<selectKey order="AFTER" resultType="int" keyProperty="board_id">
+			select last_insert_id()
+		</selectKey>
+		insert into board(title, content, ishidden, member_id)
+		values(#{title},#{content},#{ishidden},#{member_id})
+	</insert>
+	<update id="insertKey" parameterType="int">
+		update board set family=#{board_id} where board_id=#{board_id}
+	</update>
+	
+	<!-- 답글 삽입 -->
+	<select id="countFamily" parameterType="Board" resultType="int"><!-- 원글보다 랭크가 큰 글의 갯수 얻어오기 -->
+		select count(family) from board where family=#{family} and rank > #{rank}
+	</select>
+	
+	<select id="countDepth" parameterType="Board" resultType="int"><!-- 원글과 같은 depth인 글의 갯수 얻어오기 -->
+		select count(family) from board where family=#{family} and depth = #{depth}
+	</select>
+	
+	<select id="minDepthRank" parameterType="Board" resultType="int"><!-- 원글과 같은 depth인 글중에서 원글을 제외한 가장 작은 글의 rank -->
+		select min(rank) from  board where family=#{family} and depth=#{depth} and rank>#{rank}
+	</select>
+	
+	<select id="dPlusOneMaxRank" parameterType="Board" resultType="int"><!-- 원글보다 depth가 1큰 글중에서 가장 높은 rank -->
+		select max(rank) from  board where family=#{family} and depth=#{depth}+1
+	</select>
+	
+	<select id="maxRank" parameterType="int" resultType="int"><!-- 원글의 소속글 중에서 가장 끝값 얻기 -->
+		select max(rank) from board where family=#{family}
+	</select>
+	
+	<insert id="replyInsert" parameterType="Board"><!--  답글 등록하기  -->
+		insert into board(title, content, ishidden, member_id, family, rank, depth)
+		values(#{title}, #{content}, #{ishidden}, #{member_id}, #{family}, #{rank}+1, #{depth}+1)
+	</insert>
+	
+	<update id="rankUpdate" parameterType="Board"> <!-- 원글의 댓글을 초과하는 단계의 랭크를 +1씩 하기. -->
+		update board set rank=rank+1 where family=#{family} and rank>#{rank} 
+	</update>
+	<!-- //////////////////////////////////////////////////////////////////////////////////////////////// -->
+	
+	<update id="update" parameterType="Board">
+		update board set title=#{title}, content=#{content}, ishidden=#{ishidden} where  board_id=#{board_id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from board where board_id=#{board_id}
+	</delete>
+	
+</mapper>

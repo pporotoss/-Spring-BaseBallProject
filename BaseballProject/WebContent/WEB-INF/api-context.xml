@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+	
+	<context:component-scan base-package="com.baseball.*">
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+	</context:component-scan>
+	
+	<!-- <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorParameter" value="false"/>	 ?하고 파라미터로 넘겨받을지 여부 
+		<property name="favorPathExtension" value="false"/>  주소창에 확장자 사용여부 
+		<property name="ignoreAcceptHeader" value="false"/>  헤더값 무시할지 여부 
+		<property name="defaultContentType" value="application/json"/>
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json"/>
+				<entry key="xml" value="application/xml"/>
+				<entry key="html" value="text/html"/>
+			</map>
+		</property>
+	</bean> -->
+	
+	<!--  트랜잭션 처리는 컨트롤러를 읽어들이는 곳에서 해야 한다.  -->
+	
+	<!-- TranSactionManager 설정 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource"/>
+	
+	<!-- 트랜잭션 설정 -->	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception"/><!-- 적용할 메서드 이름을 적어준다 -->
+			<!--  rollback-for : 기본값이 runtimeException이므로 따로 설정 안해줘도 된다.  -->
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- AOP 설정 -->
+	<aop:config>
+		<aop:pointcut expression="execution(public * com.baseball.*.model.service.*Service.*(..))" id="transactionPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointcut"/>
+	</aop:config>
+	
+	<mvc:annotation-driven/>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+	
+	<!-- 로그인 처리용 HandlerInterceptor 등록!! -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/board/write"/>
+			<mvc:mapping path="/board/*/comment/*"/>
+			<mvc:mapping path="/board/reply"/>
+			<mvc:mapping path="/admin/*"/>
+			<bean class="common.intercepter.LoginCheckInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+</beans>

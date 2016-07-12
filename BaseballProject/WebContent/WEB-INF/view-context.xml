@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+	<context:component-scan base-package="com.baseball.*">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>	
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/"
+		p:suffix=".jsp"/>
+	
+	<mvc:annotation-driven/>
+	
+	<!--  트랜잭션 처리는 컨트롤러를 읽어들이는 곳에서 해야 한다.  -->
+	
+	<!-- TranSactionManager 설정 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource"/>
+	
+	<!-- 트랜잭션 설정 -->	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception"/><!-- 적용할 메서드 이름을 적어준다 -->
+			<!--  rollback-for : 기본값이 runtimeException이므로 따로 설정 안해줘도 된다.  -->
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- AOP 설정 -->
+	<aop:config>
+		<aop:pointcut expression="execution(public * com.baseball.*.model.service.*Service.*(..))" id="transactionPointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointcut"/>
+	</aop:config>
+
+	<!-- 로그인 처리용 HandlerInterceptor 등록!! -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/board/write"/>
+			<mvc:mapping path="/board/*/comment/*"/>
+			<mvc:mapping path="/board/reply"/>
+			<mvc:mapping path="/admin/*"/>
+			<bean class="common.intercepter.LoginCheckInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+</beans>
