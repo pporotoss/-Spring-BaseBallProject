@@ -4,16 +4,17 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Comment">
 	
-	<select id="selectAll" resultType="CommentDetail" parameterType="int">
+	<select id="selectAll" resultType="CommentDetail" parameterType="HashMap">
 		select comment_id, content, regdate, board_id, c.member_id as member_id, nickname, levelname
 		from comment c, member m, level l
-		where board_id=#{board_id} and c.member_id = m.member_id and m.level_id = l.level_id;
+		where board_id=#{board_id} and c.member_id = m.member_id and m.level_id = l.level_id
+		limit #{page}, 10
 	</select>
 	
 	<select id="selectOne" parameterType="Comment" resultType="CommentDetail">
 		select comment_id, content, regdate, board_id, c.member_id as member_id, nickname, levelname
 		from comment c, member m, level l
-		where board_id=#{board_id} and comment_id=#{comment_id} and c.member_id = m.member_id and m.level_id = l.level_id;
+		where board_id=#{board_id} and comment_id=#{comment_id} and c.member_id = m.member_id and m.level_id = l.level_id
 	</select>
 	
 	<insert id="insert" parameterType="Comment">

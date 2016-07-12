@@ -1,6 +1,8 @@
 package com.baseball.board.model.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,13 @@ public class CommentServiceImpl implements CommentService{
 	private CommentDAO commentDAO;
 	
 	@Override
-	public List selectAll(int board_id) {
+	public List selectAll(int board_id, int page) {
 		
-		List list = commentDAO.commentAll(board_id);
+		Map<String, Integer> paging = new HashMap<>();
+		paging.put("board_id", board_id);
+		paging.put("page", page-1);
+		
+		List list = commentDAO.commentAll(paging);
 		
 		return list;
 	}

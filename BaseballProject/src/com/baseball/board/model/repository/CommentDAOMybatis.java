@@ -1,6 +1,7 @@
 package com.baseball.board.model.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ public class CommentDAOMybatis implements CommentDAO{
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	@Override
-	public List commentAll(int board_id) {
+	public List commentAll(Map paging) {
 		
-		List list = sqlSessionTemplate.selectList("Comment.selectAll", board_id);
+		List list = sqlSessionTemplate.selectList("Comment.selectAll", paging);
 		
 		return list;
 	}

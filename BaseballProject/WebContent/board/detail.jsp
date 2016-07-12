@@ -242,6 +242,15 @@
 						</tr>
 					</c:forEach>
 				</table>
+				<div align="center">
+					<nav>
+						<ul class="pagination pagination-sm">
+							<li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+							<li class="active"><a href="#">1 <span class="sr-only"></span></a></li>
+							<li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+						</ul>
+					</nav>
+				</div>
 				
 				<c:if test="${loginMember != null }">
 					<form name="commentForm">
@@ -257,6 +266,7 @@
 				</c:if>
 				<div style="height:100px"></div>
 			</div>
+			
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-3 sidenav" style="background-color:white">

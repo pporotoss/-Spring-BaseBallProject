@@ -68,7 +68,7 @@ public class BoardViewController {
 		BoardDetail detail = boardService.selectOne(board_id);
 		model.addAttribute("detail", detail);
 		
-		List commentList = commentService.selectAll(board_id);
+		List commentList = commentService.selectAll(board_id, 1);
 		model.addAttribute("commentList", commentList);
 		
 		return "board/detail";
