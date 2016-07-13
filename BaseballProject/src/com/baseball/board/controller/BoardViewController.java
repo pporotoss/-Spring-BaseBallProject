@@ -68,8 +68,13 @@ public class BoardViewController {
 		BoardDetail detail = boardService.selectOne(board_id);
 		model.addAttribute("detail", detail);
 		
-		List commentList = commentService.selectAll(board_id, 1);
+		Map<String, Object> map = commentService.selectAll(board_id, 1);
+		
+		List commentList = (List)map.get("list");
+		Pager commentPager = (Pager) map.get("commentPager");
+		
 		model.addAttribute("commentList", commentList);
+		model.addAttribute("commentPager", commentPager);
 		
 		return "board/detail";
 	}

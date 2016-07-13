@@ -8,6 +8,7 @@
 		select comment_id, content, regdate, board_id, c.member_id as member_id, nickname, levelname
 		from comment c, member m, level l
 		where board_id=#{board_id} and c.member_id = m.member_id and m.level_id = l.level_id
+		order by comment_id desc
 		limit #{page}, 10
 	</select>
 	
@@ -15,6 +16,10 @@
 		select comment_id, content, regdate, board_id, c.member_id as member_id, nickname, levelname
 		from comment c, member m, level l
 		where board_id=#{board_id} and comment_id=#{comment_id} and c.member_id = m.member_id and m.level_id = l.level_id
+	</select>
+	
+	<select id="countAll" resultType="int" parameterType="int">
+		select count(comment_id) from comment where board_id=#{board_id}
 	</select>
 	
 	<insert id="insert" parameterType="Comment">

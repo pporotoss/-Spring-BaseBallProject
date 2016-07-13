@@ -242,16 +242,34 @@
 						</tr>
 					</c:forEach>
 				</table>
+<!-------------------------------- 댓글 페이징 ------------------------------------------------------>
 				<div align="center">
 					<nav>
 						<ul class="pagination pagination-sm">
-							<li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-							<li class="active"><a href="#">1 <span class="sr-only"></span></a></li>
-							<li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+							<c:if test="${commentPager.prev }">
+								<li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+							</c:if>
+							
+							<c:forEach begin="${commentPager.startPage }" end="${commentPager.endPage }" var="pageNum">
+								<c:choose>
+									<c:when test="${commentPager.page == pageNum }">
+										<li class="active">
+									</c:when>
+									<c:otherwise>
+										<li>
+									</c:otherwise>
+								</c:choose>
+									<a href="#">${pageNum }<span class="sr-only"></span></a></li>
+							</c:forEach>
+							
+							<c:if test="${commentPager.next }">
+								<li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+							</c:if>
+						
 						</ul>
 					</nav>
 				</div>
-				
+<!-------------------------------- 댓글 페이징 ------------------------------------------------------>				
 				<c:if test="${loginMember != null }">
 					<form name="commentForm">
 						<input type="hidden" value="" name="_method">

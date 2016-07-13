@@ -48,4 +48,10 @@ public class CommentDAOMybatis implements CommentDAO{
 		return sqlSessionTemplate.delete("Comment.delete", comment_id);
 	}
 
+	@Override
+	public int countAll(int board_id) {
+
+		return sqlSessionTemplate.selectOne("Comment.countAll", board_id);
+	}
+
 }

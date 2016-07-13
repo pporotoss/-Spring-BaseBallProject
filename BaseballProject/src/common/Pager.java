@@ -18,13 +18,13 @@ public class Pager {
 		this.pageSize = pageSize;
 		
 		// DB 불러올 값 설정
-		endContent = page * pageSize;
-		startContent = endContent - (pageSize-1);	// 페이지당 시작값
+		endContent = page * pageSize;	// 페이지당 마지막 게시물 번호
+		startContent = endContent - (pageSize-1);	// 페이지당 시작 게시물 번호
 		
 		// 페이징처리
 		totalPage = (int)Math.ceil(totalContents/(double)pageSize);	// 총 페이지 갯수
-		endPage = (int) Math.ceil(page/(double)blockSize)*blockSize;	// 화면 마지막 페이지
-		startPage = endPage - (blockSize - 1);	// 화면 첫페이지
+		endPage = (int) Math.ceil(page/(double)blockSize)*blockSize;	// 화면당 마지막 페이지 번호
+		startPage = endPage - (blockSize - 1);	// 화면당 첫페이지 번호
 		
 		if(endPage >= totalPage){
 			endPage = totalPage;
@@ -62,7 +62,7 @@ public class Pager {
 		this.endPage = endPage;
 	}
 
-	public boolean isPrev() {
+	public boolean isPrev() {// 이전페이지 존재 여부
 		return prev;
 	}
 
@@ -70,7 +70,7 @@ public class Pager {
 		this.prev = prev;
 	}
 
-	public boolean isNext() {
+	public boolean isNext() {// 다음 페이지 존재여부
 		return next;
 	}
 

@@ -1,5 +1,6 @@
 package com.baseball.board.model.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,8 @@ import com.baseball.board.model.domain.Comment;
 import com.baseball.board.model.domain.CommentDetail;
 import com.baseball.board.model.repository.CommentDAO;
 
+import common.Pager;
+
 @Service
 public class CommentServiceImpl implements CommentService{
 
@@ -18,15 +21,30 @@ public class CommentServiceImpl implements CommentService{
 	private CommentDAO commentDAO;
 	
 	@Override
-	public List selectAll(int board_id, int page) {
+	public Map selectAll(int board_id, int page) {
+		
+		int totalContents = commentDAO.countAll(board_id);
+		
+		Pager commentPager = new Pager(page, 10, totalContents, 10);
 		
 		Map<String, Integer> paging = new HashMap<>();
 		paging.put("board_id", board_id);
-		paging.put("page", page-1);
+		paging.put("page", commentPager.getStartContent()-1);
+						
+		List<CommentDetail> originList = commentDAO.commentAll(paging);
 		
-		List list = commentDAO.commentAll(paging);
+		ArrayList<CommentDetail> list = new ArrayList<>();	
 		
-		return list;
+		for(int i = originList.size()-1; i >= 0; i--){ // 페이지마다 불러온 리스트 역순으로 다시 담기.
+			CommentDetail commentDetail = originList.get(i);
+			list.add(commentDetail);
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list);
+		map.put("commentPager", commentPager);
+		
+		return map;
 	}
 
 	@Override
