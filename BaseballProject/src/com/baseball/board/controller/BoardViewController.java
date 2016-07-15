@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,12 +65,16 @@ public class BoardViewController {
 	
 	// 상세페이지로 이동
 	@RequestMapping(value="/board/{board_id}", method=RequestMethod.GET)
-	public String detail(@PathVariable("board_id") int board_id, Model model){
+	public String detail(@PathVariable("board_id") int board_id, String commentPage, Model model){
 		
 		BoardDetail detail = boardService.selectOne(board_id);
 		model.addAttribute("detail", detail);
 		
-		Map<String, Object> map = commentService.selectAll(board_id, 1);
+		if(commentPage == null){
+			commentPage = "1";
+		}
+		
+		Map<String, Object> map = commentService.selectAll(board_id, Integer.parseInt(commentPage));
 		
 		List commentList = (List)map.get("list");
 		Pager commentPager = (Pager) map.get("commentPager");
@@ -78,7 +84,6 @@ public class BoardViewController {
 		
 		return "board/detail";
 	}
-	
 	
 	// 글 수정 페이지로 이동
 	@RequestMapping(value="/board/{board_id}", method=RequestMethod.POST)

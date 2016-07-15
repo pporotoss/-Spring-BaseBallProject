@@ -76,17 +76,17 @@
 						<c:if test="${boardDetail.ishidden.equals(\"no\") }"><!-- 비밀글이 아니면, -->
 							<c:choose>
 								<c:when test="${boardDetail.depth == 0}"><!-- 원글이면 -->
-									&nbsp;<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }&nbsp;&nbsp;[${boardDetail.count }]	
+									&nbsp;<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }	
 								</c:when>
 								<c:otherwise><!-- 답글이면  -->
 									<c:forEach begin="0" end="${boardDetail.depth }">
 										&nbsp;&nbsp;&nbsp;
 									</c:forEach>
 									<img src="/images/board/reply.png">
-									<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }&nbsp;&nbsp;[${boardDetail.count }]
+									<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }
 								</c:otherwise>
 							</c:choose>
-							</a>
+							</a>&nbsp;[${boardDetail.count }]
 						</c:if>
 						<c:if test="${boardDetail.ishidden.equals(\"yes\") }"><!-- 비밀글이면  -->
 							<c:choose>
@@ -94,17 +94,17 @@
 									<c:choose>
 										<c:when test="${boardDetail.depth == 0}"><!-- 원글이면 -->
 											&nbsp;<img src="/images/board/lock.png">
-											<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }&nbsp;&nbsp;[${boardDetail.count }]	
+											<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }	
 										</c:when>
 										<c:otherwise><!-- 답글이면  -->
 											<c:forEach begin="0" end="${boardDetail.depth }">
 												&nbsp;&nbsp;&nbsp;
 											</c:forEach>
 											<img src="/images/board/reply.png"><img src="/images/board/lock.png">
-											<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }&nbsp;&nbsp;[${boardDetail.count }]
+											<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }
 										</c:otherwise>
 									</c:choose>
-									</a>
+									</a>&nbsp;[${boardDetail.count }]
 								</c:when>
 								<c:otherwise><!--  작성자나 관리자가 아니면,  -->
 									<c:choose>

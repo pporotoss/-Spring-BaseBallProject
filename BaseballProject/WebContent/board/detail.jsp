@@ -88,6 +88,11 @@
 	    		commentForm.content.value = "";// 댓글 입력창 지우기.
 			    	
 			    	if(data.result != 0){	// 등록 성공 했으면,
+			    		
+			    		if(commentTable.rows.length == 10){	// 페이지 표시된 댓글이 10개이면,
+			    			commentTable.deleteRow(0);	// 첫번째 댓글 삭제
+			    		}
+			    		
 			    		/* 테이블 하단에 댓글 추가 */
 			    		var row = commentTable.insertRow(-1);
 			    		var cell1 = row.insertCell(0);
@@ -105,7 +110,7 @@
 			    		cell1.innerHTML = "&nbsp;"+"<img src=\"/images/member/"+obj.levelname+".png\">"+obj.nickname;
 			    		cell2.innerHTML = "&nbsp;&nbsp;"+obj.content;
 			    		cell3.innerHTML = obj.regdate;
-			    		cell4.innerHTML = "<a href=\"javascript:deleteComment("+obj.comment_id+")\">삭제</a>";
+			    		cell4.innerHTML = '<a data-toggle="modal" href="#modal_'+obj.comment_id+'">수정</a>&nbsp;|<div id="modal_'+obj.comment_id+'" class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">댓글수정</h4></div><div class="modal-body"><textarea style="width:100%" class="form-control" rows="3" maxlength="50" id="edit_${commentDetail.comment_id }">'+obj.content+'</textarea></div><div class="modal-footer"><input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment('+obj.comment_id+')"><input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기"></div></div></div></div><a href=\"javascript:deleteComment("'+obj.comment_id+'")\">삭제</a>';
 			    	}// if
   			}// function	
   		});// ajax
@@ -259,7 +264,7 @@
 										<li>
 									</c:otherwise>
 								</c:choose>
-									<a href="#">${pageNum }<span class="sr-only"></span></a></li>
+									<a href="/view/board/${detail.board_id }?commentPage=${pageNum}">${pageNum }<span class="sr-only"></span></a></li>
 							</c:forEach>
 							
 							<c:if test="${commentPager.next }">
@@ -269,7 +274,7 @@
 						</ul>
 					</nav>
 				</div>
-<!-------------------------------- 댓글 페이징 ------------------------------------------------------>				
+<!-------------------------------- 댓글 입력 ------------------------------------------------------>				
 				<c:if test="${loginMember != null }">
 					<form name="commentForm">
 						<input type="hidden" value="" name="_method">
