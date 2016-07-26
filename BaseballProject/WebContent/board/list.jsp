@@ -44,7 +44,17 @@
       .row.content {height:auto;} 
     }
   </style>
+  <script>
+  	// 표시 게시물 갯수 변동
+  	$(document).ready(function(){
+  		$("#pagesize").change(function(){
+  			if($("#pagesize").val() != 0){
+  				location.href="/view/board?page=${pager.page}&pagesize="+$("#pagesize").val();
+  			}
+  	    });
+  	});
   
+  </script>
 </head>
 <body>
 
@@ -57,6 +67,15 @@
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-8 text-left"> 
       <h1>&nbsp;&nbsp;&nbsp;자유게시판</h1>
+    	<div align="right" class="form-inline">
+		  게시물 갯수 : <select class="form-control" style="width:15%" name="pagesize" id="pagesize">
+		    <option value="0">선택해 주세요.</option>
+		    <option value="10">10개</option>
+		    <option value="20">20개</option>
+		    <option value="30">30개</option>
+		    <option value="40">40개</option>
+		  </select>
+		</div>
       <table class="table table-hover table-responsive">
 	    <thead>
 	      <tr>
@@ -136,7 +155,7 @@
 		  	<a href="/view/board/write"><input type="button" value="글쓰기" class="btn btn-info"></a>
 		  </div>
 	  	</c:if>
-	  	<!--  페이징  -->
+	  	<!-----------------  페이징 ------------------------------------ -->
 	  	<div align="center">
 		  	<nav>
 			  <ul class="pagination">
@@ -156,7 +175,7 @@
 				    		<li>
 				    	</c:otherwise>
 			    	</c:choose>
-			    	<a href="/view/board?page=${cnt }&pagesize=10">${cnt }</a></li>
+			    	<a href="/view/board?page=${cnt }&pagesize=${pager.pageSize}">${cnt }</a></li>
 			    </c:forEach>
 			    <c:if test="${pager.next }">
 				    <li>
