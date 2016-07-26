@@ -1,12 +1,16 @@
 package com.baseball.notice.model.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baseball.notice.model.domain.Notice;
 import com.baseball.notice.model.repository.NoticeDAO;
+
+import common.Pager;
 
 @Service
 public class NoticeServiceImpl implements NoticeService{
@@ -15,11 +19,30 @@ public class NoticeServiceImpl implements NoticeService{
 	private NoticeDAO noticeDAO;
 	
 	@Override
-	public List selectAll() {
+	public Map selectAll(String page) {
 		
-		List list = noticeDAO.selectAll();
+		if(page == null){
+			page = "1";
+		}
 		
-		return list;
+		int pageSize = 10;
+		int totalContents = noticeDAO.totalCount();
+		int blockSize = 10;
+		
+		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
+		
+		Map<String, Integer> paging = new HashMap<String, Integer>();
+		paging.put("page", pager.getPage()-1);
+		paging.put("pageSize", pageSize);
+				
+		List list = noticeDAO.selectAll(paging);
+		
+		// 전달할 값 설정
+		Map<String, Object> map = new HashMap<String, Object>(); 
+		map.put("pager", pager);
+		map.put("list", list);
+		
+		return map;
 	}
 
 	@Override

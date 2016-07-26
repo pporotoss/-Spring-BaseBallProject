@@ -1,6 +1,7 @@
 package com.baseball.notice.model.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,9 @@ public class NoticeDAOMybatis implements NoticeDAO{
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	@Override
-	public List selectAll() {
+	public List selectAll(Map paging) {
 		
-		List list = sqlSessionTemplate.selectList("Notice.selectAll");
+		List list = sqlSessionTemplate.selectList("Notice.selectAll", paging);
 		
 		return list;
 	}
@@ -30,6 +31,12 @@ public class NoticeDAOMybatis implements NoticeDAO{
 		return notice;
 	}
 
+	@Override
+	public int totalCount() {
+		
+		return sqlSessionTemplate.selectOne("Notice.totalCount");
+	}
+	
 	@Override
 	public void update(Notice notice) {
 		sqlSessionTemplate.update("Notice.update", notice);

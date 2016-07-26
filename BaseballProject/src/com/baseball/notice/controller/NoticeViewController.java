@@ -1,6 +1,7 @@
 package com.baseball.notice.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.baseball.notice.model.domain.Notice;
 import com.baseball.notice.model.service.NoticeService;
 
+import common.Pager;
+
 @Controller
 public class NoticeViewController {
 
@@ -20,11 +23,15 @@ public class NoticeViewController {
 	
 	// 공지사항 리스트 이동
 	@RequestMapping(value="/notice", method=RequestMethod.GET)
-	public String noticeList(Model model){
+	public String noticeList(Model model, String page){
 		
-		List noticeList = noticeService.selectAll();
+		Map<String, Object> map = noticeService.selectAll(page);
+		
+		List<Notice> noticeList = (List)map.get("list");
+		Pager pager = (Pager)map.get("pager");
 		
 		model.addAttribute("noticeList", noticeList);
+		model.addAttribute("pager", pager);
 		
 		return "notice/list";
 	}
