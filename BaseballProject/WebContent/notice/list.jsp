@@ -84,6 +84,38 @@
 		  	<a href="/view/notice/write"><input type="button" value="글쓰기" class="btn btn-info"></a>
 		  </div>
 	  	</c:if>
+	  	<!-----------------  페이징 ------------------------------------ -->
+	  	<div align="center">
+		  	<nav>
+			  <ul class="pagination">
+			    <c:if test="${pager.prev }">
+				    <li>
+				      <a href="/view/notice?page=${pager.startPage-1 }" aria-label="Previous">
+				        <span aria-hidden="true">&laquo;</span>
+				      </a>
+				    </li>
+			    </c:if>
+			    <c:forEach var="cnt" begin="${pager.startPage }" end="${pager.endPage }">
+			    	<c:choose>
+				    	<c:when test="${cnt == pager.page }">
+					    	<li class="active">
+				    	</c:when>
+				    	<c:otherwise>
+				    		<li>
+				    	</c:otherwise>
+			    	</c:choose>
+			    	<a href="/view/notice?page=${cnt }">${cnt }</a></li>
+			    </c:forEach>
+			    <c:if test="${pager.next }">
+				    <li>
+				      <a href="/view/notice?page=${pager.endPage+1 }" aria-label="Next">
+				        <span aria-hidden="true">&raquo;</span>
+				      </a>
+				    </li>
+			    </c:if>
+			  </ul>
+			</nav>
+		</div>
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-2 sidenav" style="background-color:white">
