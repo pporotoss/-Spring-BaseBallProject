@@ -161,7 +161,7 @@
 			  <ul class="pagination">
 			    <c:if test="${pager.prev }">
 				    <li>
-				      <a href="#" aria-label="Previous">
+				      <a href="/view/board?page=${pager.startPage-1 }&pagesize=${pager.pageSize}" aria-label="Previous">
 				        <span aria-hidden="true">&laquo;</span>
 				      </a>
 				    </li>
@@ -179,7 +179,7 @@
 			    </c:forEach>
 			    <c:if test="${pager.next }">
 				    <li>
-				      <a href="#" aria-label="Next">
+				      <a href="/view/board?page=${pager.endPage+1 }&pagesize=${pager.pageSize}" aria-label="Next">
 				        <span aria-hidden="true">&raquo;</span>
 				      </a>
 				    </li>
