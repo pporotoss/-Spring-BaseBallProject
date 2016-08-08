@@ -196,7 +196,7 @@
 		      		<c:if test="${loginMember.member_id == detail.member_id }">
 		      			<input type="button" class="btn btn-warning" value="수정" onClick="update()">
 		      		</c:if>
-		      		<c:if test="${loginMember.member_id == detail.member_id || loginMember.level_id == 4 }">
+		      		<c:if test="${loginMember.member_id == detail.member_id || loginMember.rank == 1 }">
 		      			<input type="button" class="btn btn-danger" value="삭제" onClick="del()">
 		      		</c:if>
 		      		<input type="button" class="btn btn-primary" value="답글" onClick="reply()">
@@ -214,7 +214,7 @@
 							<td style="width:15%; text-align:center">${commentDetail.regdate}</td>
 						
 							<c:choose>
-								<c:when test="${loginMember.member_id == commentDetail.member_id || loginMember.level_id == 4}">
+								<c:when test="${loginMember.member_id == commentDetail.member_id || loginMember.rank == 1}">
 									<td style="width:15%; text-align:center">
 										<c:if test="${loginMember.member_id == commentDetail.member_id }">
 											<a data-toggle="modal" href="#modal_${commentDetail.comment_id }">수정</a>&nbsp;|

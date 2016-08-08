@@ -102,7 +102,7 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void delete(int board_id) {
 		
-		
+		boardDAO.delete(board_id);
 		
 	}
 }

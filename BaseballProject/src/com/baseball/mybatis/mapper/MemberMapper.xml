@@ -10,7 +10,7 @@
 
 	<select id="memberAll" resultType="MemberDetail">
 		select member_id, id, nickname, levelname, username, email, point, t.name as teamname from member m, level l, team t
-		where m.level_id = l.level_id and m.team_id = t.team_id
+		where m.level_id = l.level_id and m.team_id = t.team_id and id != 'admin'
 		order by member_id; 
 	</select>
 		
@@ -37,7 +37,9 @@
 	</delete>
 	
 	<select id="login" parameterType="Member" resultType="Member">
-		select * from member where id=#{id}
+		select member_id, id, nickname, pwd, username, email, team_id, point, m.level_id, rank 
+		from member m, level l 
+		where m.level_id = l.level_id and id=#{id}
 	</select>
 	
 	<select id="getId" resultType="String">

@@ -45,6 +45,26 @@
   </style>
   <script>
   	function updateLevel(){
+  		// 회원 체크여부 검사
+  		var chkCount = 0;
+  		
+  		for(var ch = 0; ch < memberForm.member_id.length; ch++){
+  			if(memberForm.member_id[ch].checked){
+  				chkCount++;
+  			}
+  		}
+		
+  		if(chkCount == 0){
+  			alert("변경할 회원을 선택해 주세요.");
+  			return;
+  		}
+
+  		// 변경 등급 선택여부 검사
+  		if(memberForm.level_id.value == 0){
+  			alert("변경시킬 등급을 선택해 주세요.");
+  			return;
+  		}
+  		
   		if(!confirm("변경하시겠습니까?")){
   			return;
   		}
@@ -94,21 +114,35 @@
 		    </thead>
 		    <tbody>
 		      <c:forEach items="${memberList}" var="memberDetail" >
-		      	<tr>
-			      	<td><input type="checkbox" name="member_id" value="${memberDetail.member_id}"></td>
-			        <td>${memberDetail.id}</td>
-			        <td>${memberDetail.nickname}</td>
-			        <td><img src="/images/member/${memberDetail.levelname }.png">${memberDetail.levelname}</td>
-			      </tr>
+			      <c:if test="${loginMember.member_id != memberDetail.member_id }">
+			      	<tr>
+				      	<td><input type="checkbox" name="member_id" value="${memberDetail.member_id}"></td>
+				        <td>${memberDetail.id}</td>
+				        <td>${memberDetail.nickname}</td>
+				        <td><img src="/images/member/${memberDetail.levelname }.png">${memberDetail.levelname}</td>
+				      </tr>
+				  </c:if>
 		      </c:forEach>
 		    </tbody>
 		  </table>
 		  <div class="form-inline">
 	     	<select name="level_id" class="form-control">
 	     		<option value="0">변경시킬 등급을 선택해 주세요.</option>
-	     		<c:forEach items="${levelList }" var="level">
-	     			<option value="${level.level_id }">${level.levelname }</option>
-	     		</c:forEach>
+ 				
+ 				<c:choose>
+	 				<c:when test="${loginMember.id.equals(\"admin\")}"><!-- admin 계정이면 -->
+	 					<c:forEach items="${levelList }" var="level">
+	     					<option value="${level.level_id }">${level.levelname }</option>
+		     			</c:forEach>	
+	 				</c:when>
+	 				<c:otherwise>
+	 					<c:forEach items="${levelList }" var="level"><!-- admin계정 아니면 -->
+	 						<c:if test="${level.rank != 1}">
+	     						<option value="${level.level_id }">${level.levelname }</option>
+	     					</c:if>
+		     			</c:forEach>
+	 				</c:otherwise>
+ 				</c:choose>
 	     		
 	     	</select>
      	</form>

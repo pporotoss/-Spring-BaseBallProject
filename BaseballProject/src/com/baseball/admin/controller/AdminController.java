@@ -21,8 +21,9 @@ public class AdminController {
 	@Autowired
 	private LevelDAO levelDAO;
 	
+	// 회원 불러오기
 	@RequestMapping(value="/admin/member", method=RequestMethod.GET)
-	public String goAdmin(Model model){
+	public String goAdmin(Model model, String page, String rank){
 		
 		List memberList = memberService.memberAll();
 		

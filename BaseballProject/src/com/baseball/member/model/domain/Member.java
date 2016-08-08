@@ -11,6 +11,14 @@ public class Member {
 	private int team_id;
 	private int point;
 	private int level_id;
+	private int rank;
+	
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
 	public int getMember_id() {
 		return member_id;
 	}

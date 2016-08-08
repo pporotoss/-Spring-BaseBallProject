@@ -16,6 +16,7 @@ public interface BoardDAO {
 	public int insert(Board board);
 	public int update(Board board);
 	public int delete(int board_id);
+	public void deleteByMember(int member_id);	// 멤버아이디로 삭제하기.
 	public int countFamily(Board board);
 	public void insertKey(int board_id);
 	public int rankUpdate(Board board);	// 답글삽입시 나머지 답글들 랭크 하나씩 증가
@@ -24,5 +25,6 @@ public interface BoardDAO {
 	public int countDepth(Board board);
 	public int minDepthRank(Board board);
 	public int dPlusOneMaxRank(Board board);
+	
 	
 }

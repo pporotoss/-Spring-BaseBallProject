@@ -40,7 +40,7 @@
               <li><a href="/view/team/hitter">타자 순위</a></li>
             </ul>
           </li>
-	      <c:if test="${loginMember.level_id == 4}">
+	      <c:if test="${loginMember.rank == 1}">
 	      	<li class="${management }"><a href="/view/admin/member">회원관리</a></li>
 	      </c:if>
       </ul>

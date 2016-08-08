@@ -109,7 +109,7 @@
 						</c:if>
 						<c:if test="${boardDetail.ishidden.equals(\"yes\") }"><!-- 비밀글이면  -->
 							<c:choose>
-								<c:when test="${boardDetail.member_id == loginMember.member_id || loginMember.level_id == 4}"><!-- 작성자이거나 관리자이면, -->
+								<c:when test="${boardDetail.member_id == loginMember.member_id || loginMember.rank == 1}"><!-- 작성자이거나 관리자이면, -->
 									<c:choose>
 										<c:when test="${boardDetail.depth == 0}"><!-- 원글이면 -->
 											&nbsp;<img src="/images/board/lock.png">

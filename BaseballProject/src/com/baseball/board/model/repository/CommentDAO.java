@@ -14,5 +14,5 @@ public interface CommentDAO {
 	public int insertComment(Comment comment);
 	public int updateComment(Comment comment);
 	public int deleteComment(int comment_id);
-	
+	public int deleteByMember(int member_id);
 }

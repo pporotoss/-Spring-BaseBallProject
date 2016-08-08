@@ -1,13 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%
-	String msg = (String)request.getAttribute("msg");
-	if(msg != null){
-		out.print("<script>");
-		out.print("alert('"+msg+"')");
-		out.print("</script>");
-	}
-%>
-<!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%><!DOCTYPE html>
 <html>
 <head>
   <title>로그인</title>
@@ -49,8 +41,13 @@
       .row.content {height:auto;} 
     }
   </style>
+  
   <script>
-  	function login(){
+	 <c:if test="${msg != null }">
+		alert("${msg}");
+	 </c:if>
+
+   	 function login(){
   		
   		// 빈칸검사
   		if(loginForm.id.value.length < 1){

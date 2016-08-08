@@ -56,8 +56,17 @@ public class  BoardDAOMybatis implements BoardDAO{
 
 	@Override
 	public int delete(int board_id) {
-		// TODO Auto-generated method stub
+		
+		sqlSessionTemplate.delete("Board.delete", board_id);
+		
 		return 0;
+	}
+	
+	@Override
+	public void deleteByMember(int member_id) {
+		
+		sqlSessionTemplate.delete("Board.deleteByMember", member_id);
+		
 	}
 
 	@Override

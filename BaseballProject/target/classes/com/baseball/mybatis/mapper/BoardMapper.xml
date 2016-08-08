@@ -78,4 +78,8 @@
 		delete from board where board_id=#{board_id}
 	</delete>
 	
+	<delete id="deleteByMember" parameterType="int">
+		delete from board where member_id=#{member_id}
+	</delete>
+	
 </mapper>

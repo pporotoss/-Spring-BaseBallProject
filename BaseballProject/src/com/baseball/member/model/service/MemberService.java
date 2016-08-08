@@ -15,6 +15,7 @@ public interface MemberService {
 	public void registMember(Member member);
 	public void updateMember(Member member);
 	public void deleteMember(int[] member_id);
+	public void deleteMember(int member_id);
 	public Member loginMember(Member member);
 	public boolean chkId(String id);
 	public boolean chkNickname(String nickname);
