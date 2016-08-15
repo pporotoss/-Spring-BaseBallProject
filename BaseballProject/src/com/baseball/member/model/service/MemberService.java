@@ -1,15 +1,15 @@
 package com.baseball.member.model.service;
 
 import java.util.List;
-
-import javax.security.auth.login.LoginException;
+import java.util.Map;
 
 import com.baseball.member.model.domain.Member;
 
 public interface MemberService {
 	
 	public List memberList();
-	public List memberAll();
+	public Map memberAll(String page, String keyword);
+	public Map memberRank(String page, String rank);
 	public List LevelAll();
 	public Member selectMember(int member_id);
 	public void registMember(Member member);

@@ -1,6 +1,7 @@
 package com.baseball.admin.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,9 +24,20 @@ public class AdminController {
 	
 	// 회원 불러오기
 	@RequestMapping(value="/admin/member", method=RequestMethod.GET)
-	public String goAdmin(Model model, String page, String rank){
+	public String goAdmin(Model model, String page, String rank, String keyword){
+		Map map;
+
+		if(rank == null){
+			
+			map = memberService.memberAll(page, keyword);
+			
+		}else{
+			
+			map = memberService.memberRank(page, rank);
+			
+		}
 		
-		List memberList = memberService.memberAll();
+		List memberList = (List)map.get("list");
 		
 		model.addAttribute("memberList", memberList);
 		

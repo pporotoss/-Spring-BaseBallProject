@@ -18,6 +18,10 @@
 		select * from member where member_id={member_id}
 	</select>
 	
+	<select id="totalMember" resultType="int">
+		select count(memebr_id) from member;
+	</select>
+	
 	<insert id="insert" parameterType="Member">
 		insert into member(id, nickname, pwd, username, email, team_id)
 		values(#{id}, #{nickname}, #{pwd}, #{username}, #{email}, #{team_id})

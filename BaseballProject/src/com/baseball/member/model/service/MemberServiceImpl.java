@@ -1,6 +1,8 @@
 package com.baseball.member.model.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +14,8 @@ import com.baseball.exception.LoginFailException;
 import com.baseball.member.model.domain.Member;
 import com.baseball.member.model.repository.LevelDAO;
 import com.baseball.member.model.repository.MemberDAO;
+
+import common.Pager;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -37,10 +41,60 @@ public class MemberServiceImpl implements MemberService{
 		return memberDAO.selectList();
 	}
 
+	// 회원정보 불러오기
 	@Override
-	public List memberAll() {
+	public Map memberAll(String page, String keyword) {
+		List list;
+		int pageSize = 10;
+		int totalContents = memberDAO.totalMember();
+		int blockSize = 10;
 		
-		return memberDAO.memberAll();
+		if(page == null){
+			page = "1";
+		}
+
+		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
+		
+		if(keyword == null){	// 검색어 없을때
+		
+			list = memberDAO.memberAll(pager.getPage()-1);
+			
+		}else{	// 검색어 있을때
+			
+			list = memberDAO.memberSearch(pager.getPage()-1, keyword);
+			
+		}
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("pager", pager);
+		map.put("list", list);
+		
+		return map;
+	}
+	
+	// 랭크별로 불러오기
+	@Override
+	public Map memberRank(String page, String rank) {
+		
+		int pageSize = 10;
+		int totalContents = memberDAO.totalMember();
+		int blockSize = 10;
+		
+		if(page == null){
+			page = "1";
+		}
+
+		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
+		
+		List list = memberDAO.memberRank(Integer.parseInt(page), Integer.parseInt(rank));
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("pager", pager);
+		map.put("list", list);
+		
+		return map;
 	}
 	
 	@Override

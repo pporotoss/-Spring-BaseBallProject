@@ -25,10 +25,25 @@ public class MemberDAOMybatis implements MemberDAO{
 	}
 	
 	@Override
-	public List memberAll() {
+	public List memberAll(int page) {
 	
-		List list = sqlSessionTemplate.selectList("Member.memberAll");
+		List list = sqlSessionTemplate.selectList("Member.memberAll", page);
+		
 		return list;
+	}
+	
+	@Override
+	public List memberSearch(int page, String keyword) {
+		
+		
+		return null;
+	}
+	
+	@Override
+	public List memberRank(int page, int rank) {
+		
+		
+		return null;
 	}
 	
 	@Override
@@ -90,6 +105,12 @@ public class MemberDAOMybatis implements MemberDAO{
 	public int updateMemberLevel(Member member) {
 
 		return sqlSessionTemplate.update("Member.updateLevel", member);
+	}
+
+	@Override
+	public int totalMember() {
+		
+		return sqlSessionTemplate.selectOne("Member.totalMember");
 	}
 
 }
