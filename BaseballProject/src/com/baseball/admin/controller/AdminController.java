@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.baseball.member.model.repository.LevelDAO;
 import com.baseball.member.model.service.MemberService;
 
+import common.Pager;
+
 /* 관리자 전용 요청 */
 @Controller
 public class AdminController {
@@ -24,18 +26,25 @@ public class AdminController {
 	
 	// 회원 불러오기
 	@RequestMapping(value="/admin/member", method=RequestMethod.GET)
-	public String goAdmin(Model model, String page, String rank, String keyword){
+	public String goAdmin(Model model, String page, String level_id, String keyword){
 		Map map;
-
-		if(rank == null){
+		
+		if(level_id == null || level_id.equals("all")){
 			
 			map = memberService.memberAll(page, keyword);
+			if(keyword != null){
+				model.addAttribute("keyword", keyword);
+			}
 			
 		}else{
 			
-			map = memberService.memberRank(page, rank);
+			map = memberService.memberLevel(page, level_id);
+			model.addAttribute("level_id", level_id);	// 등급별로 표시할때만.
 			
 		}
+		
+		Pager pager = (Pager)map.get("pager");
+		model.addAttribute("pager", pager);
 		
 		List memberList = (List)map.get("list");
 		

@@ -5,21 +5,37 @@
 <mapper namespace="Member">
 	
 	<select id="selectAll" resultType="Member">
-		select * from member order by member_id desc;
+		select * from member order by member_id desc
 	</select>
 
-	<select id="memberAll" resultType="MemberDetail">
+	<select id="memberAll" resultType="MemberDetail" parameterType="Map">
 		select member_id, id, nickname, levelname, username, email, point, t.name as teamname from member m, level l, team t
 		where m.level_id = l.level_id and m.team_id = t.team_id and id != 'admin'
-		order by member_id; 
+		order by member_id
+		limit #{startContent},#{pageSize}
+	</select>
+
+	<select id="memberSearch" resultType="MemberDetail" parameterType="Map">
+		select member_id, id, nickname, levelname, username, email, point, t.name as teamname from member m, level l, team t
+		where m.level_id = l.level_id and m.team_id = t.team_id and id != 'admin'
+		and id like concat('%',#{keyword},'%')
+		order by member_id
+		limit #{startContent},#{pageSize}
 	</select>
 		
+	<select id="memberLevel" resultType="MemberDetail" parameterType="Map">
+		select member_id, id, nickname, levelname, username, email, point, t.name as teamname from member m, level l, team t
+		where m.level_id = l.level_id and m.team_id = t.team_id and id != 'admin' and m.level_id=#{level_id}
+		order by member_id
+		limit #{startContent},#{pageSize}
+	</select>
+	
 	<select id="selectOne" resultType="Member" parameterType="int">
 		select * from member where member_id={member_id}
 	</select>
 	
 	<select id="totalMember" resultType="int">
-		select count(memebr_id) from member;
+		select count(member_id) from member where id != 'admin'
 	</select>
 	
 	<insert id="insert" parameterType="Member">

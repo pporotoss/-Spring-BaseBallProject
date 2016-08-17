@@ -9,7 +9,7 @@ public interface MemberService {
 	
 	public List memberList();
 	public Map memberAll(String page, String keyword);
-	public Map memberRank(String page, String rank);
+	public Map memberLevel(String page, String level_id);
 	public List LevelAll();
 	public Member selectMember(int member_id);
 	public void registMember(Member member);

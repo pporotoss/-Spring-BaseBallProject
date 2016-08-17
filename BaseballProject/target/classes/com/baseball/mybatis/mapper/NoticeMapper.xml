@@ -5,7 +5,7 @@
 <mapper namespace="Notice">
 	
 	<select id="selectAll" resultType="Notice" parameterType="Map">
-		select * from notice order by notice_id desc limit #{page}, #{pageSize}
+		select * from notice order by notice_id desc limit #{startContent}, #{pageSize}
 	</select>
 	
 	<select id="selectOne" parameterType="int" resultType="Notice">

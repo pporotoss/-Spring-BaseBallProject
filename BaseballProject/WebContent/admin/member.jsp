@@ -88,6 +88,24 @@
   		memberForm.submit();
   		
   	}
+  	
+  	// 등급별 보기
+  	function memberGrade(level_id){
+  		location.href = "/view/admin/member?level_id="+level_id;
+  	}
+  	
+  	// 검색하기
+  	function search(){
+  		if(searchForm.keyword.value == ""){
+	  		alert("검색어를 입력해 주세요.");
+	  		searchForm.keyword.focus();
+  		}
+  		
+  		searchForm.action= "/view/admin/member?keyword="+searchForm.keyword.value;
+  		searchForm.method="GET";
+  		searchForm.submit();
+  	}
+  	
   </script>
 </head>
 <body>
@@ -101,6 +119,26 @@
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-6 text-left"> 
       <h1>회원관리</h1>
+      <div class="form-inline">
+      	등급별로 보기 : <select name="level_id" class="form-control" onChange="memberGrade(this.value)">
+      		<option value="0">표시할 등급을 선택해 주세요.</option>
+      		<option value="all">전체보기</option>
+	     	<c:choose>
+	 				<c:when test="${loginMember.id.equals(\"admin\")}"><!-- admin 계정이면 -->
+	 					<c:forEach items="${levelList }" var="level">
+	     					<option value="${level.level_id }">${level.levelname }</option>
+		     			</c:forEach>	
+	 				</c:when>
+	 				<c:otherwise>
+	 					<c:forEach items="${levelList }" var="level"><!-- admin계정 아니면 -->
+	 						<c:if test="${level.rank != 1}">
+	     						<option value="${level.level_id }">${level.levelname }</option>
+	     					</c:if>
+		     			</c:forEach>
+	 				</c:otherwise>
+ 				</c:choose>
+	     </select>
+      </div>
     	<form name="memberForm">
     	  <input type="hidden" value="" name="_method">
 	      <table class="table table-hover">
@@ -146,9 +184,43 @@
 	     		
 	     	</select>
      	</form>
-     	<input type="button" class="btn btn-success" value="등급변경" onClick="updateLevel()">
-     	<input type="button" class="btn btn-danger" value="회원삭제" onClick="deleteMember()">
+	     	<input type="button" class="btn btn-success" value="등급변경" onClick="updateLevel()">
+	     	<input type="button" class="btn btn-danger" value="회원삭제" onClick="deleteMember()">
      	</div>
+     	<div align="center">
+		  	<nav>
+			  <ul class="pagination">
+			    <c:if test="${pager.prev }">
+				    <li>
+				      <a href="/view/admin/member?page=${pager.startPage-1 }<c:if test="${level_id != null }">&level_id=${level_id }</c:if><c:if test="${keyword !=null }">&keyword=${keyword }</c:if>" aria-label="Previous">
+				        <span aria-hidden="true">&laquo;</span>
+				      </a>
+				    </li>
+			    </c:if>
+			    <c:forEach var="cnt" begin="${pager.startPage }" end="${pager.endPage }">
+			    	<c:choose>
+				    	<c:when test="${cnt == pager.page }">
+					    	<li class="active">
+				    	</c:when>
+				    	<c:otherwise>
+				    		<li>
+				    	</c:otherwise>
+			    	</c:choose>
+			    	<a href="/view/admin/member?page=${cnt }<c:if test="${level_id != null }">&level_id=${level_id }</c:if><c:if test="${keyword !=null }">&keyword=${keyword }</c:if>">${cnt }</a></li>
+			    </c:forEach>
+			    <c:if test="${pager.next }">
+				    <li>
+				      <a href="/view/admin/member?page=${pager.endPage+1 }<c:if test="${level_id != null }">&level_id=${level_id }</c:if><c:if test="${keyword !=null }">&keyword=${keyword }</c:if>" aria-label="Next">
+				        <span aria-hidden="true">&raquo;</span>
+				      </a>
+				    </li>
+			    </c:if>
+			  </ul>
+			</nav>
+		</div>
+		<div class="form-inline">
+			<form name="searchForm">회원 ID 검색 : <input type="text" class="form-control" name="keyword" <c:if test="${keyword != null }">value="${keyword }"</c:if>> <input type="button" class="btn btn-info" value="검색" onClick="search()"> <input type="button" class="btn btn-warning" value="전체보기" onClick="location.href='/view/admin/member'"></form>
+		</div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-3 sidenav" style="background-color:white">
     </div>

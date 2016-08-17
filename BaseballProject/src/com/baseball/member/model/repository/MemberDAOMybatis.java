@@ -1,6 +1,7 @@
 package com.baseball.member.model.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,25 +26,25 @@ public class MemberDAOMybatis implements MemberDAO{
 	}
 	
 	@Override
-	public List memberAll(int page) {
+	public List memberAll(Map searchMap) {
 	
-		List list = sqlSessionTemplate.selectList("Member.memberAll", page);
+		List list = sqlSessionTemplate.selectList("Member.memberAll", searchMap);
 		
 		return list;
 	}
 	
 	@Override
-	public List memberSearch(int page, String keyword) {
+	public List memberSearch(Map searchMap) {
 		
 		
-		return null;
+		return sqlSessionTemplate.selectList("Member.memberSearch", searchMap);
 	}
 	
 	@Override
-	public List memberRank(int page, int rank) {
+	public List memberLevel(Map levelMap) {
 		
 		
-		return null;
+		return sqlSessionTemplate.selectList("Member.memberLevel", levelMap);
 	}
 	
 	@Override

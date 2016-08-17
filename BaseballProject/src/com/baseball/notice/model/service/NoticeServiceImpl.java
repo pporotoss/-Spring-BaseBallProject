@@ -32,7 +32,7 @@ public class NoticeServiceImpl implements NoticeService{
 		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
 		
 		Map<String, Integer> paging = new HashMap<String, Integer>();
-		paging.put("page", pager.getPage()-1);
+		paging.put("startContent", pager.getStartContent()-1);
 		paging.put("pageSize", pageSize);
 				
 		List list = noticeDAO.selectAll(paging);

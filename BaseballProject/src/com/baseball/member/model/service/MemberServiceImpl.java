@@ -54,14 +54,18 @@ public class MemberServiceImpl implements MemberService{
 		}
 
 		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
+		Map searchMap = new HashMap<>();
+		searchMap.put("startContent", pager.getStartContent()-1);
+		searchMap.put("pageSize", pageSize);
 		
 		if(keyword == null){	// 검색어 없을때
 		
-			list = memberDAO.memberAll(pager.getPage()-1);
+			list = memberDAO.memberAll(searchMap);
 			
 		}else{	// 검색어 있을때
 			
-			list = memberDAO.memberSearch(pager.getPage()-1, keyword);
+			searchMap.put("keyword", keyword);
+			list = memberDAO.memberSearch(searchMap);
 			
 		}
 		
@@ -73,9 +77,9 @@ public class MemberServiceImpl implements MemberService{
 		return map;
 	}
 	
-	// 랭크별로 불러오기
+	// 등급별로 불러오기
 	@Override
-	public Map memberRank(String page, String rank) {
+	public Map memberLevel(String page, String level_id) {
 		
 		int pageSize = 10;
 		int totalContents = memberDAO.totalMember();
@@ -87,7 +91,12 @@ public class MemberServiceImpl implements MemberService{
 
 		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
 		
-		List list = memberDAO.memberRank(Integer.parseInt(page), Integer.parseInt(rank));
+		Map levelMap = new HashMap<>();
+		levelMap.put("startContent", pager.getStartContent()-1);
+		levelMap.put("pageSize", pageSize);
+		levelMap.put("level_id", Integer.parseInt(level_id));
+		
+		List list = memberDAO.memberLevel(levelMap);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
