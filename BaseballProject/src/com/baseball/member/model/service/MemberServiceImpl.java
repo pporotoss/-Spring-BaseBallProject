@@ -16,6 +16,7 @@ import com.baseball.member.model.repository.LevelDAO;
 import com.baseball.member.model.repository.MemberDAO;
 
 import common.Pager;
+import common.Searching;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -46,7 +47,9 @@ public class MemberServiceImpl implements MemberService{
 	public Map memberAll(String page, String keyword) {
 		List list;
 		int pageSize = 10;
-		int totalContents = memberDAO.totalMember();
+		Map searchKeyword = new HashMap<>();
+		searchKeyword.put("keyword", keyword);
+		int totalContents = memberDAO.totalMember(searchKeyword);
 		int blockSize = 10;
 		
 		if(page == null){

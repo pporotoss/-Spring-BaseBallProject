@@ -31,11 +31,14 @@
 	</select>
 	
 	<select id="selectOne" resultType="Member" parameterType="int">
-		select * from member where member_id={member_id}
+		select * from member where member_id=#{member_id}
 	</select>
 	
-	<select id="totalMember" resultType="int">
+	<select id="totalMember" resultType="int" parameterType="Map">
 		select count(member_id) from member where id != 'admin'
+		<if test="keyword != null">
+			and id like concat('%', #{keyword}, '%')
+		</if>
 	</select>
 	
 	<insert id="insert" parameterType="Member">

@@ -12,6 +12,7 @@ public interface MemberDAO {
 	public List memberSearch(Map searchMap);	// 멤버 검색하기
 	public List memberLevel(Map levelMap);	// 랭크별로 불러오기
 	public int totalMember();	// 총 멤버수 불러오기.
+	public int totalMember(Map searchKeyword);	// 검색 멤버수 불러오기.
 	public Member selectMember(int member_id);
 	public int insertMember(Member member);
 	public int updateMember(Member member);

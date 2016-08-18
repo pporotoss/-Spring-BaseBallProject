@@ -109,6 +109,12 @@ public class MemberDAOMybatis implements MemberDAO{
 	}
 
 	@Override
+	public int totalMember(Map searchKeyword) {
+		
+		return sqlSessionTemplate.selectOne("Member.totalMember", searchKeyword);
+	}
+	
+	@Override
 	public int totalMember() {
 		
 		return sqlSessionTemplate.selectOne("Member.totalMember");

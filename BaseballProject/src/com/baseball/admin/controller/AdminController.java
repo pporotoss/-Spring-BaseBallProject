@@ -13,6 +13,7 @@ import com.baseball.member.model.repository.LevelDAO;
 import com.baseball.member.model.service.MemberService;
 
 import common.Pager;
+import common.Searching;
 
 /* 관리자 전용 요청 */
 @Controller
@@ -30,9 +31,10 @@ public class AdminController {
 		Map map;
 		
 		if(level_id == null || level_id.equals("all")){
-			
+
 			map = memberService.memberAll(page, keyword);
-			if(keyword != null){
+			
+			if(keyword != null){	 // 검색어 없으면 
 				model.addAttribute("keyword", keyword);
 			}
 			
