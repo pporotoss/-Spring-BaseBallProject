@@ -8,12 +8,22 @@
 		select count(board_id) from board;
 	</select>
 	
-	<select id="selectAll" resultType="BoardDetail" parameterType="int">
+	<select id="selectAll" resultType="BoardDetail" parameterType="Map">
 		select b.board_id as board_id, title, count(c.board_id) as count, b.content, hit, b.regdate as regdate, family, depth, b.rank as rank, ishidden, b.member_id as member_id, nickname, levelname
 		from board b left outer join comment c on b.board_id = c.board_id
 		left outer join member m on b.member_id = m.member_id
 		left outer join level l on m.level_id = l.level_id
-		where m.member_id is not null group by b.title order by b.family desc, b.rank asc limit #{start}, #{pagesize}
+		where m.member_id is not null
+		<if test="searchType != null">
+			<if test="searchType.equalsIgnoreCase('')">
+			</if>
+			<if test="searchType.equalsIgnoreCase('')">
+			</if>
+			<if test="searchType.equalsIgnoreCase('')">
+			</if>
+		</if> 
+		group by b.title 
+		order by b.family desc, b.rank asc limit #{startContent}, #{pagesize}
 	</select>
 	
 	<select id="selectOne" parameterType="int" resultType="BoardDetail">

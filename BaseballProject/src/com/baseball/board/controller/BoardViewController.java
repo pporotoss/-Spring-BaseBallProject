@@ -18,6 +18,7 @@ import com.baseball.board.model.service.BoardService;
 import com.baseball.board.model.service.CommentService;
 
 import common.Pager;
+import common.Searching;
 
 @Controller
 public class BoardViewController {
@@ -32,9 +33,13 @@ public class BoardViewController {
 	
 	// 리스트페이지로 이동
 	@RequestMapping(value="/board", method=RequestMethod.GET)
-	public String selectAll(Model model, String page, String pagesize){
+	public String selectAll(Model model, String page, String pagesize, Searching searching){
 		
-		Map<String, Object> boardAll = boardService.selectAll(page, pagesize);
+		Map<String, Object> boardAll = 	boardAll = boardService.selectAll(page, pagesize, searching);
+		
+		if(searching.getKeyword() != null){
+			model.addAttribute("searching", searching);
+		}
 		
 		// 리스트 얻어오기
 		List<BoardDetail> boardDetailList = (List)boardAll.get("list");

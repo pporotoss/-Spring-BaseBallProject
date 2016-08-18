@@ -13,6 +13,7 @@ import com.baseball.board.model.repository.BoardDAO;
 import com.baseball.exception.RegistFailException;
 
 import common.Pager;
+import common.Searching;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -22,7 +23,7 @@ public class BoardServiceImpl implements BoardService{
 	
 	
 	@Override
-	public Map selectAll(String page, String pagesize) {
+	public Map selectAll(String page, String pagesize, Searching searching) {
 		
 		if(page == null){
 			page = "1";
@@ -37,8 +38,8 @@ public class BoardServiceImpl implements BoardService{
 		Pager pager = new Pager(Integer.parseInt(page), Integer.parseInt(pagesize), totalContents, blocksize);
 		
 		// 리스트얻어오기
-		Map<String, Integer> paging = new HashMap<String, Integer>();
-		paging.put("start", pager.getStartContent()-1);
+		Map<String, Object> paging = new HashMap<String, Object>();
+		paging.put("startContent", pager.getStartContent()-1);
 		paging.put("pagesize", pager.getPageSize());
 		
 		List list = boardDAO.selectAll(paging);
