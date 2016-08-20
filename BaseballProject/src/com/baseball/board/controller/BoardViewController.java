@@ -37,7 +37,7 @@ public class BoardViewController {
 		
 		Map<String, Object> boardAll = 	boardAll = boardService.selectAll(page, pagesize, searching);
 		
-		if(searching.getKeyword() != null){
+		if(searching.getKeyword() != null){	// 검색어 있으면,
 			model.addAttribute("searching", searching);
 		}
 		
@@ -70,7 +70,7 @@ public class BoardViewController {
 	
 	// 상세페이지로 이동
 	@RequestMapping(value="/board/{board_id}", method=RequestMethod.GET)
-	public String detail(@PathVariable("board_id") int board_id, String commentPage, Model model){
+	public String detail(@PathVariable("board_id") int board_id, String commentPage, String page, String pagesize, Searching searching, Model model){
 		
 		BoardDetail detail = boardService.selectOne(board_id);
 		model.addAttribute("detail", detail);
@@ -86,6 +86,12 @@ public class BoardViewController {
 		
 		model.addAttribute("commentList", commentList);
 		model.addAttribute("commentPager", commentPager);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("pagesize", pagesize);
+		if(searching.getKeyword() != null){
+			model.addAttribute("searching", searching);
+		}
 		
 		return "board/detail";
 	}

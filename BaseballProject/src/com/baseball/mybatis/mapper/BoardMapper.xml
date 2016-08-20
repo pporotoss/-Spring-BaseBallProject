@@ -4,21 +4,21 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Board">
 	
-	<select id="countAll" resultType="int">
+	<select id="countAll" resultType="int" parameterType="Map">
 		select count(board_id) from board b
 		<if test="searchType != null">
 			<if test="searchType.equalsIgnoreCase('title')">
-				where title like concat('%', #{keyword}, '%')
+				where title like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="searchType.equalsIgnoreCase('content')">
-				where content like concat('%', #{keyword}, '%')
+				where b.content like CONCAT('%', #{keyword}, '%')
 			</if>
 			<if test="searchType.equalsIgnoreCase('title+content')">
-				where (title like concat('%', #{keyword}, '%') or content like concat('%', #{keyword}, '%')) 
+				where (title like CONCAT('%', #{keyword}, '%') or b.content like CONCAT('%', #{keyword}, '%')) 
 			</if>
 			<if test="searchType.equalsIgnoreCase('writer')">
 				left outer join member m on b.board_id = m.member_id
-				where b.member_id = (select member_id from member where nickname like concat('%', #{keyword}, '%'))
+				where b.member_id = (select member_id from member where nickname like CONCAT('%', #{keyword}, '%'))
 			</if>
 		</if>
 	</select>
@@ -29,18 +29,18 @@
 		left outer join member m on b.member_id = m.member_id
 		left outer join level l on m.level_id = l.level_id
 		where m.member_id is not null
-		<if test="searchType != null">
-			<if test="searchType.equalsIgnoreCase('title')">
-				and title like concat('%', #{keyword}, '%')
+		<if test="searching != null">
+			<if test="searching.searchType.equalsIgnoreCase('title')">
+				and title like CONCAT('%', #{searching.keyword}, '%')
 			</if>
-			<if test="searchType.equalsIgnoreCase('content')">
-				and content like concat('%', #{keyword}, '%')
+			<if test="searching.searchType.equalsIgnoreCase('content')">
+				and b.content like CONCAT('%', #{searching.keyword}, '%')
 			</if>
-			<if test="searchType.equalsIgnoreCase('title+content')">
-				and (title like concat('%', #{keyword}, '%') or content like concat('%', #{keyword}, '%')) 
+			<if test="searching.searchType.equalsIgnoreCase('title+content')">
+				and (title like CONCAT('%', #{searching.keyword}, '%') or b.content like CONCAT('%', #{searching.keyword}, '%')) 
 			</if>
-			<if test="searchType.equalsIgnoreCase('writer')">
-				and b.member_id = (select member_id from member where nickname like concat('%', #{keyword}, '%'))
+			<if test="searching.searchType.equalsIgnoreCase('writer')">
+				and b.member_id = (select member_id from member where nickname like CONCAT('%', #{searching.keyword}, '%'))
 			</if>
 		</if> 
 		group by b.title 

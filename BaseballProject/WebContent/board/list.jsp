@@ -49,11 +49,23 @@
   	$(document).ready(function(){
   		$("#pagesize").change(function(){
   			if($("#pagesize").val() != 0){
-  				location.href="/view/board?page=${pager.page}&pagesize="+$("#pagesize").val();
+  				location.href="/view/board?page=${pager.page}&pagesize="+$("#pagesize").val()<c:if test="${searching !=null}">+"&searchType=${searching.searchType}&keyword=${searching.keyword}"</c:if>;
   			}
   	    });
   	});
   
+  	// 검색하기
+  	function search(){
+  		if(searchForm.keyword.value.trim() == ""){
+  			alert("검색어를 입력해 주세요.");
+  			searchForm.keyword.focus();
+  			return;
+  		}
+  		
+  		searchForm.action="/view/board";
+  		searchForm.method="GET";
+  		searchForm.submit();
+  	}
   </script>
 </head>
 <body>
@@ -95,14 +107,14 @@
 						<c:if test="${boardDetail.ishidden.equals(\"no\") }"><!-- 비밀글이 아니면, -->
 							<c:choose>
 								<c:when test="${boardDetail.depth == 0}"><!-- 원글이면 -->
-									&nbsp;<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }	
+									&nbsp;<a href="/view/board/${boardDetail.board_id }?page=${pager.page}&pagesize=${pager.pageSize}<c:if test="${searching.keyword != null}">&searchType=${searching.searchType}&keyword=${searching.keyword}</c:if>">${boardDetail.title }	
 								</c:when>
 								<c:otherwise><!-- 답글이면  -->
 									<c:forEach begin="0" end="${boardDetail.depth }">
 										&nbsp;&nbsp;&nbsp;
 									</c:forEach>
 									<img src="/images/board/reply.png">
-									<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }
+									<a href="/view/board/${boardDetail.board_id }?page=${pager.page}&pagesize=${pager.pageSize}<c:if test="${searching.keyword != null}">&searchType=${searching.searchType}&keyword=${searching.keyword}</c:if>">${boardDetail.title }
 								</c:otherwise>
 							</c:choose>
 							</a>&nbsp;[${boardDetail.count }]
@@ -113,14 +125,14 @@
 									<c:choose>
 										<c:when test="${boardDetail.depth == 0}"><!-- 원글이면 -->
 											&nbsp;<img src="/images/board/lock.png">
-											<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }	
+											<a href="/view/board/${boardDetail.board_id }?page=${pager.page}&pagesize=${pager.pageSize}<c:if test="${searching.keyword != null}">&searchType=${searching.searchType}&keyword=${searching.keyword}</c:if>">${boardDetail.title }	
 										</c:when>
 										<c:otherwise><!-- 답글이면  -->
 											<c:forEach begin="0" end="${boardDetail.depth }">
 												&nbsp;&nbsp;&nbsp;
 											</c:forEach>
 											<img src="/images/board/reply.png"><img src="/images/board/lock.png">
-											<a href="/view/board/${boardDetail.board_id }">${boardDetail.title }
+											<a href="/view/board/${boardDetail.board_id }?page=${pager.page}&pagesize=${pager.pageSize}<c:if test="${searching.keyword != null}">&searchType=${searching.searchType}&keyword=${searching.keyword}</c:if>">${boardDetail.title }
 										</c:otherwise>
 									</c:choose>
 									</a>&nbsp;[${boardDetail.count }]
@@ -161,7 +173,7 @@
 			  <ul class="pagination">
 			    <c:if test="${pager.prev }">
 				    <li>
-				      <a href="/view/board?page=${pager.startPage-1 }&pagesize=${pager.pageSize}" aria-label="Previous">
+				      <a href="/view/board?page=${pager.startPage-1 }&pagesize=${pager.pageSize}<c:if test="${searching.keyword !=null}">&searchType=${searching.searchType}&keyword=${searching.keyword}</c:if>" aria-label="Previous">
 				        <span aria-hidden="true">&laquo;</span>
 				      </a>
 				    </li>
@@ -175,11 +187,11 @@
 				    		<li>
 				    	</c:otherwise>
 			    	</c:choose>
-			    	<a href="/view/board?page=${cnt }&pagesize=${pager.pageSize}">${cnt }</a></li>
+			    	<a href="/view/board?page=${cnt }&pagesize=${pager.pageSize}<c:if test="${searching.keyword !=null}">&searchType=${searching.searchType}&keyword=${searching.keyword}</c:if>">${cnt }</a></li>
 			    </c:forEach>
 			    <c:if test="${pager.next }">
 				    <li>
-				      <a href="/view/board?page=${pager.endPage+1 }&pagesize=${pager.pageSize}" aria-label="Next">
+				      <a href="/view/board?page=${pager.endPage+1 }&pagesize=${pager.pageSize}<c:if test="${searching.keyword !=null}">&searchType=${searching.searchType}&keyword=${searching.keyword}</c:if>" aria-label="Next">
 				        <span aria-hidden="true">&raquo;</span>
 				      </a>
 				    </li>
@@ -187,6 +199,25 @@
 			  </ul>
 			</nav>
 		</div>
+		<!------- 검 색 ------------>
+		<form name="searchForm">
+			<div class="row">
+			  <div class="col-xs-2">
+				<select class="form-control" name="searchType">
+				   <option value="title">제 목</option>
+				   <option value="content">내 용</option>
+				   <option value="title+content">제 목 + 내 용</option>
+				   <option value="writer">글쓴이</option>
+				</select>
+			  </div>
+			  <div class="col-xs-5">
+			    <input type="text" class="form-control" placeholder="검색어를 입력해 주세요." <c:if test="${searching.keyword !=null}">value="${searching.keyword}"</c:if> name="keyword">
+			  </div>
+			  <input class="btn btn-success" type="button" value="검색" onClick="search()"> <input class="btn btn-warning" type="button" value="전체보기" onClick="location.href='/view/board'">
+			</div>
+		</form>
+    </div>
+    <div>
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-2 sidenav hidden-xs" style="background-color:white">

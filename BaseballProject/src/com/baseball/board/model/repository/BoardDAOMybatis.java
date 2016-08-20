@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.baseball.board.model.domain.Board;
 import com.baseball.board.model.domain.BoardDetail;
 
+import common.Searching;
+
 @Repository
 public class  BoardDAOMybatis implements BoardDAO{
 	
@@ -17,9 +19,9 @@ public class  BoardDAOMybatis implements BoardDAO{
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	@Override
-	public int countAll() {
+	public int countAll(Searching searching) {
 		
-		return sqlSessionTemplate.selectOne("Board.countAll");
+		return sqlSessionTemplate.selectOne("Board.countAll", searching);
 	}
 	
 	@Override

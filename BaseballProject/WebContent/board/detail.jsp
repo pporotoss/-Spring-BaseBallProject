@@ -50,7 +50,7 @@
   		detailForm.submit();
   	}
   	
-  	function reply(){
+  	function reply(){	// 답글달기
   		detailForm.action = "/view/board/reply/write";
   		detailForm.method="POST";
   		detailForm.submit();
@@ -201,7 +201,7 @@
 		      		</c:if>
 		      		<input type="button" class="btn btn-primary" value="답글" onClick="reply()">
 	      		</c:if>
-				<a href="/view/board"><input type="button" class="btn btn-default" value="목록"></a>
+				<a href="/view/board?page=${page }&pagesize=${pagesize}<c:if test="${searching.keyword != null }">&searchType=${searching.searchType }&keyword=${searching.keyword }</c:if>"><input type="button" class="btn btn-default" value="목록"></a>
 			</div>
 <!-- ///////////////////////////////////           댓글                  //////////////////////////////////////////////////////////// -->
 			<div>
@@ -252,7 +252,7 @@
 					<nav>
 						<ul class="pagination pagination-sm">
 							<c:if test="${commentPager.prev }">
-								<li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+								<li><a href="/view/board/${detail.board_id }?commentPage=${commentPager.startPage - 1}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
 							</c:if>
 							
 							<c:forEach begin="${commentPager.startPage }" end="${commentPager.endPage }" var="pageNum">
@@ -268,7 +268,7 @@
 							</c:forEach>
 							
 							<c:if test="${commentPager.next }">
-								<li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+								<li><a href="/view/board/${detail.board_id }?commentPage=${commentPager.endPage + 1}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
 							</c:if>
 						
 						</ul>

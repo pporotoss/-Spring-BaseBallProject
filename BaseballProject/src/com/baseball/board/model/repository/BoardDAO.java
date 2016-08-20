@@ -6,10 +6,12 @@ import java.util.Map;
 import com.baseball.board.model.domain.Board;
 import com.baseball.board.model.domain.BoardDetail;
 
+import common.Searching;
+
 
 public interface BoardDAO {
 	
-	public int countAll();	// 전체 게시물 수 가져오기
+	public int countAll(Searching searching);	// 전체 게시물 수 가져오기
 	public List selectAll(Map paging);
 	public BoardDetail selectOne(int board_id);
 	public void updateHit(int board_id);

@@ -34,13 +34,17 @@ public class BoardServiceImpl implements BoardService{
 		
 		// 페이징처리
 		int blocksize = 10;
-		int totalContents = boardDAO.countAll();
+		int totalContents = boardDAO.countAll(searching);
 		Pager pager = new Pager(Integer.parseInt(page), Integer.parseInt(pagesize), totalContents, blocksize);
 		
 		// 리스트얻어오기
 		Map<String, Object> paging = new HashMap<String, Object>();
 		paging.put("startContent", pager.getStartContent()-1);
 		paging.put("pagesize", pager.getPageSize());
+		
+		if(searching.getKeyword() != null){
+			paging.put("searching", searching);
+		}
 		
 		List list = boardDAO.selectAll(paging);
 		
