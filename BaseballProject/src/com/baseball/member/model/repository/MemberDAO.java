@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.baseball.member.model.domain.Member;
+import com.baseball.member.model.domain.MemberDetail;
 
 public interface MemberDAO {
 	
@@ -13,7 +14,7 @@ public interface MemberDAO {
 	public List memberLevel(Map levelMap);	// 랭크별로 불러오기
 	public int totalMember();	// 총 멤버수 불러오기.
 	public int totalMember(Map searchKeyword);	// 검색 멤버수 불러오기.
-	public Member selectMember(int member_id);
+	public MemberDetail selectMember(int member_id);
 	public int insertMember(Member member);
 	public int updateMember(Member member);
 	public int deleteMember(int member_id);

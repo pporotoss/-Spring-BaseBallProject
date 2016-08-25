@@ -30,8 +30,9 @@
 		limit #{startContent},#{pageSize}
 	</select>
 	
-	<select id="selectOne" resultType="Member" parameterType="int">
-		select * from member where member_id=#{member_id}
+	<select id="selectOne" resultType="MemberDetail" parameterType="int">
+		select member_id, id, nickname, levelname, username, email, point, t.name as teamname from member m, level l, team t
+		where m.level_id = l.level_id and m.team_id = t.team_id and member_id=#{member_id}
 	</select>
 	
 	<select id="totalMember" resultType="int" parameterType="Map">
@@ -47,7 +48,8 @@
 	</insert>
 	
 	<update id="update" parameterType="Member">
-		update member set id=#{id}, nickname=#{nickname}, pwd=#{pwd}, username=#{username}, email=#{email}, team_id=#{team_id} 
+		update member set id=#{id}, nickname=#{nickname}, username=#{username}, email=#{email}, team_id=#{team_id}
+		<if test="pwd != null">, pwd=#{pwd}</if> 
 		where member_id=#{member_id}
 	</update>
 	

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.baseball.exception.LoginFailException;
 import com.baseball.exception.RegistFailException;
 import com.baseball.member.model.domain.Member;
+import com.baseball.member.model.domain.MemberDetail;
 
 @Repository
 public class MemberDAOMybatis implements MemberDAO{
@@ -48,9 +49,9 @@ public class MemberDAOMybatis implements MemberDAO{
 	}
 	
 	@Override
-	public Member selectMember(int member_id) {
+	public MemberDetail selectMember(int member_id) {
 
-		Member member = sqlSessionTemplate.selectOne("Member.selectOne", member_id);
+		MemberDetail member = sqlSessionTemplate.selectOne("Member.selectOne", member_id);
 		return member;
 	}
 

@@ -1,9 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>회원가입</title>
+  <title>회원정보</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -44,90 +45,89 @@
   </style>
 </head>
 <script>
+	var pwdFlag = false;
 	
-	function goback(){	// 뒤로가기
-		history.back();
-	}
-	
-	// 회원 가입하기!!
-	function regist(){
-		
-		// id 글자수 확인
-		if(registForm.id.value.length < 4 || registForm.id.value.length > 15){
-			alert("ID글자수를 확인해주세요.");
-			registForm.id.focus();
-			return;
-		}
-		
-		// id 중복검사여부 확인
-		if($("#dupleID").val() == "true"){
-			alert("ID 중복검사를 해주세요.");
-			registForm.id.focus();
-			return;
-		}
-		
+	$(document).ready(function(){
+		$("#dupleNick").change(function(){
+			$("#dupleNick").val("true");	
+		});
+	});
+
+	// 수정하기!!
+	function update(){
 		
 		// password 글자수 확인
-		if(registForm.pwd.value.length < 4 || registForm.pwd.value.length > 15){
-			alert("비밀번호 글자수를 확인해주세요.");
-			registForm.pwd.focus();
-			return;
+		if(updateForm.pwd.value.trim().length < 4 || updateForm.pwd.value.trim().length > 15){
+			if(!$("#pwd").attr("disabled")){
+				
+				alert("비밀번호 글자수를 확인해주세요.");
+				updateForm.pwd.focus();
+				return;
+			}
 		}
 		
 		// password 일치여부 확인
-		if(registForm.pwd.value != registForm.repwd.value){
-			alert("비밀번호가 일치하지 않습니다.");
-			registForm.repwd.focus();
-			return;
+		if(updateForm.pwd.value.trim() != updateForm.repwd.value.trim()){
+			if(!$("#repwd").attr("disabled")){
+				alert("비밀번호가 일치하지 않습니다.");
+				updateForm.repwd.focus();
+				return;
+			}
 		}
 		
 		// 이름 공백여부확인
-		if(registForm.username.value.length < 1){
+		if(updateForm.username.value.trim().length < 1){
 			alert("이름을 입력해주세요.");
-			registForm.username.focus();
+			updateForm.username.focus();
 			return;
 		}
 		
 		// 별명 입력여부 확인
-		if(registForm.nickname.value.length < 1){
+		if(updateForm.nickname.value.trim().length < 1){
 			alert("별명을 입력해주세요.");
-			registForm.nickname.focus();
+			updateForm.nickname.focus();
 			return;
 		}
 		
 		// 별명 중복검사여부 확인
 		if($("#dupleNick").val() == "true"){
 			alert("별명 중복검사를 해주세요.");
-			registForm.nickname.focus();
+			updateForm.nickname.focus();
 			return;
 		}
 		
 		// 이메일 입력확인
-		if(registForm.email.value.length < 1){
+		if(updateForm.email.value.length < 1){
 			alert("이메일을 입력해주세요.");
-			registForm.email.focus();
+			updateForm.email.focus();
 			return;
 		}
 		
 		// 이메일 양식확인
-		if(!isEmail(registForm.email.value)){
+		if(!isEmail(updateForm.email.value)){
 			alert("올바른 이메일을 입력해 주세요.");
-			registForm.email.focus();
+			updateForm.email.focus();
 			return;
 		}
 		
 		// 팀 선택여부 확인
-		if(registForm.team_id.value == 0){
+		if(updateForm.team_id.value == 0){
 			alert("응원하는 팀을 선택해 주세요.");
-			registForm.team_id.focus();
+			updateForm.team_id.focus();
 			return;
 		}
 		
-		registForm.action="/view/member/regist";
-		registForm.method="POST";
-		registForm.submit();
 		
-	}// 폼전송.
+		if(!confirm("수정하시겠습니까?")){
+			
+			return;
+		}
+		
+		updateForm.action="/view/member/myinfo";
+		updateForm.method="POST";
+		updateForm.submit();
+		
+	} // 폼전송.
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	
@@ -140,37 +140,54 @@
 		return regExp.test(email);
 	}
 	
-	// 아이디 중복 확인
-	function idChk(){
-		
-		// id 글자수 확인
-		if(registForm.id.value.length < 4 || registForm.id.value.length > 15){
-			alert("ID글자수를 확인해주세요.");
-			registForm.id.focus();
-			return;
-		}
-		
-		$.getJSON("/api/member/chkid/"+registForm.id.value, function(result){
-			alert(result.msg);
-			$("#dupleID").val(result.result);
-	    });
-	}
 	
 	// 별명 중복 확인
 	function nickChk(){
-		// 별명 입력여부 확인
-		if(registForm.nickname.value.length < 1){
-			alert("별명을 입력해주세요.");
-			registForm.nickname.focus();
+		
+		// 별명 변경여부 확인
+		if(updateForm.nickname.value.trim() == "${memberDetail.nickname}"){
 			return;
 		}
 		
-		$.getJSON("/api/member/chknick/"+registForm.nickname.value, function(result){
+		// 별명 입력여부 확인
+		if(updateForm.nickname.value.trim().length < 1){
+			alert("별명을 입력해주세요.");
+			updateForm.nickname.focus();
+			return;
+		}
+		
+		$.getJSON("/api/member/chknick/"+updateForm.nickname.value, function(result){
 			alert(result.msg);
 			$("#dupleNick").val(result.result);
 	    });		
 	}
 	
+	// 비번 변경 활성화
+	function editPwd(){
+		
+		if(pwdFlag){
+			
+			$("#pwdBtn").val("비밀번호 변경하기");
+			$("#pwd").val("");
+			$("#repwd").val("");
+			$("#pwd").attr("disabled", true);
+			$("#repwd").attr("disabled", true);
+			$("#pwd").removeAttr("placeholder");
+			$("#repwd").removeAttr("placeholder");
+			pwdFlag = false;
+			
+		}else{
+			
+			$("#pwdBtn").val("변경 취소");
+			$("#pwd").attr("disabled", false);
+			$("#repwd").attr("disabled", false);
+			$("#pwd").attr("placeholder","패스워드는 4~15자 이내로 입력해주세요.");
+			$("#repwd").attr("placeholder","패스워드를 다시한번 입력해주세요.");
+			pwdFlag = true;
+			
+		}
+		
+	}
 </script>
 <body>
 
@@ -182,54 +199,56 @@
 	    </div>
 	<!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
 	    <div class="col-sm-6 text-left"> 
-	      <h1>회원가입</h1>
-	      	<input type="hidden" id="dupleID" value="true">
-	      	<input type="hidden" id="dupleNick" value="true">
-	      	<form name="registForm">
+	      <h1>회원정보</h1>
+	      	<form name="updateForm">
+		      	<input type="hidden" name="_method" value="PUT">
+		      	<input type="hidden" id="dupleNick" value="false">
+		      	<input type="hidden" name="member_id" value="${memberDetail.member_id }">
 		      	<div class="form-group">
 				  <label for="usr">ID:</label>
-				  <div class="form-inline">
-					  <input type="text" class="form-control" id="usr" maxlength="15" placeholder="아이디는 4~15자 이내로 입력해주세요." name="id" style="width:85%">
-					  <input type="button" class="btn" value="ID중복확인" onClick="idChk()">
-				  </div>
+					<input type="text" class="form-control" id="usr" maxlength="15" name="id" readonly value="${memberDetail.id }">
+				</div>
+		      	<div class="form-group">
+				  <label for="">회원등급: <img src='/images/member/${memberDetail.levelname }.png'></label>
+					<input type="text" class="form-control" readonly value="${memberDetail.levelname }">
 				</div>
 				<div class="form-group">
-				  <label for="pwd">Password:</label>
-				  <input type="password" class="form-control" id="pwd" maxlength="15" placeholder="패스워드는 4~15자 이내로 입력해주세요." name="pwd">
+				  <label for="pwd">Password:</label> <input type="button" id="pwdBtn" class="btn btn-warning btn-xs" value="비밀번호 변경하기" onClick="editPwd()">
+				  <input type="password" class="form-control" id="pwd" maxlength="15" name="pwd" disabled>
 				</div>
 				<div class="form-group">
 				  <label for="repwd">Password 확인:</label>
-				  <input type="password" class="form-control" id="repwd" maxlength="15" placeholder="패스워드를 다시한번 입력해주세요." name="repwd">
+				  <input type="password" class="form-control" id="repwd" maxlength="15" name="repwd" disabled>
 				</div>
 		      	<div class="form-group">
 				  <label for="username">이 름:</label>
-				  <input type="text" class="form-control" id="username" maxlength="10" name="username">
+				  <input type="text" class="form-control" id="username" maxlength="10" name="username" value="${memberDetail.username }">
 				</div>
 		      	<div class="form-group">
 				  <label for="nickname">별 명:</label>
 				  <div class="form-inline">
-					  <input type="text" class="form-control" id="name" maxlength="10" name="nickname" placeholder="별명은 10자 이내로 입력해주세요." style="width:85%">
+					  <input type="text" class="form-control" id="name" maxlength="10" name="nickname" value="${memberDetail.nickname }" style="width:85%">
 					  <input type="button" class="btn" value="별명중복확인" onClick="nickChk()">
 				  </div>
 				</div>
 		      	<div class="form-group">
 				  <label for="email">E-mail:</label>
-				  <input type="text" class="form-control" id="email" maxlength="40" placeholder="example : abcd@abc.com" name="email">
+				  <input type="text" class="form-control" id="email" maxlength="40" value="${memberDetail.email }" name="email">
 				</div>
 		      	<div class="form-group">
 				  <label for="team_id">응원팀:</label>
 				  <select class="form-control" id="team_id" name="team_id">
 				    <option value="0">팀선택</option>
 				    <c:forEach items="${teamList }" var="team">
-				    	<option value="${team.team_id }">${team.name }</option>
+				    	<option value="${team.team_id }" <c:if test="${team.name.equals(memberDetail.teamname) }">selected</c:if> >${team.name }</option>
 				    </c:forEach>
 				  </select>
 				</div>
 			</form>
 	      	<div class="form-group">
 			  <label></label>
-			  <input type="button" class="btn btn-primary" value="회원가입" onClick="regist()">
-			  <input type="button" class="btn btn-danger" value="취소" onClick="goback()">
+			  <input type="button" class="btn btn-primary" value="수정하기" onClick="update()">
+			  <input type="button" class="btn btn-danger" value="취소" onClick="history.back()">
 			</div>
 			
 	    </div>

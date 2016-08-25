@@ -12,11 +12,11 @@ import com.baseball.board.model.repository.BoardDAO;
 import com.baseball.board.model.repository.CommentDAO;
 import com.baseball.exception.LoginFailException;
 import com.baseball.member.model.domain.Member;
+import com.baseball.member.model.domain.MemberDetail;
 import com.baseball.member.model.repository.LevelDAO;
 import com.baseball.member.model.repository.MemberDAO;
 
 import common.Pager;
-import common.Searching;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -117,9 +117,9 @@ public class MemberServiceImpl implements MemberService{
 	
 	// 회원정보 한명만 불러오기 
 	@Override
-	public Member selectMember(int member_id) {
+	public MemberDetail selectMember(int member_id) {
 		
-		Member member = memberDAO.selectMember(member_id);
+		MemberDetail member = memberDAO.selectMember(member_id);
 		
 		return member;
 	}
@@ -141,6 +141,12 @@ public class MemberServiceImpl implements MemberService{
 	// 회원정보 변경
 	@Override
 	public void updateMember(Member member) {
+		
+		if(member.getPwd() != null){	// 비밀번호 변경했으면,
+			String pwd = passwordEncoder.encode(member.getPwd());	// 넘어온 비밀번호 암호화
+			member.setPwd(pwd);
+		}
+		
 		memberDAO.updateMember(member);
 	}
 	

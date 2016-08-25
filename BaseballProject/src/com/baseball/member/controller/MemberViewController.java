@@ -2,7 +2,6 @@ package com.baseball.member.controller;
 
 import java.util.List;
 
-import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.baseball.exception.LoginFailException;
 import com.baseball.member.model.domain.Member;
+import com.baseball.member.model.domain.MemberDetail;
 import com.baseball.member.model.service.MemberService;
 import com.baseball.team.model.service.TeamService;
 
@@ -52,7 +53,7 @@ public class MemberViewController {
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String gotoLogin(HttpServletRequest request){
 		
-		String referer = request.getHeader("Referer"); // 이전에 보던 페이지 주소 얻어오기!!
+		String referer = request.getHeader("Referer"); // 헤더의 referer 이용해서 이전에 보던 페이지 주소 얻어오기!!
 		HttpSession session = request.getSession();	// 이전에 보던 페이지 세션에 담기!!
 		session.setAttribute("referer", referer.substring(referer.lastIndexOf(":")+5));
 				
@@ -66,7 +67,7 @@ public class MemberViewController {
 		Member loginMember = memberService.loginMember(member);
 		session.setAttribute("loginMember", loginMember); // 로그인한 멤버 정보 세션에 담기!!
 		
-		String referer = (String)session.getAttribute("referer");	 // 로그인 이전에 보던 페이지 주소 얻어오기!!
+		String referer = (String)session.getAttribute("referer");	 // 세션에 담아놓은 로그인 이전에 보던 페이지 주소 얻어오기!!
 		session.removeAttribute("referer"); // 세션에서 페이지주소 제거!!
 		
 		return "redirect:"+referer; // 로그인 이전에 보던 페이지로 이동!!
@@ -81,7 +82,30 @@ public class MemberViewController {
 		return "redirect:/";	// 메인페이지로 이동.
 	}
 	
-	// 회원 삭제
+	// 마이페이지 이동
+	@RequestMapping(value="/myinfo", method=RequestMethod.GET) 
+	public String myPage(Model model, Member member){
+		
+		MemberDetail memberDetail = memberService.selectMember(member.getMember_id());
+		
+		model.addAttribute("memberDetail", memberDetail);
+		List teamList = teamService.selectList();
+		model.addAttribute("teamList", teamList);
+		
+		return "member/myinfo";
+	}
+	
+	// 회원정보 수정하기
+	@RequestMapping(value="/myinfo", method=RequestMethod.PUT)
+	public String updateInfo(Model model, Member member){
+		
+		memberService.updateMember(member);
+		
+		return "redirect:/view/member/myinfo?member_id="+member.getMember_id();
+	}
+	
+	
+	// 회원 탈퇴
 	public String deleteMember(){
 		
 		return "";

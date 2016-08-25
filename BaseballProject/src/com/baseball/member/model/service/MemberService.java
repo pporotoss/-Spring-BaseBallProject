@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.baseball.member.model.domain.Member;
+import com.baseball.member.model.domain.MemberDetail;
 
 public interface MemberService {
 	
@@ -11,7 +12,7 @@ public interface MemberService {
 	public Map memberAll(String page, String keyword);
 	public Map memberLevel(String page, String level_id);
 	public List LevelAll();
-	public Member selectMember(int member_id);
+	public MemberDetail selectMember(int member_id);
 	public void registMember(Member member);
 	public void updateMember(Member member);
 	public void deleteMember(int[] member_id);

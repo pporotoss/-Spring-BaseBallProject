@@ -52,5 +52,5 @@
 			<bean class="common.intercepter.LoginCheckInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
-
+	
 </beans>

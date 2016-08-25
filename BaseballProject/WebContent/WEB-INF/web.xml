@@ -10,6 +10,7 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:com/baseball/model/root-context.xml</param-value>
   </context-param>
+
   <filter>
     <filter-name>encoding</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -22,6 +23,8 @@
     <filter-name>encoding</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  
+  <!-- HiddenMethod -->
   <filter>
     <filter-name>httpMethodFilter</filter-name>
     <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
@@ -30,6 +33,8 @@
     <filter-name>httpMethodFilter</filter-name>
     <servlet-name>webServlet</servlet-name>
   </filter-mapping>
+  
+  
   <servlet>
     <servlet-name>apiServlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
