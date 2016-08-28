@@ -49,7 +49,10 @@
   	$(document).ready(function(){
   		$("#pagesize").change(function(){
   			if($("#pagesize").val() != 0){
-  				location.href="/view/board?page=${pager.page}&pagesize="+$("#pagesize").val()<c:if test="${searching !=null}">+"&searchType=${searching.searchType}&keyword=${searching.keyword}"</c:if>;
+  				<c:if test="${searching !=null}">
+  					<c:set var="search" value="\"&searchType=${searching.searchType}&keyword=${searching.keyword}\""/>
+  				</c:if>
+  				location.href="/view/board?page=${pager.page}&pagesize="+$("#pagesize").val()+${search};
   			}
   	    });
   	});
@@ -83,10 +86,10 @@
     	<div align="right" class="form-inline">
 		  게시물 갯수 : <select class="form-control" style="width:15%" name="pagesize" id="pagesize">
 		    <option value="0">선택해 주세요.</option>
-		    <option value="10">10개</option>
-		    <option value="20">20개</option>
-		    <option value="30">30개</option>
-		    <option value="40">40개</option>
+		    <option value="10" <c:out value="${pager.pageSize == 10 ? 'selected' : '' }"/>>10개</option>
+		    <option value="20" <c:out value="${pager.pageSize == 20 ? 'selected' : '' }"/>>20개</option>
+		    <option value="30" <c:out value="${pager.pageSize == 30 ? 'selected' : '' }"/>>30개</option>
+		    <option value="40" <c:out value="${pager.pageSize == 40 ? 'selected' : '' }"/>>40개</option>
 		  </select>
 		</div>
       <table class="table table-hover table-responsive">
