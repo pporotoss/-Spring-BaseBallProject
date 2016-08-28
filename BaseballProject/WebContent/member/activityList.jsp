@@ -44,25 +44,7 @@
     }
   </style>
   <script>
-	  function goFreeBoard(){
-		  $("li").removeClass("active");
-		  $("#freeBoard").addClass("active");
-	  }
 	  
-	  function goFreeComment(){
-		  $("li").removeClass("active");
-		  $("#freeComment").addClass("active");
-	  }
-	  
-	  function goPhoto(){
-		  $("li").removeClass("active");
-		  $("#photo").addClass("active");
-	  }
-	  
-	  function goPhotoComment(){
-		  $("li").removeClass("active");
-		  $("#photoComment").addClass("active");
-	  }
 	  
   </script>
 </head>
@@ -78,32 +60,69 @@
     <div class="col-sm-6 text-left"> 
       <h1>활동내역</h1>
       <ul class="nav nav-tabs">
-		<li role="presentation" class="active" id="freeBoard"><a href="javascript:goFreeBoard()">자유게시판</a></li>
-		<li role="presentation" id="freeComment"><a href="javascript:goFreeComment()">자유게시판 댓글</a></li>
-		<li role="presentation" id="photo"><a href="javascript:goPhoto()">사진게시판</a></li>
-		<li role="presentation" id="photoComment"><a href="javascript:goPhotoComment()">사진게시판 댓글</a></li>
+      	<c:if test="${freeBoardList != null }">
+      		<c:set var="freeBoardMenu" value="active" />
+      	</c:if>
+      	<c:if test="${freeCommentList != null }">
+      		<c:set var="freeCommentMenu" value="active"/>
+      	</c:if>
+      	<c:if test="${photoList != null }">
+      		<c:set var="photoBoardMenu" value="active"/>
+      	</c:if>
+      	<c:if test="${photoCommnetList != null }">
+      		<c:set var="photoCommentMenu" value="active"/>
+      	</c:if>
+		<li role="presentation" class="${freeBoardMenu }"><a href="/view/member/activityList/${loginMember.member_id }/freeBoard">자유게시판</a></li>
+		<li role="presentation" class="${freeCommentMenu }"><a href="/view/member/activityList/${loginMember.member_id }/freeComment">자유게시판 댓글</a></li>
+		<li role="presentation" class="${photoBoardMenu }"><a href="javascript:goPhoto()">사진게시판</a></li>
+		<li role="presentation" class="${photoCommentMenu }"><a href="javascript:goPhotoComment()">사진게시판 댓글</a></li>
 	  </ul>
       <table class="table table-hover">
 		    <thead>
 		      <tr>
 		         <tr>
-			        <th width="5%" style="text-align:center">번 호</th>
-			        <th width="60%" style="text-align:center" colspan="2">&nbsp;제 목</th>
+			        <th width="5%" style="text-align:center">번호</th>
+			        <c:if test="${freeBoardList != null || photoBoardList != null}" >
+			        	<c:set var="headName" value="제 목"/>
+			        </c:if>
+			        <c:if test="${freeCommentList != null || photoCommentList != null}" >
+			        	<c:set var="headName" value="내 용"/>
+			        </c:if>				        
+		        	<th width="60%" style="text-align:center" colspan="2">&nbsp;${headName }</th>
 			        <th width="15%">&nbsp;작성일</th>
-			        <th width="10%" style="text-align:center">조회수</th>
+			        
+			        <c:if test="${freeBoardList != null || photoBoardList != null}" >
+			        	<th width="10%" style="text-align:center">조회수</th>
+			        </c:if>
 			      </tr>
 		      </tr>
 		    </thead>
 		    <tbody>
-		      <c:forEach items="${freeBoardList }" var="boardDetail">
-			      <tr>
-			        <td style="text-align:center">${boardDetail.board_id }</td>
-			        <td width="10%"><!-- 빈칸 --></td>
-			        <td><a href="/view/board/${boardDetail.board_id }?page=${pager.page}&pagesize=${pager.pageSize}"> ${boardDetail.title }</a></td>
-			        <td><fmt:formatDate value="${boardDetail.regdate }" type="both" pattern="yyyy.MM.dd hh:mm:ss"/></td>
-			        <td style="text-align:center">${boardDetail.count }</td>
-			      </tr>
-		      </c:forEach>
+			   <c:choose>
+			   		<c:when test="${freeBoardList != null }"><!-- 자유게시판 내역 -->
+				      <c:forEach items="${freeBoardList }" var="boardDetail">
+					      <tr>
+					        <td style="text-align:center">${boardDetail.board_id }</td>
+					        <td width="10%"><!-- 빈칸 --></td>
+					        <td><a href="/view/board/${boardDetail.board_id }?page=${pager.page}&pagesize=${pager.pageSize}"> ${boardDetail.title }</a></td>
+					        <td><fmt:formatDate value="${boardDetail.regdate }" type="both" pattern="yyyy.MM.dd hh:mm:ss"/></td>
+					        <td style="text-align:center">${boardDetail.hit }</td>
+					      </tr>
+				      </c:forEach>
+			      	</c:when>
+			   		<c:when test="${freeCommentList != null }"><!-- 자유게시판 댓글 내역 -->
+			   		  <c:set var="commentNum" value="${pager.endContent }"/>
+				      <c:forEach items="${freeCommentList }" var="commentDetail">
+					      <tr>
+					        <td style="text-align:center">${commentNum }</td>
+					        <td width="10%"><!-- 빈칸 --></td>
+					        <td>${commentDetail.content }</td>
+					        <td><fmt:formatDate value="${commentDetail.regdate }" type="both" pattern="yyyy.MM.dd hh:mm:ss"/></td>
+					      </tr>
+					      <c:set var="commentNum" value="${commentNum - 1 }"/>
+				      </c:forEach>
+			      	</c:when>
+			   	</c:choose>
 		    </tbody>
 		  </table>
     </div>

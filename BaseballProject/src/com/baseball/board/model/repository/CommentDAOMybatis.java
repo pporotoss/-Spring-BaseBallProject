@@ -60,4 +60,16 @@ public class CommentDAOMybatis implements CommentDAO{
 		return sqlSessionTemplate.selectOne("Comment.countAll", board_id);
 	}
 
+	@Override
+	public int userCommentCount(int member_id) {
+		
+		return sqlSessionTemplate.selectOne("Comment.userCommentCount", member_id);
+	}
+
+	@Override
+	public List userCommentList(Map user) {
+
+		return sqlSessionTemplate.selectList("Comment.userCommentList", user);
+	}
+
 }

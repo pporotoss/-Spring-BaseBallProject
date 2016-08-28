@@ -23,7 +23,7 @@ public interface MemberService {
 	public void updateMemberLevel(int[] member_id, int level_id);
 	public Map freeBoardList(int member_id, String page);
 	public Map freeCommentList(int member_id, String page);
-	public Map photoList(int member_id, String page);
+	public Map photoBoardList(int member_id, String page);
 	public Map photoCommentList(int member_id, String page);
 	
 }

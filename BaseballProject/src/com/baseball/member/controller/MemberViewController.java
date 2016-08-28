@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.baseball.board.model.domain.Comment;
 import com.baseball.exception.LoginFailException;
 import com.baseball.member.model.domain.Member;
 import com.baseball.member.model.domain.MemberDetail;
@@ -85,7 +86,8 @@ public class MemberViewController {
 		return "redirect:/";	// 메인페이지로 이동.
 	}
 	
-	// 마이페이지 이동
+	/* 회원정보 */
+	// 회원정보 이동
 	@RequestMapping(value="/myinfo/{member_id}", method=RequestMethod.GET) 
 	public String myPage(Model model, @PathVariable("member_id") int member_id){
 		
@@ -116,9 +118,9 @@ public class MemberViewController {
 	
 	/*  활동내역  */
 
-	// 자유게시판
-	@RequestMapping(value="/activityList/{member_id}", method=RequestMethod.GET)
-	public String activityList(Model model, @PathVariable("member_id") int member_id, String page){
+	// 자유게시판 작성글
+	@RequestMapping(value="/activityList/{member_id}/freeBoard", method=RequestMethod.GET)
+	public String freeBoardList(Model model, @PathVariable("member_id") int member_id, String page){
 		
 		Map map = memberService.freeBoardList(member_id, page);
 		List<MemberDetail> freeBoardList = (List)map.get("freeBoardList");
@@ -130,7 +132,19 @@ public class MemberViewController {
 		return "member/activityList";
 	}
 	
-	
+	// 자유게시판 댓글
+	@RequestMapping(value="/activityList/{member_id}/freeComment", method=RequestMethod.GET)
+	public String freeCommentList(Model model, @PathVariable("member_id") int member_id, String page){
+		
+		Map map = memberService.freeCommentList(member_id, page);
+		List<Comment> freeCommentList = (List)map.get("freeCommentList");
+		Pager pager = (Pager) map.get("pager");
+		
+		model.addAttribute("freeCommentList", freeCommentList);
+		model.addAttribute("pager", pager);
+		
+		return "member/activityList";
+	}
 	
 
 	

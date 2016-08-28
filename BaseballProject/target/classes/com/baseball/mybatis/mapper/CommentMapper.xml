@@ -41,4 +41,16 @@
 	<delete id="deleteByMember" parameterType="int">
 		delete form comment where member_id=${member_id}
 	</delete>
+	
+	<select id="userCommentCount" parameterType="int" resultType="int">
+		select count(comment_id) from comment
+		where member_id=#{member_id}
+	</select>
+	
+	<select id="userCommentList" parameterType="Map" resultType="Comment">
+		select comment_id, content, regdate from comment
+		where member_id=#{member_id}
+		order by comment_id desc
+		limit #{startContent}, #{pageSize}
+	</select>
 </mapper>

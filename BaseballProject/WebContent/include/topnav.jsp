@@ -60,7 +60,7 @@
 		        	<ul class="dropdown-menu" role="menu">
 		              <li><a href="/view/member/myinfo/${loginMember.member_id }">회원정보</a></li>
 		              <li class="divider"></li>
-		              <li><a href="/view/member/activityList/${loginMember.member_id }">활동내역</a></li>
+		              <li><a href="/view/member/activityList/${loginMember.member_id }/freeBoard">활동내역</a></li>
 		            </ul>
 		         </li>
 	        	<li><a href="/view/member/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
