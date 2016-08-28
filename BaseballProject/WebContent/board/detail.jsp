@@ -67,6 +67,12 @@
   	// 댓글 삽입
   	function insertComment(){
   		var commentTable = document.getElementById("commentTable");
+  		if(commentForm.content.value.trim().length == 0){
+  			alert("댓글을 입력해 주세요.");	
+	  		commentForm.content.focus();
+	  		return;
+  		}
+  		
   		
   		$.ajax({
   			type:"post",	// 요청방식
@@ -101,10 +107,10 @@
 			    		var cell4 = row.insertCell(3);
 			    		
 			    		cell1.style.width="20%";
-			    		cell2.style.width="20%";
-			    		cell3.style.width="20%";
+			    		cell2.style.width="50%";
+			    		cell3.style.width="15%";
 			    		cell3.style.textAlign="center";
-			    		cell4.style.width="20%";
+			    		cell4.style.width="15%";
 			    		cell4.style.textAlign="center";
 			    		
 			    		cell1.innerHTML = "&nbsp;"+"<img src=\"/images/member/"+obj.levelname+".png\">"+obj.nickname;
@@ -248,32 +254,8 @@
 					</c:forEach>
 				</table>
 <!-------------------------------- 댓글 페이징 ------------------------------------------------------>
-				<div align="center">
-					<nav>
-						<ul class="pagination pagination-sm">
-							<c:if test="${commentPager.prev }">
-								<li><a href="/view/board/${detail.board_id }?commentPage=${commentPager.startPage - 1}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-							</c:if>
-							
-							<c:forEach begin="${commentPager.startPage }" end="${commentPager.endPage }" var="pageNum">
-								<c:choose>
-									<c:when test="${commentPager.page == pageNum }">
-										<li class="active">
-									</c:when>
-									<c:otherwise>
-										<li>
-									</c:otherwise>
-								</c:choose>
-									<a href="/view/board/${detail.board_id }?commentPage=${pageNum}">${pageNum }<span class="sr-only"></span></a></li>
-							</c:forEach>
-							
-							<c:if test="${commentPager.next }">
-								<li><a href="/view/board/${detail.board_id }?commentPage=${commentPager.endPage + 1}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-							</c:if>
-						
-						</ul>
-					</nav>
-				</div>
+				<c:set var="url" value="/view/board/${detail.board_id }?commentPage="/>
+				<%@ include file="/include/commentPaging.jsp" %>
 <!-------------------------------- 댓글 입력 ------------------------------------------------------>				
 				<c:if test="${loginMember != null }">
 					<form name="commentForm">

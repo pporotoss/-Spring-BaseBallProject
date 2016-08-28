@@ -78,12 +78,7 @@
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-8 text-left"> 
-   		<c:set var="detailUrl" value="/view/board"/>
- 		<c:set var="detailUrl1" value="?page=${pager.page }&pagesize=${pager.pageSize}"/>
-		<c:set var="detailUrl2" value=""/>
-		<c:if test="${searching.keyword != null }">
-  			<c:set var="detailUrl2" value="&searchType=${searching.searchType}&keyword=${searching.keyword}"/>
- 		</c:if>
+   		
       <h1>&nbsp;&nbsp;&nbsp;자유게시판</h1>
     	<div align="right" class="form-inline">
 		  게시물 갯수 : <select class="form-control" style="width:15%" name="pagesize" id="pagesize">
@@ -105,6 +100,12 @@
 	      </tr>
 	    </thead>
 	    <tbody>
+	    <c:set var="detailUrl" value="/view/board/"/>
+ 		<c:set var="detailUrl1" value="?page=${pager.page }&pagesize=${pager.pageSize}"/>
+		<c:set var="detailUrl2" value=""/>
+		<c:if test="${searching.keyword != null }">
+  			<c:set var="detailUrl2" value="&searchType=${searching.searchType}&keyword=${searching.keyword}"/>
+ 		</c:if>
 		     <c:forEach items="${boardDetailList }" var="boardDetail">
 		     	<tr>
 					<td style="text-align:center">${boardDetail.board_id}</td>
@@ -122,7 +123,7 @@
 									<img src="/images/board/reply.png">
 								</c:otherwise>
 							</c:choose>
-							<a href="${detailUrl1 }${detailUrl2}${detailUrl3}">${boardDetail.title }</a>&nbsp;[${boardDetail.count }]
+							<a href="${detailUrl }${boardDetail.board_id}${detailUrl1}${detailUrl2}">${boardDetail.title }</a>&nbsp;[${boardDetail.count }]
 						</c:if>
 						<c:if test="${boardDetail.ishidden.equals(\"yes\") }"><!-- 비밀글이면  -->
 							<c:choose>
@@ -138,7 +139,7 @@
 											<img src="/images/board/reply.png"><img src="/images/board/lock.png">
 										</c:otherwise>
 									</c:choose>
-									<a href="${detailUrl1 }${detailUrl2}${detailUrl3}">${boardDetail.title }</a>&nbsp;[${boardDetail.count }]
+									<a href="${detailUrl }${boardDetail.board_id}${detailUrl1}${detailUrl2}">${boardDetail.title }</a>&nbsp;[${boardDetail.count }]
 								</c:when>
 								<c:otherwise><!--  작성자나 관리자가 아니면,  -->
 									<c:choose>
