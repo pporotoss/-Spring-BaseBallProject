@@ -111,7 +111,7 @@
 				      </c:forEach>
 			      	</c:when>
 			   		<c:when test="${freeCommentList != null }"><!-- 자유게시판 댓글 내역 -->
-			   		  <c:set var="commentNum" value="${pager.endContent }"/>
+			   		  <c:set var="commentNum" value="${pager.totalContents-(pager.startContent-1)  }"/>
 				      <c:forEach items="${freeCommentList }" var="commentDetail">
 					      <tr>
 					        <td style="text-align:center">${commentNum }</td>
@@ -125,6 +125,47 @@
 			   	</c:choose>
 		    </tbody>
 		  </table>
+		  <!-----------------  페이징 ------------------------------------ -->
+	  	<div align="center">
+	  		<c:if test="${freeBoardList != null }">
+	  			<c:set var="url" value="/view/member/activityList/${loginMember.member_id }/freeBoard?page="/>
+	  		</c:if>
+	  		<c:if test="${freeCommentList != null }">
+	  			<c:set var="url" value="/view/member/activityList/${loginMember.member_id }/freeComment?page="/>
+	  		</c:if>
+		  	<nav>
+			  <ul class="pagination">
+			    <c:if test="${pager.prev }">
+				    <li>
+				      <a href="${url}${(pager.startPage-1)}" aria-label="Previous">
+				        <span aria-hidden="true">&laquo;</span>
+				      </a>
+				    </li>
+			    </c:if>
+			    <c:forEach var="cnt" begin="${pager.startPage }" end="${pager.endPage }">
+			    	<c:choose>
+				    	<c:when test="${cnt == pager.page }">
+				    		<c:set var="pageClass" value="active"/>
+				    	</c:when>
+				    	<c:otherwise>
+				    		<c:set var="pageClass" value=""/>
+				    	</c:otherwise>
+			    	</c:choose>	
+			    
+			    	<li class="${pageClass }">
+			    		<a href="${url}${cnt }">${cnt }</a>
+			    	</li>
+			    </c:forEach>
+			    <c:if test="${pager.next }">
+				    <li>
+				      <a href="${url }${pager.endPage+1}" aria-label="Next">
+				        <span aria-hidden="true">&raquo;</span>
+				      </a>
+				    </li>
+			    </c:if>
+			  </ul>
+			</nav>
+		</div>
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-3 sidenav" style="background-color:white">

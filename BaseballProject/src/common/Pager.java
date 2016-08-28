@@ -2,29 +2,31 @@ package common;
 
 public class Pager {
 	
-	private int page;
-	private int startPage;
-	private int endPage;
-	private boolean prev;
-	private boolean next;
-	private int totalPage;
+	private int page;	// 현재 페이지
+	private int startPage;	// 페이징 블럭 시작페이지 번호
+	private int endPage;	// 페이징 블럭 마지막 페이지 번호
+	private boolean prev;	// 이전 페이징 블럭 존재 유무
+	private boolean next;	// 다음 페이징 블럭 존재 유무
+	private int totalPage;	// 총 페이지 갯수
 	private int pageSize;	// 화면당 표시될 게시물 수
 	private int blockSize;	// 화면당 표시될 페이징 번호 수
-	private int startContent;
-	private int endContent;
+	private int startContent;	// 화면당 첫페이지 번호
+	private int endContent;	// 화면당 마지막 페이지 번호
+	private int totalContents;	// 총 게시물 수
 	
 	public Pager(int page, int pageSize, int totalContents, int blockSize) {
 		this.page = page;
 		this.pageSize = pageSize;
+		this.totalContents = totalContents;
 		
 		// DB 불러올 값 설정
 		endContent = page * pageSize;	// 페이지당 마지막 게시물 번호
 		startContent = endContent - (pageSize-1);	// 페이지당 시작 게시물 번호
 		
 		// 페이징처리
-		totalPage = (int)Math.ceil(totalContents/(double)pageSize);	// 총 페이지 갯수
-		endPage = (int) Math.ceil(page/(double)blockSize)*blockSize;	// 화면당 마지막 페이지 번호
-		startPage = endPage - (blockSize - 1);	// 화면당 첫페이지 번호
+		totalPage = (int)Math.ceil(totalContents/(double)pageSize);	
+		endPage = (int) Math.ceil(page/(double)blockSize)*blockSize;	
+		startPage = endPage - (blockSize - 1);	
 		
 		if(endPage >= totalPage){
 			endPage = totalPage;
@@ -36,6 +38,14 @@ public class Pager {
 		if((endPage+1) <= totalPage){
 			next = true;
 		}
+	}
+
+	public int getTotalContents() {
+		return totalContents;
+	}
+
+	public void setTotalContents(int totalContents) {
+		this.totalContents = totalContents;
 	}
 
 	public int getPage() {
