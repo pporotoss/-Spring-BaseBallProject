@@ -24,10 +24,14 @@
 		<c:when test="${memberList != null}">
 			<c:set var="management" value="active"/>
 		</c:when>
+		<c:when test="${photoList != null}">
+			<c:set var="photoboard" value="active"/>
+		</c:when>
 		
      </c:choose>
 	      <li class="${noticeboard }"><a href="/view/notice">공지사항</a></li>
 		  <li class="${freeboard }"><a href="/view/board">자유게시판</a></li>
+		  <li class="${photoboard }"><a href="/view/photo">사진게시판</a></li>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">야구<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
