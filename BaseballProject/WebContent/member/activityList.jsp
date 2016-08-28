@@ -133,38 +133,7 @@
 	  		<c:if test="${freeCommentList != null }">
 	  			<c:set var="url" value="/view/member/activityList/${loginMember.member_id }/freeComment?page="/>
 	  		</c:if>
-		  	<nav>
-			  <ul class="pagination">
-			    <c:if test="${pager.prev }">
-				    <li>
-				      <a href="${url}${(pager.startPage-1)}" aria-label="Previous">
-				        <span aria-hidden="true">&laquo;</span>
-				      </a>
-				    </li>
-			    </c:if>
-			    <c:forEach var="cnt" begin="${pager.startPage }" end="${pager.endPage }">
-			    	<c:choose>
-				    	<c:when test="${cnt == pager.page }">
-				    		<c:set var="pageClass" value="active"/>
-				    	</c:when>
-				    	<c:otherwise>
-				    		<c:set var="pageClass" value=""/>
-				    	</c:otherwise>
-			    	</c:choose>	
-			    
-			    	<li class="${pageClass }">
-			    		<a href="${url}${cnt }">${cnt }</a>
-			    	</li>
-			    </c:forEach>
-			    <c:if test="${pager.next }">
-				    <li>
-				      <a href="${url }${pager.endPage+1}" aria-label="Next">
-				        <span aria-hidden="true">&raquo;</span>
-				      </a>
-				    </li>
-			    </c:if>
-			  </ul>
-			</nav>
+	  		<%@ include file="/include/paging.jsp" %>
 		</div>
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
