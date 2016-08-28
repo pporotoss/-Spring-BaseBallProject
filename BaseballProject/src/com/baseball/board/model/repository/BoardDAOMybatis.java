@@ -122,4 +122,16 @@ public class  BoardDAOMybatis implements BoardDAO{
 		
 		return result;
 	}
+
+	@Override
+	public List userContents(Map user) {
+		
+		return sqlSessionTemplate.selectList("Board.userContents", user);
+	}
+
+	@Override
+	public int userContentsCount(int member_id) {
+
+		return sqlSessionTemplate.selectOne("Board.userContentsCount", member_id);
+	}
 }

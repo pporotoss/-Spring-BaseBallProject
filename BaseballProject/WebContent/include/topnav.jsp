@@ -54,9 +54,9 @@
         		<li class="dropdown">
 		        	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>${loginMember.nickname }<span class="caret"></span></a>
 		        	<ul class="dropdown-menu" role="menu">
-		              <li><a href="/view/member/myinfo?member_id=${loginMember.member_id }">회원정보</a></li>
+		              <li><a href="/view/member/myinfo/${loginMember.member_id }">회원정보</a></li>
 		              <li class="divider"></li>
-		              <li><a href="#">활동내역</a></li>
+		              <li><a href="/view/member/activityList/${loginMember.member_id }">활동내역</a></li>
 		            </ul>
 		         </li>
 	        	<li><a href="/view/member/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>

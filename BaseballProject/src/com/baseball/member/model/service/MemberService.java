@@ -21,5 +21,9 @@ public interface MemberService {
 	public boolean chkId(String id);
 	public boolean chkNickname(String nickname);
 	public void updateMemberLevel(int[] member_id, int level_id);
+	public Map freeBoardList(int member_id, String page);
+	public Map freeCommentList(int member_id, String page);
+	public Map photoList(int member_id, String page);
+	public Map photoCommentList(int member_id, String page);
 	
 }

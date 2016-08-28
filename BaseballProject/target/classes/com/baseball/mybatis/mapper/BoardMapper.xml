@@ -113,4 +113,16 @@
 		delete from board where member_id=#{member_id}
 	</delete>
 	
+	<select id="userContentsCount" parameterType="int" resultType="int">
+		select count(board_id) from board where member_id=#{member_id}
+	</select>
+
+	<select id="userContents" parameterType="Map" resultType="BoardDetail">
+		select board_id, title, hit, regdate
+		from board
+		where member_id=#{member_id}
+		order by board_id desc
+		limit #{startContent}, #{pageSize}
+	</select>
+	
 </mapper>

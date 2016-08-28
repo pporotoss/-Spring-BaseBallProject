@@ -1,6 +1,7 @@
 package com.baseball.member.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,6 +20,8 @@ import com.baseball.member.model.domain.Member;
 import com.baseball.member.model.domain.MemberDetail;
 import com.baseball.member.model.service.MemberService;
 import com.baseball.team.model.service.TeamService;
+
+import common.Pager;
 
 @Controller
 @RequestMapping("/member")
@@ -83,10 +86,10 @@ public class MemberViewController {
 	}
 	
 	// 마이페이지 이동
-	@RequestMapping(value="/myinfo", method=RequestMethod.GET) 
-	public String myPage(Model model, Member member){
+	@RequestMapping(value="/myinfo/{member_id}", method=RequestMethod.GET) 
+	public String myPage(Model model, @PathVariable("member_id") int member_id){
 		
-		MemberDetail memberDetail = memberService.selectMember(member.getMember_id());
+		MemberDetail memberDetail = memberService.selectMember(member_id);
 		
 		model.addAttribute("memberDetail", memberDetail);
 		List teamList = teamService.selectList();
@@ -101,7 +104,7 @@ public class MemberViewController {
 		
 		memberService.updateMember(member);
 		
-		return "redirect:/view/member/myinfo?member_id="+member.getMember_id();
+		return "redirect:/view/member/myinfo/"+member.getMember_id();
 	}
 	
 	
@@ -110,6 +113,27 @@ public class MemberViewController {
 		
 		return "";
 	}
+	
+	/*  활동내역  */
+
+	// 자유게시판
+	@RequestMapping(value="/activityList/{member_id}", method=RequestMethod.GET)
+	public String activityList(Model model, @PathVariable("member_id") int member_id, String page){
+		
+		Map map = memberService.freeBoardList(member_id, page);
+		List<MemberDetail> freeBoardList = (List)map.get("freeBoardList");
+		Pager pager = (Pager) map.get("pager");
+		
+		model.addAttribute("freeBoardList", freeBoardList);
+		model.addAttribute("pager", pager);
+	
+		return "member/activityList";
+	}
+	
+	
+	
+
+	
 	
 	@ExceptionHandler(LoginFailException.class)
 	public ModelAndView loginFail(LoginFailException e){

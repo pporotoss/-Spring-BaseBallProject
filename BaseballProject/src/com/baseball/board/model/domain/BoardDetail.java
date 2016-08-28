@@ -15,7 +15,7 @@ public class BoardDetail {
 	private int member_id;
 	private String nickname;
 	private String levelname;
-	private int count;
+	private int count;	// °Ô½Ã¹°¿¡ µþ¸° ´ñ±Û °¹¼ö
 	
 	public int getBoard_id() {
 		return board_id;

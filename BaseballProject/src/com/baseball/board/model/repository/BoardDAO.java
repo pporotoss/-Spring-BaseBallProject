@@ -27,6 +27,7 @@ public interface BoardDAO {
 	public int countDepth(Board board);
 	public int minDepthRank(Board board);
 	public int dPlusOneMaxRank(Board board);
-	
+	public List userContents(Map user);	// 사용자가 쓴 글 모두 가져오기.
+	public int userContentsCount(int member_id);	// 해당 사용자가 쓴 글의 갯수 가져오기.
 	
 }

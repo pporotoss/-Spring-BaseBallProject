@@ -238,5 +238,48 @@ public class MemberServiceImpl implements MemberService{
 		
 	}
 
+	@Override
+	public Map freeBoardList(int member_id, String page) {
+		
+		int pageSize = 10;
+		int totalContents = boardDAO.userContentsCount(member_id);
+		int blockSize = 10;
+		
+		if(page == null){
+			page = "1";
+		}
+		
+		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
+		Map user = new HashMap();
+		user.put("member_id", member_id);
+		user.put("startContent", pager.getStartContent()-1);
+		user.put("pageSize", pager.getPageSize());
+		
+		Map result = new HashMap();
+		List freeBoardList = boardDAO.userContents(user);
+		result.put("freeBoardList", freeBoardList);
+		result.put("pager", pager);
+		
+		return result;
+	}
+
+	@Override
+	public Map freeCommentList(int member_id, String page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map photoList(int member_id, String page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map photoCommentList(int member_id, String page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }
