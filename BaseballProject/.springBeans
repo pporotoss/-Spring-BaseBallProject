@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[3.7.3.201602250914-RELEASE]]></pluginVersion>
+	<pluginVersion><![CDATA[3.8.1.201607290748-RELEASE]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
@@ -9,7 +9,6 @@
 	<configs>
 		<config>WebContent/WEB-INF/view-context.xml</config>
 		<config>WebContent/WEB-INF/api-context.xml</config>
-		<config>src/com/baseball/model/root-context.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

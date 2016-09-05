@@ -49,40 +49,45 @@
   
 <div class="container-fluid text-center">    
   <div class="row content">
-    <div class="col-sm-1 sidenav" style="background-color:white">
+    <div class="col-sm-2 sidenav" style="background-color:white">
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
-    <div class="col-sm-10 text-left"> 
-      <h1>사진게시판</h1>
-      <table class="table table-hover">
-	    <thead>
-	      <tr>
-	        <th>Firstname</th>
-	        <th>Lastname</th>
-	        <th>Email</th>
-	      </tr>
-	    </thead>
-	    <tbody>
-	      <tr>
-	        <td>John</td>
-	        <td>Doe</td>
-	        <td>john@example.com</td>
-	      </tr>
-	      <tr>
-	        <td>Mary</td>
-	        <td>Moe</td>
-	        <td>mary@example.com</td>
-	      </tr>
-	      <tr>
-	        <td>July</td>
-	        <td>Dooley</td>
-	        <td>july@example.com</td>
-	      </tr>
-	    </tbody>
-	  </table>
-    </div>
+    <div class="col-sm-8 text-left"> 
+      <h1>사진게시판  &nbsp;&nbsp;<c:if test="${loginMember != null }"><input type="button" value="사진올리기" class="btn btn-warning" onClick="location.href='/photo/upload.jsp'" ></c:if></h1> 
+      <br>
+      <br>
+      <div class="row">
+      	
+      		<div class="col-sm-3">
+				<a href="pulpitrock.jpg" class="thumbnail">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							제  목[댓글수]
+						</div>
+					</div>
+					<img src="pulpitrock.jpg" alt="Pulpit Rock" style="width:150px;height:150px">
+				</a>
+				<div class="panel panel-default">
+						<div class="panel-body">
+							<table>
+								<tr>
+									<td>작성일</td>
+								</tr>
+								<tr>
+									<td>작성자</td>
+								</tr>
+							</table>
+					</div>
+				</div>
+      		</div>
+      		
+      		
+    	</div>
+<!------------------------ 페이징 --------------------------------->
+      			
+      </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
-    <div class="col-sm-1 sidenav" style="background-color:white">
+    <div class="col-sm-2 sidenav" style="background-color:white">
     </div>
   </div>
 </div>

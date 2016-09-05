@@ -16,6 +16,9 @@
 
 	<mvc:annotation-driven/>
 	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:maxUploadSize="1048576"/>
+	
 	<mvc:default-servlet-handler/>
 	<!-- image 등의 정적 자원의 위치 등록!!  -->
 	<mvc:resources location="/images/" mapping="/images/**"/>
@@ -37,7 +40,9 @@
 		<constructor-arg ref="sqlSessionFactoryBean"/>
 	</bean>
 	
-	<!--  비밀번호 암호화!!  -->
+	<!--  스프링 시큐리티 이용 비밀번호 암호화!!  -->
 	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
+	
 	
 </beans>

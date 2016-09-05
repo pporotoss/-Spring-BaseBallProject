@@ -3,12 +3,13 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:com/baseball/model/root-context.xml</param-value>
+    <param-value>classpath:com/baseball/config/root-context.xml</param-value>
   </context-param>
 
   <filter>

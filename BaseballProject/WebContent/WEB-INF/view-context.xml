@@ -20,6 +20,9 @@
 		p:prefix="/"
 		p:suffix=".jsp"/>
 	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:maxUploadSize="1048576"/>
+
 	<mvc:annotation-driven/>
 	
 	<!--  트랜잭션 처리는 컨트롤러를 읽어들이는 곳에서 해야 한다.  -->
