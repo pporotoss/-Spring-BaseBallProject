@@ -1,14 +1,17 @@
 package com.baseball.photoboard.model.domain;
 
+import java.util.Date;
+
 public class PhotoBoard {
 
 	private int photoBoard_id;
 	private String title;
-	private String original_name;
-	private String convert_name;
+	private String saveName;
 	private int hit;
-	private String regdate;
+	private Date regdate;
 	private int member_id;
+	private String thumb1;
+	private String thumb2;
 	
 	public int getPhotoBoard_id() {
 		return photoBoard_id;
@@ -22,17 +25,11 @@ public class PhotoBoard {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getOriginal_name() {
-		return original_name;
+	public String getSaveName() {
+		return saveName;
 	}
-	public void setOriginal_name(String original_name) {
-		this.original_name = original_name;
-	}
-	public String getConvert_name() {
-		return convert_name;
-	}
-	public void setConvert_name(String convert_name) {
-		this.convert_name = convert_name;
+	public void setSaveName(String saveName) {
+		this.saveName = saveName;
 	}
 	public int getHit() {
 		return hit;
@@ -40,10 +37,10 @@ public class PhotoBoard {
 	public void setHit(int hit) {
 		this.hit = hit;
 	}
-	public String getRegdate() {
+	public Date getRegdate() {
 		return regdate;
 	}
-	public void setRegdate(String regdate) {
+	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
 	public int getMember_id() {
@@ -52,4 +49,17 @@ public class PhotoBoard {
 	public void setMember_id(int member_id) {
 		this.member_id = member_id;
 	}
+	public String getThumb1() {
+		return thumb1;
+	}
+	public void setThumb1(String thumb1) {
+		this.thumb1 = thumb1;
+	}
+	public String getThumb2() {
+		return thumb2;
+	}
+	public void setThumb2(String thumb2) {
+		this.thumb2 = thumb2;
+	}
+	
 }

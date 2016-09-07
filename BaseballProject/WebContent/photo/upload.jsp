@@ -144,6 +144,13 @@
 		
 		return GCD;
   	}// cacGCD
+  	
+  	function upload(){
+  		uploadForm.action="/view/photo";
+  		uploadForm.method="POST";
+  		uploadForm.encoding="multipart/form-data"
+  		uploadForm.submit();
+  	}
   </script>
 </head>
 <body>
@@ -181,7 +188,7 @@
 			  </div>
 			</form>
 			<div align="right">
-				<input type="button" class="btn btn-primary" value="올리기">
+				<input type="button" class="btn btn-primary" value="올리기" onClick="upload()">
 			</div>
       	</div>
     </div>

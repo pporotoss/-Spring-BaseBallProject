@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PhotoBoard">
+	
+	<select id="photoBoardList">
+	</select>
+	
+	<select id="photoLoad" parameterType="int" resultType="photoDetail">
+		select photoBoard_id, title, saveName, p.member_id, thumb1, thumb2, hit, regdate, nickname, levelname
+		from photoBoard p, member m, level l
+		where p.member_id = m.member_id and m.level_id = l.level_id and photoBoard_id = #{photoBoard_id}
+	</select>
+	
+	<insert id="photoUpload" parameterType="PhotoBoard" useGeneratedKeys="true" keyProperty="photoBoard_id">
+		insert into photoBoard(title, saveName, member_id <if test="thumb1 != null">, thumb1</if> <if test="thumb2 != null">, thumb2</if>)
+		values(#{title}, #{saveName}, #{member_id} <if test="thumb1 != null">, #{thumb1}</if> <if test="thumb2 != null">, #{thumb2}</if>)
+	</insert>
+	
+</mapper>
