@@ -111,6 +111,20 @@ public class PhotoUploader {
 		return size;
 	}	
 	
+	public static void deletePhoto(String savePath, String filename, String ext){	// 사진 삭제.
+		
+		File deleteFile = new File(savePath+"/"+filename+ext);
+		deleteFile.delete();
+		
+	}
+	
+	public static boolean deleteDir(String deletePath){	// 디렉토리 삭제
+		
+		File deleteDir = new File(deletePath);
+		
+		return deleteDir.delete();
+	}
+	
 	public static int getGCD(int first, int second){
 		int GCD = 0;
 		int big = 0;

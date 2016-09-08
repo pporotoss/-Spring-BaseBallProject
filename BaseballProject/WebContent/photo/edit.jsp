@@ -1,9 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>사진 올리기</title>
+  <title>사진 수정하기</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -50,6 +51,7 @@
   	$(document).ready(function(){
   		
   		$("#uploadFile").change(function(){	// 파일 선택하면,
+  			
   			if($("#uploadFile")[0].files[0].size >= 10 * 1024 * 1024){	// 파일 크기 검사
 				alert("10M 이하의 파일만 업로드 해주세요.");
   				$("#uploadFile").val("");
@@ -145,21 +147,22 @@
 		return GCD;
   	}// cacGCD
   	
-  	function upload(){
+  	function edit(){
+  		
   		if($("#title").val().trim().length <= 0){
   			alert("제목을 입력해 주세요.");
   			$("#title").focus();
   			return;
   		}
-  		if($("#uploadFile").val() == ""){
-  			alert("업로드할 사진을 선택해 주세요.");
-  			return;
+  		
+  		if($("#uploadFile").val() == ""){	// 사진 선택 안했으면,	
+  			editForm.saveName.value = "";
   		}
   		
-  		uploadForm.action="/view/photo";
-  		uploadForm.method="POST";
-  		uploadForm.encoding="multipart/form-data"
-  		uploadForm.submit();
+  		editForm.action="/view/photo/${photoDetail.photoBoard_id}";
+  		editForm.method="POST";
+  		editForm.encoding="multipart/form-data"
+  		editForm.submit();
   	}
   </script>
 </head>
@@ -173,23 +176,30 @@
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-6 text-left"> 
-      <h1>사진 올리기</h1>
+      <h1>사진 수정하기</h1>
       	<div>
       		<br>
-	      	<form name="uploadForm">
-	      		<input type="hidden" value="${loginMember.member_id}" name="member_id">
+	      	<form name="editForm">
+	      		<input type="hidden" name="thumb1" value="${photoDetail.thumb1 }">
+	      		<input type="hidden" name="thumb2" value="${photoDetail.thumb2 }">
+	      		<input type="hidden" value="${photoDetail.member_id}" name="member_id">
 			    <div class="form-group">
 			    	<label for="writer" class="control-label">작성자 : </label>
-		      		<input type="text" class="form-control" id="writer" value="${loginMember.nickname}" readonly>
+		      		<input type="text" class="form-control" id="writer" value="${photoDetail.nickname}" readonly>
 				</div>
 			    <div class="form-group">
 				    <label for="title" class="control-label">제 목 :</label>
-		      		<input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력해 주세요.">
+		      		<input type="text" class="form-control" id="title" name="title" value="${photoDetail.title }">
+				</div>
+				<div class="form-group">
+				    <label for="regdate" class="control-label">작성일 :</label>
+		      		<fmt:formatDate value="${photoDetail.regdate }" pattern="yyyy/MM/dd hh:mm:ss" var="regdate"/>
+		      		<input type="text" class="form-control" name="regdate" id="regdate" value="${regdate }" readonly>
 				</div>
 				<div align="center">
 				
-					<img  id="preImg" src="">
-					
+					<img  id="preImg" src="${photoDetail.saveName }">
+					<input type="hidden" name="saveName" value="${photoDetail.saveName }">
 				</div>
 				<div class="form-group">
 			    <label for="uploadFile">파일 업로드</label>
@@ -198,7 +208,7 @@
 			  </div>
 			</form>
 			<div align="right">
-				<input type="button" class="btn btn-primary" value="올리기" onClick="upload()">
+				<input type="button" class="btn btn-primary" value="수정하기" onClick="edit()">
 			</div>
       	</div>
     </div>

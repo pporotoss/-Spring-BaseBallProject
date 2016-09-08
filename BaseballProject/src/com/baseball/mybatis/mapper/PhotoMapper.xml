@@ -18,4 +18,14 @@
 		values(#{title}, #{saveName}, #{member_id} <if test="thumb1 != null">, #{thumb1}</if> <if test="thumb2 != null">, #{thumb2}</if>)
 	</insert>
 	
+	<update id="photoBoardHitUp" parameterType="int">
+		update photoBoard set hit = hit + 1
+		where photoBoard_id=#{photoBoard_id}
+	</update>
+	
+	<update id="photoEdit" parameterType="PhotoBoard">
+		update photoBoard set title=#{title}, thumb1=#{thumb1}, thumb2=#{thumb2} <if test="saveName != null">, saveName=#{saveName}</if>
+		where photoBoard_id=#{photoBoard_id}
+	</update>
+	
 </mapper>

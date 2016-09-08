@@ -47,5 +47,22 @@ public class PhotoBoardViewController {
 		return "photo/detail";
 	}
 	
+	@RequestMapping(value="/photo/{photoBoard_id}", method=RequestMethod.POST)	// 게시물 수정하기. multipart/form은 무조껀 POST로만 하도록 Apache에서 강제!!
+	public String photoEdit(Model model, @PathVariable("photoBoard_id") int photoBoard_id, HttpServletRequest request, MultipartFile uploadFile, PhotoBoard photoBoard){
+		
+		photoBoard.setPhotoBoard_id(photoBoard_id);
+		photoBoardService.photoEdit(request, uploadFile, photoBoard);
+		
+		return "redirect:/view/photo/"+photoBoard_id;
+	}
+	
+	@RequestMapping(value="/photo/edit", method=RequestMethod.POST)
+	public String goEdit(Model model, PhotoDetail photoDetail ){
+		
+		model.addAttribute("photoDetail", photoDetail);
+		
+		return "photo/edit";
+	}
+	
 	
 }

@@ -14,5 +14,6 @@ public interface PhotoBoardDAO {
 	public PhotoDetail photoLoad(int photoBoard_id);
 	public void photoEdit(PhotoBoard photoBoard);
 	public void photoDelete(int photoBoard_id);
+	public void photoBoardHitUp(int photoBoard_id);
 	
 }

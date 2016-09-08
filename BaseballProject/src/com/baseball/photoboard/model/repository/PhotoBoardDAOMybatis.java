@@ -47,4 +47,9 @@ public class PhotoBoardDAOMybatis implements PhotoBoardDAO {
 		
 	}
 
+	@Override
+	public void photoBoardHitUp(int photoBoard_id) {
+		sqlSessionTemplate.update("PhotoBoard.photoBoardHitUp", photoBoard_id);		
+	}
+
 }

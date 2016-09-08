@@ -45,7 +45,18 @@
     }
   </style>
   <script>
-  
+  	// 수정하기
+  	function goEdit() {
+  		detailForm.action="/view/photo/edit";
+  		detailForm.method="POST";
+  		detailForm.submit();
+  	}
+  	
+  	// 삭제하기
+  	function deletePhoto() {
+  		
+  	}
+  	
   </script>
 </head>
 <body>
@@ -61,15 +72,23 @@
       <h1>사진 보기</h1>
       	<div>
       		<br>
-	      	<form name="uploadForm">
+	      	<form name="detailForm">
+	      		<input type="hidden" value="${photoDetail.photoBoard_id }" name="photoBoard_id">
 	      		<input type="hidden" value="${photoDetail.member_id}" name="member_id">
+	      		<input type="hidden" value="${photoDetail.thumb1 }" name="thumb1">
+	      		<input type="hidden" value="${photoDetail.thumb2 }" name="thumb2">
 			    <div class="form-group">
 			    	<label for="writer" class="control-label">작성자 : </label>
-		      		<input type="text" class="form-control" id="writer" value="${photoDetail.nickname}" readonly>
+		      		<input type="text" class="form-control" id="writer" value="${photoDetail.nickname}" name="nickname" readonly>
 				</div>
 			    <div class="form-group">
 				    <label for="title" class="control-label">제 목 :</label>
 		      		<input type="text" class="form-control" id="title" name="title" value="${photoDetail.title }" readonly>
+				</div>
+				<div class="form-group">
+				    <label for="regdate" class="control-label">작성일 :</label>
+				    <fmt:formatDate value="${photoDetail.regdate }" pattern="yyyy/MM/dd hh:mm:ss" var="regdate"/>
+		      		<input type="text" class="form-control" name="regdate" id="regdate" value="${regdate }" readonly>
 				</div>
 				<div align="center">
 					<c:set var="imgName" value="${photoDetail.saveName }"/>
@@ -77,6 +96,7 @@
 					<c:set var="imgFormat" value="${splitNames[fn:length(splitNames)-1] }"/>
 					<c:set var="cnt" value="0"/>
 					<c:set var="filename" />
+					
 					<c:forEach begin="0" end="${fn:length(splitNames)-2 }" step="1">
 						<c:set var="filename" value="${filename.concat(splitNames[cnt]) }"/>
 						<c:set var="cnt" value="${cnt = cnt + 1 }"/>
@@ -85,15 +105,18 @@
 					<c:if test="${photoDetail.thumb1.equals(\"Y\") }">
 						<c:set var="filename" value="${filename.concat(\"_thumb1\")}" />
 					</c:if>
-					<img  id="preImg" src='/images/photo/<fmt:formatDate value="${photoDetail.regdate }" pattern="yyyy/MM/dd"/>/${filename}.${imgFormat}'>
+					<a href='/images/photo/<fmt:formatDate value="${photoDetail.regdate }" pattern="yyyy/MM/dd"/>/${imgName }' target="_blank">
+						<img  id="preImg" src='/images/photo/<fmt:formatDate value="${photoDetail.regdate }" pattern="yyyy/MM/dd"/>/${filename}.${imgFormat}'>
+					</a>
+					<input type="hidden" name="saveName" value='/images/photo/<fmt:formatDate value="${photoDetail.regdate }" pattern="yyyy/MM/dd" />/${filename}.${imgFormat}'>					
 				</div>
 			</form>
       	</div>
       		<br>
 			<div align="right">
-				<input type="button" class="btn btn-warning" value="수정하기" onClick="">
-				<input type="button" class="btn btn-danger" value="삭제하기" onClick="">
-				<input type="button" class="btn btn-primary" value="목록보기" onClick="">
+				<input type="button" class="btn btn-warning" value="수정하기" onClick="goEdit()">
+				<input type="button" class="btn btn-danger" value="삭제하기" onClick="deletePhoto()">
+				<input type="button" class="btn btn-primary" value="목록보기" onClick="location.href='/view/photo'">
 			</div>
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    

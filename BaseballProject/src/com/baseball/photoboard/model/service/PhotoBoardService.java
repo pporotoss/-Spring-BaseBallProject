@@ -17,7 +17,7 @@ public interface PhotoBoardService {
 	public Map photoBoardList(String page, Searching searching);
 	public int photoUpload(HttpServletRequest request, MultipartFile uploadFile, PhotoBoard photoBoard);
 	public PhotoDetail photoLoad(int photoBoard_id);
-	public void photoEdit();
+	public void photoEdit(HttpServletRequest request, MultipartFile uploadFile, PhotoBoard photoBoard);
 	public void photoDelete(int photoBoard_id);
 	
 }
