@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PhotoComment">
+	
+	<select id="photoCommentCounts" resultType="int" parameterType="int">
+		select count(photoComment_id) 
+		from photoComment
+		where photoBoard_id=#{photoBoard_id}
+	</select>
+	
+	<select id="photoCommentList" parameterType="Map" resultType="PhotoCommentDetail">
+		select photoComment_id, content, regdate, p.member_id, photoBoard_id, levelname, nickname
+		from photoComment p, level l, member m
+		where p.member_id = m.member_id and m.level_id = l.level_id and photoBoard_id=#{photoBoard_id}
+		limit #{startContent}, #{pageSize}
+	</select>
+	
+</mapper>

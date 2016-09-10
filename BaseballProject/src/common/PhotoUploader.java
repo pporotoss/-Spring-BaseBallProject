@@ -20,7 +20,7 @@ public class PhotoUploader {
 		
 		UUID uuid = UUID.randomUUID();
 		String saveName = uuid+"_"+originalName;
-		File originalFile = new File(savePath+"/"+saveName);
+		File originalFile = new File(savePath+File.separator+saveName);
 		try {
 			uploadFile.transferTo(originalFile);	// 원본파일 저장.
 		} catch (IllegalStateException e) {
@@ -37,7 +37,7 @@ public class PhotoUploader {
 		
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-		String savePath = realPath+"/"+format.format(cal.getTime());
+		String savePath = realPath+File.separator+format.format(cal.getTime());
 		
 		File dateFile = new File(savePath);
 		if(!dateFile.exists()){
@@ -49,8 +49,8 @@ public class PhotoUploader {
 	
 	public static int imgResize (String savePath, String imgName, String thumbName, int maxResizingSize) {	// 이미지 리사이즈해서 저장.
 				
-		File image = new File(savePath+"/"+imgName);
-		File thumb = new File(savePath+"/"+thumbName);
+		File image = new File(savePath+File.separator+imgName);
+		File thumb = new File(savePath+File.separator+thumbName);
 		
 		int[] size = getResizingSize(image, maxResizingSize);
 		
@@ -111,11 +111,11 @@ public class PhotoUploader {
 		return size;
 	}	
 	
-	public static void deletePhoto(String savePath, String filename, String ext){	// 사진 삭제.
+	public static boolean deletePhoto(String savePath, String filename, String ext){	// 사진 삭제.
 		
-		File deleteFile = new File(savePath+"/"+filename+ext);
-		deleteFile.delete();
+		File deleteFile = new File(savePath+File.separator+filename+ext);
 		
+		return deleteFile.delete();
 	}
 	
 	public static boolean deleteDir(String deletePath){	// 디렉토리 삭제

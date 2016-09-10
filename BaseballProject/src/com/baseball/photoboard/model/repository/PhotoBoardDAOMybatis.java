@@ -37,13 +37,12 @@ public class PhotoBoardDAOMybatis implements PhotoBoardDAO {
 
 	@Override
 	public void photoEdit(PhotoBoard photoBoard) {
-		// TODO Auto-generated method stub
-		
+		sqlSessionTemplate.update("PhotoBoard.photoEdit", photoBoard);		
 	}
 
 	@Override
 	public void photoDelete(int photoBoard_id) {
-		// TODO Auto-generated method stub
+		sqlSessionTemplate.update("PhotoBoard.photoDelete", photoBoard_id);
 		
 	}
 

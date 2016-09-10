@@ -1,5 +1,6 @@
 package com.baseball.photoboard.model.service;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
@@ -72,19 +73,18 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	@Override
 	public void photoEdit(HttpServletRequest request, MultipartFile uploadFile, PhotoBoard photoBoard) {
 		
-		if(photoBoard.getSaveName() != null){	// 사진 바꿨으면,
+		if(!uploadFile.getOriginalFilename().equals("")){	// 사진 바꿨으면,
 			
 			/* 기존파일 삭제 */
+			SimpleDateFormat format = new SimpleDateFormat("yyyy"+File.separator+"MM"+File.separator+"dd");
 			String realPath = request.getSession().getServletContext().getRealPath("/images/photo");
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 			String datePath = format.format(photoBoard.getRegdate());
-			String savePath = realPath+"/"+datePath;
-			
+			String savePath = realPath+File.separator+datePath;
 			String saveName = photoBoard.getSaveName();
 			String filename = saveName.substring(0,saveName.lastIndexOf("."));
 			String ext = saveName.substring(saveName.lastIndexOf("."));
 			
-			PhotoUploader.deletePhoto(savePath, filename, ext);	// 원래 파일 삭제.
+			boolean del = PhotoUploader.deletePhoto(savePath, filename, ext);	// 원래 파일 삭제.
 			if(photoBoard.getThumb2().equals("Y")){	// 제일 작은 썸네일 생성했으면,
 				PhotoUploader.deletePhoto(savePath, filename+"+thumb2", ext);	// 제일 작은 썸네일 파일 삭제.
 				if(photoBoard.getThumb1().equals("Y")){	// 중간 썸네일 생성 했으면,
@@ -114,6 +114,10 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 			
 			photoBoard.setSaveName(saveName);
 			
+		}else{
+			
+			photoBoard.setSaveName(null);
+			
 		}// if(saveName)
 		
 		photoBoardDAO.photoEdit(photoBoard);
@@ -121,8 +125,27 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	}
 
 	@Override
-	public void photoDelete(int photoBoard_id) {
-		// TODO Auto-generated method stub
+	public void photoDelete(HttpServletRequest request, PhotoBoard photoBoard) {
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy"+File.separator+"MM"+File.separator+"dd");
+		String realPath = request.getSession().getServletContext().getRealPath("/images/photo");	// 저장경로 최상위 폴더.
+		String datePath = format.format(photoBoard.getRegdate());	// 저장경로 중 날짜 경로.
+		String savePath = realPath+File.separator+datePath;	// 풀 저장 경로.
+		String saveName = photoBoard.getSaveName();	// DB상에 저장된 이름.
+		String filename = saveName.substring(0,saveName.lastIndexOf("."));
+		String ext = saveName.substring(saveName.lastIndexOf("."));
+		
+		PhotoUploader.deletePhoto(savePath, filename, ext);	// 원래 파일 삭제.
+		if(photoBoard.getThumb2().equals("Y")){	// 제일 작은 썸네일 생성했으면,
+			PhotoUploader.deletePhoto(savePath, filename+"_thumb2", ext);	// 제일 작은 썸네일 파일 삭제.
+			if(photoBoard.getThumb1().equals("Y")){	// 중간 썸네일 생성 했으면,
+				PhotoUploader.deletePhoto(savePath, filename+"_thumb1", ext);	// 중간 썸네일 파일 삭제.
+			}				
+		}
+		
+		PhotoUploader.deleteDir(savePath);	// 파일 삭제 후 저장 폴더삭제. 폴더안에 파일 없을때만 폴더 삭제 됨.
+		
+		photoBoardDAO.photoDelete(photoBoard.getPhotoBoard_id());
 		
 	}
 

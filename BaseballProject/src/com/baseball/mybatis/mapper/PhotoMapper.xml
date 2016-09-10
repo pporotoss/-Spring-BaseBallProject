@@ -28,4 +28,8 @@
 		where photoBoard_id=#{photoBoard_id}
 	</update>
 	
+	<delete id="photoDelete" parameterType="int">
+		delete from photoBoard where photoBoard_id=#{photoBoard_id}
+	</delete>
+	
 </mapper>

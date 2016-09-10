@@ -18,6 +18,6 @@ public interface PhotoBoardService {
 	public int photoUpload(HttpServletRequest request, MultipartFile uploadFile, PhotoBoard photoBoard);
 	public PhotoDetail photoLoad(int photoBoard_id);
 	public void photoEdit(HttpServletRequest request, MultipartFile uploadFile, PhotoBoard photoBoard);
-	public void photoDelete(int photoBoard_id);
+	public void photoDelete(HttpServletRequest request, PhotoBoard photoBoard);
 	
 }

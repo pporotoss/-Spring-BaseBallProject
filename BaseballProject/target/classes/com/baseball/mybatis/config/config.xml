@@ -16,6 +16,8 @@
 		<typeAlias type="com.baseball.notice.model.domain.Notice" alias="Notice"/>
 		<typeAlias type="com.baseball.photoboard.model.domain.PhotoBoard" alias="PhotoBoard"/>
 		<typeAlias type="com.baseball.photoboard.model.domain.PhotoDetail" alias="PhotoDetail"/>
+		<typeAlias type="com.baseball.photoboard.model.domain.PhotoComment" alias="PhotoComment"/>
+		<typeAlias type="com.baseball.photoboard.model.domain.PhotoCommentDetail" alias="PhotoCommentDetail"/>
 	</typeAliases>
 	
 	
@@ -27,6 +29,7 @@
 		<mapper resource="com/baseball/mybatis/mapper/NoticeMapper.xml"/>
 		<mapper resource="com/baseball/mybatis/mapper/LevelMapper.xml"/>
 		<mapper resource="com/baseball/mybatis/mapper/PhotoMapper.xml"/>
+		<mapper resource="com/baseball/mybatis/mapper/PhotoCommentMapper.xml"/>
 	</mappers>
 	
 </configuration>

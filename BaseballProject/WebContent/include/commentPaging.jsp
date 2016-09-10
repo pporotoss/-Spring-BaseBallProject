@@ -1,10 +1,10 @@
-<!-- 
+<%-- 
 
 ** 댓글 페이징 처리 전에 반드시 아래와 같이 변수 선언 필요!!	**
 
-	<c:set var="url" value="/view/board/${detail.board_id }?commentPage="/>
-
- -->
+	<c:set var="url" value="/view/board/${게시물번호 }?commentPage=댓글페이지"/>
+ 
+ --%>
 <div align="center">
   	<nav>
 	  <ul class="pagination">
