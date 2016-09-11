@@ -21,7 +21,8 @@
 	
 	<mvc:default-servlet-handler/>
 	<!-- image 등의 정적 자원의 위치 등록!!  -->
-	<mvc:resources location="/images/" mapping="/images/**"/>
+	<mvc:resources location="/images/" mapping="/images/**"/><!--  사진 저장 폴더  -->
+	<mvc:resources location="/script/" mapping="/script/**"/><!--  자바스크립트 파일 폴더  -->
 							<!-- location : 자원의 실제 위치. 폴더이기 때문에 /생략 하면 안된다.   -->
 	
 	<context:component-scan base-package="com.baseball.*">

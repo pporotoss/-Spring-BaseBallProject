@@ -44,6 +44,8 @@
       .row.content {height:auto;} 
     }
   </style>
+  <script src="../script/photoComment.js"></script>
+  <script src="../script/commentPaging.js"></script>
   <script>
   	// 수정하기
   	function goEdit() {
@@ -60,26 +62,50 @@
   		detailForm.submit();
   	}
   	
-  	// 댓글 입력
-  	function insertComment() {
+  	// 댓글 불러오기
+  	function getCommentList(commentPage){
   		
-  		$.ajax({
-  	  		type:"post",	// 요청방식
-  	  		url:"/api/photo/${photoDetail.photoBoard_id}/comment",
-  	  		headers:{	// 헤더값 세팅.
-  	  		"Content-Type":"application/json",
-  	  		"X-HTTP-Method-Override":"POST"
-  	  		 },
-  	  			dataType:"text",
-  	  			data:JSON.stringify({
-  	  					"content":$("#commentContent").val(),
-  	          			"member_id":${loginMember.member_id}
-  	  			}),
-  	  			success:function(data){
-  	  			   console.log(data);
-  	       }
-  		});
+  		$.get("/api/photo/${photoDetail.photoBoard_id}/comment?commentPage="+commentPage, function(data){
+  	        var photoCommentList = data.photoCommentList;
+  	        var commentPager = data.commentPager;
+  			
+			reCreateCommentTable(photoCommentList);// 테이블 새로 만들기.
+			
+			reCreatePaging(commentPager);	// 페이징 새로 만들기.
+  	        
+  	    });
+  		
   	}
+  	
+  	<c:if test="${loginMember != null}">
+	  	// 댓글 입력
+	  	function insertComment() {
+	  		
+	  		$.ajax({
+	  	  		type:"post",	// 요청방식
+	  	  		url:"/api/photo/${photoDetail.photoBoard_id}/comment",
+	  	  		headers:{	// 헤더값 세팅.
+	  	  		"Content-Type":"application/json",
+	  	  		"X-HTTP-Method-Override":"POST"
+	  	  		},
+	  			dataType:"text",
+	  			data:JSON.stringify({
+					"content" : $("#commentContent").val(),
+	       			"member_id" : ${lloginMember.member_id}
+	  			}),
+	 	  		success:function(data){
+	 	  			$("#commentContent").val("");
+					var obj = JSON.parse(data);
+					var commentPager = obj.commentPager;		// 페이징 객체
+					var photoCommentList = obj.photoCommentList;	// 댓글 리스트
+					
+					reCreateCommentTable(photoCommentList);// 테이블 새로 만들기.
+					
+	 	       	}// success
+	  		});// ajax
+	  		
+	  	}// insertComment
+  	</c:if>
   	
   </script>
 </head>
@@ -162,9 +188,8 @@
 							<c:choose>
 								<c:when test="${loginMember.member_id == photoCommentDetail.member_id || loginMember.rank == 1}">
 									<td style="width:15%; text-align:center">
-										<c:if test="${loginMember.member_id == photoCommentDetail.member_id }">
+										<c:if test="${loginMember.member_id == photoCommentDetail.member_id }"><%-- 본인 쓴글이면, 수정하기 활성화 --%>
 											<a data-toggle="modal" href="#modal_${photoCommentDetail.photoComment_id }">수정</a>&nbsp;|
-											
 											<div id="modal_${photoCommentDetail.photoComment_id }" class="modal fade">
 											  <div class="modal-dialog">
 											    <div class="modal-content">
@@ -183,6 +208,7 @@
 											  </div><!-- /.modal-dialog -->
 											</div><!-- /.modal -->
 										</c:if>
+										
 										<a href="javascript:deleteComment(${photoCommentDetail.photoComment_id })">삭제</a>
 									</td>
 								</c:when>
@@ -194,14 +220,43 @@
 					</c:forEach>
 				</table>
 <!-------------------------------- 댓글 페이징 ------------------------------------------------------>
-				<c:set var="url" value="/view/photo/${detail.board_id }?commentPage="/>
-				<%@ include file="/include/commentPaging.jsp" %>
+				<div align="center" id="commentPaging">
+				  	<nav>
+					  <ul class="pagination">
+					    <c:if test="${commentPager.prev }">
+						    <li>
+						      <a href="javascript:getCommentList(${(commentPager.startPage-1)})" aria-label="Previous">
+						        <span aria-hidden="true">&laquo;</span>
+						      </a>
+						    </li>
+					    </c:if>
+					    <c:forEach var="cnt" begin="${commentPager.startPage }" end="${commentPager.endPage }">
+					    	<c:choose>
+						    	<c:when test="${cnt == commentPager.page }">
+						    		<c:set var="pageClass" value="active"/>
+						    	</c:when>
+						    	<c:otherwise>
+						    		<c:set var="pageClass" value=""/>
+						    	</c:otherwise>
+					    	</c:choose>	
+					    
+					    	<li class="${pageClass }">
+					    		<a href="javascript:getCommentList(${cnt })">${cnt }</a>
+					    	</li>
+					    </c:forEach>
+					    <c:if test="${commentPager.next }">
+						    <li>
+						      <a href="javascript:getCommentList(${commentPager.endPage+1})" aria-label="Next">
+						        <span aria-hidden="true">&raquo;</span>
+						      </a>
+						    </li>
+					    </c:if>
+					  </ul>
+					</nav>
+				</div>
 <!-------------------------------- 댓글 입력 ------------------------------------------------------>				
 				<c:if test="${loginMember != null }">
 					<form name="commentForm">
-						<input type="hidden" value="" name="_method">
-						<input type="hidden" value="${loginMember.member_id }" name="member_id">
-						<input type="hidden" value="${detail.board_id }" name="board_id">
 						<textarea style="width:100%" class="form-control" rows="3" maxlength="50" placeholder="50자 이내로 입력해주세요." name="content" id="commentContent"></textarea>
 					</form>
 					<div style="height:5px"></div>

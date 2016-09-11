@@ -22,10 +22,12 @@ public class PhotoBoardAPIController {
 	private PhotoCommentService photoCommentService;
 	
 	@RequestMapping(value="/photo/{photoBoard_id}/comment", method=RequestMethod.GET, produces="application/json")// 댓글 리스트 불러오기.
-	public ResponseEntity<Map<String,Object>> photoCommentList(@PathVariable("photoBoard_id") int photoBoard_id){	
+	public ResponseEntity<Map<String,Object>> photoCommentList(@PathVariable("photoBoard_id") int photoBoard_id, String commentPage){	
 		
-		int page = 1;
-		Map<String,Object> commentMap = photoCommentService.photoCommentList(photoBoard_id, page);
+		if(commentPage == null){
+			commentPage = "1";
+		}
+		Map<String,Object> commentMap = photoCommentService.photoCommentList(photoBoard_id, Integer.parseInt(commentPage));
 		
 		return new ResponseEntity<>(commentMap, HttpStatus.OK);
 	}

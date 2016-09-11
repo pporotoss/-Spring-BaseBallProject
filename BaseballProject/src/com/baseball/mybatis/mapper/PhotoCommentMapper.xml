@@ -14,12 +14,13 @@
 		select photoComment_id, content, regdate, p.member_id, photoBoard_id, levelname, nickname
 		from photocomment p, level l, member m
 		where p.member_id = m.member_id and m.level_id = l.level_id and photoBoard_id=#{photoBoard_id}
+		order by photoComment_id desc
 		limit #{startContent}, #{pageSize}
 	</select>
 	
-	<select id="photoCommentInsert" parameterType="PhotoComment">
+	<insert id="photoCommentInsert" parameterType="PhotoComment">
 		insert into photocomment(content, member_id, photoBoard_id)
 		values(#{content}, #{member_id}, #{photoBoard_id})
-	</select>
+	</insert>
 	
 </mapper>
