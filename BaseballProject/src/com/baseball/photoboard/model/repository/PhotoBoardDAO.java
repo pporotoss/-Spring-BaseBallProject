@@ -12,8 +12,8 @@ public interface PhotoBoardDAO {
 	public Map photoBoardList(String page, Searching searching);
 	public int photoUpload(PhotoBoard photoBoard);
 	public PhotoDetail photoLoad(int photoBoard_id);
-	public void photoEdit(PhotoBoard photoBoard);
-	public void photoDelete(int photoBoard_id);
-	public void photoBoardHitUp(int photoBoard_id);
+	public int photoEdit(PhotoBoard photoBoard);
+	public int photoDelete(int photoBoard_id);
+	public int photoBoardHitUp(int photoBoard_id);
 	
 }

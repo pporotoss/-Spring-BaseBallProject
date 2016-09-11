@@ -60,6 +60,27 @@
   		detailForm.submit();
   	}
   	
+  	// 댓글 입력
+  	function insertComment() {
+  		
+  		$.ajax({
+  	  		type:"post",	// 요청방식
+  	  		url:"/api/photo/${photoDetail.photoBoard_id}/comment",
+  	  		headers:{	// 헤더값 세팅.
+  	  		"Content-Type":"application/json",
+  	  		"X-HTTP-Method-Override":"POST"
+  	  		 },
+  	  			dataType:"text",
+  	  			data:JSON.stringify({
+  	  					"content":$("#commentContent").val(),
+  	          			"member_id":${loginMember.member_id}
+  	  			}),
+  	  			success:function(data){
+  	  			   console.log(data);
+  	       }
+  		});
+  	}
+  	
   </script>
 </head>
 <body>
@@ -91,7 +112,7 @@
 				</div>
 				<div class="form-group">
 				    <label for="regdate" class="control-label">작성일 :</label>
-				    <fmt:formatDate value="${photoDetail.regdate }" pattern="yyyy/MM/dd hh:mm:ss" var="regdate"/>
+				    <fmt:formatDate value="${photoDetail.regdate }" pattern="yyyy/MM/dd HH:mm:ss" var="regdate"/>
 		      		<input type="text" class="form-control" name="regdate" id="regdate" value="${regdate }" readonly>
 				</div>
 				<div align="center">
@@ -131,11 +152,12 @@
 			<div>
 				
 				<table class="table table table-striped table-responsive" id="commentTable">
-					<c:forEach items="${commentList }" var="photoCommentDetail">
+					<c:forEach items="${photoCommentList }" var="photoCommentDetail">
 						<tr>
 							<td style="width:20%">&nbsp;<img src="/images/member/${photoCommentDetail.levelname}.png">${photoCommentDetail.nickname}</td>
 							<td style="width:50%" id="content_${photoCommentDetail.photoComment_id }">&nbsp;&nbsp;${photoCommentDetail.content}</td>
-							<td style="width:15%; text-align:center">${photoCommentDetail.regdate}</td>
+							<fmt:formatDate value="${photoCommentDetail.regdate }" pattern="yyyy/MM/dd HH:mm:ss" var="commentDate"/>
+							<td style="width:15%; text-align:center">${commentDate}</td>
 						
 							<c:choose>
 								<c:when test="${loginMember.member_id == photoCommentDetail.member_id || loginMember.rank == 1}">
@@ -180,7 +202,7 @@
 						<input type="hidden" value="" name="_method">
 						<input type="hidden" value="${loginMember.member_id }" name="member_id">
 						<input type="hidden" value="${detail.board_id }" name="board_id">
-						<textarea style="width:100%" class="form-control" rows="3" maxlength="50" placeholder="50자 이내로 입력해주세요." name="content"></textarea>
+						<textarea style="width:100%" class="form-control" rows="3" maxlength="50" placeholder="50자 이내로 입력해주세요." name="content" id="commentContent"></textarea>
 					</form>
 					<div style="height:5px"></div>
 					<div  align="right">

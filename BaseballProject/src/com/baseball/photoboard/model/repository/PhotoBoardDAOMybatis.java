@@ -36,19 +36,21 @@ public class PhotoBoardDAOMybatis implements PhotoBoardDAO {
 	}
 
 	@Override
-	public void photoEdit(PhotoBoard photoBoard) {
-		sqlSessionTemplate.update("PhotoBoard.photoEdit", photoBoard);		
-	}
-
-	@Override
-	public void photoDelete(int photoBoard_id) {
-		sqlSessionTemplate.update("PhotoBoard.photoDelete", photoBoard_id);
+	public int photoEdit(PhotoBoard photoBoard) {
 		
+		return sqlSessionTemplate.update("PhotoBoard.photoEdit", photoBoard);		
 	}
 
 	@Override
-	public void photoBoardHitUp(int photoBoard_id) {
-		sqlSessionTemplate.update("PhotoBoard.photoBoardHitUp", photoBoard_id);		
+	public int photoDelete(int photoBoard_id) {
+		
+		return sqlSessionTemplate.update("PhotoBoard.photoDelete", photoBoard_id);
+	}
+
+	@Override
+	public int photoBoardHitUp(int photoBoard_id) {
+		
+		return sqlSessionTemplate.update("PhotoBoard.photoBoardHitUp", photoBoard_id);		
 	}
 
 }

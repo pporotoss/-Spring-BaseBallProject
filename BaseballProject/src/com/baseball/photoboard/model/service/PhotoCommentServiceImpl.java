@@ -40,15 +40,23 @@ public class PhotoCommentServiceImpl implements PhotoCommentService{
 	}
 
 	@Override
-	public void photoCommentEdit(PhotoComment photoComment) {
+	public int photoCommentEdit(PhotoComment photoComment) {
 		// TODO Auto-generated method stub
 		
+		return 0;
 	}
 
 	@Override
-	public void photoCommentDelete(int photoComment_id) {
+	public int photoCommentDelete(int photoComment_id) {
 		// TODO Auto-generated method stub
 		
+		return 0;
+	}
+
+	@Override
+	public int photoCommentInsert(PhotoComment photoComment) {
+		
+		return photoCommentDAO.photoCommentInsert(photoComment);
 	}
 
 }

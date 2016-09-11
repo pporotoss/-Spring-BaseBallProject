@@ -51,7 +51,8 @@ public class PhotoBoardViewController {
 		
 		PhotoDetail photoDetail = photoBoardService.photoLoad(photoBoard_id);	// 게시물 불러오기.
 		
-		Map commentMap = photoCommentService.photoCommentList(photoBoard_id, 1);// 댓글 불러오기.
+		int page = 1;
+		Map commentMap = photoCommentService.photoCommentList(photoBoard_id, page);// 댓글 불러오기.
 		
 		List photoCommentList = (List)commentMap.get("photoCommentList");
 		Pager commentPager = (Pager) commentMap.get("commentPager");

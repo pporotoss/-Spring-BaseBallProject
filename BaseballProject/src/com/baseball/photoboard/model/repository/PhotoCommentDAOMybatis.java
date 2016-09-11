@@ -17,26 +17,32 @@ public class PhotoCommentDAOMybatis implements PhotoCommentDAO{
 	
 	@Override
 	public List photoCommentList(Map parameterMap) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSessionTemplate.selectList("PhotoComment.photoCommentList", parameterMap);
 	}
 
 	@Override
-	public void photoCommentEdit(PhotoComment photoComment) {
+	public int photoCommentEdit(PhotoComment photoComment) {
 		// TODO Auto-generated method stub
-		
+		return 0;
 	}
 
 	@Override
-	public void photoCommentDelete(int photoComment_id) {
+	public int photoCommentDelete(int photoComment_id) {
 		// TODO Auto-generated method stub
-		
+		return 0;
 	}
 
 	@Override
 	public int photoCommentCounts(int photoBoard_id) {
 
 		return sqlSessionTemplate.selectOne("PhotoComment.photoCommentCounts", photoBoard_id);
+	}
+
+	@Override
+	public int photoCommentInsert(PhotoComment photoComment) {
+
+		return sqlSessionTemplate.insert("PhotoComment.photoCommentInsert", photoComment);
 	}
 
 }
