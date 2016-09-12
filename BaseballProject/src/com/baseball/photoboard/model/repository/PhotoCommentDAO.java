@@ -7,7 +7,7 @@ import com.baseball.photoboard.model.domain.PhotoComment;
 
 public interface PhotoCommentDAO {
 	public List photoCommentList(Map parameterMap);
-	public int photoCommentEdit(PhotoComment photoComment);
+	public int photoCommentUpdate(PhotoComment photoComment);
 	public int photoCommentDelete(int photoComment_id);
 	public int photoCommentCounts(int photoBoard_id);
 	public int photoCommentInsert(PhotoComment photoComment);

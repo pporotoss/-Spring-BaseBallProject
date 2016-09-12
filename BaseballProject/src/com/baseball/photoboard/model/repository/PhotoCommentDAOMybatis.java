@@ -22,15 +22,15 @@ public class PhotoCommentDAOMybatis implements PhotoCommentDAO{
 	}
 
 	@Override
-	public int photoCommentEdit(PhotoComment photoComment) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int photoCommentUpdate(PhotoComment photoComment) {
+
+		return sqlSessionTemplate.update("PhotoComment.photoCommentUpdate", photoComment);
 	}
 
 	@Override
 	public int photoCommentDelete(int photoComment_id) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		return sqlSessionTemplate.delete("PhotoComment.photoCommentDelete", photoComment_id);
 	}
 
 	@Override

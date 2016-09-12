@@ -56,6 +56,7 @@
   	
   	// 삭제하기
   	function deletePhoto() {
+  		if(!confirm("삭제 하시겠습니까?"))return;
   		detailForm._method.value = "DELETE";
   		detailForm.action = "/view/photo/${photoDetail.photoBoard_id}";
   		detailForm.method="POST";
@@ -77,7 +78,7 @@
   		
   	}
   	
-  	<c:if test="${loginMember != null}">
+  	<c:if test="${loginMember != null}"><%-- 로그인 안했으면 표시 안함. --%>
 	  	// 댓글 입력
 	  	function insertComment() {
 	  		
@@ -91,12 +92,11 @@
 	  			dataType:"text",
 	  			data:JSON.stringify({
 					"content" : $("#commentContent").val(),
-	       			"member_id" : ${lloginMember.member_id}
+	       			"member_id" : ${loginMember.member_id}
 	  			}),
 	 	  		success:function(data){
 	 	  			$("#commentContent").val("");
 					var obj = JSON.parse(data);
-					var commentPager = obj.commentPager;		// 페이징 객체
 					var photoCommentList = obj.photoCommentList;	// 댓글 리스트
 					
 					reCreateCommentTable(photoCommentList);// 테이블 새로 만들기.
@@ -105,8 +105,63 @@
 	  		});// ajax
 	  		
 	  	}// insertComment
-  	</c:if>
   	
+  		
+	  	// 댓글 수정하기
+	  	function updateComment(photoComment_id) {
+	  		var content = $("#edit_"+photoComment_id).val();
+	  		
+	  		$.ajax({
+	  	  		type:"PUT",	// 요청방식
+	  	  		url:"/api/photo/${photoDetail.photoBoard_id}/comment/"+photoComment_id,
+	  	  		headers:{	// 헤더값 세팅.
+	  	  		"Content-Type":"application/json",		// 자료형
+	  	  		"X-HTTP-Method-Override":"PUT"	// 요청방식
+	  	  		},
+	  			dataType:"text",
+	  			data:JSON.stringify({
+					"content" : content
+	  			}),
+	 	  		success:function(data){
+					
+			  		$("#content_"+photoComment_id).html("&nbsp;&nbsp;"+content);	// 해당 댓글만 수정.	
+					
+	 	       	}// success
+	  		});// ajax
+	  		
+	  	}
+	  	
+	  	// 댓글 삭제하기
+	  	function deleteComment(photoComment_id) {
+	  		
+	  		if(!confirm("삭제 하시겠습니까?"))return;
+	  		
+	  		$.ajax({
+	  	  		type:"DELETE",	// 요청방식
+	  	  		url:"/api/photo/${photoDetail.photoBoard_id}/comment/"+photoComment_id,
+	  	  		headers:{	// 헤더값 세팅.
+	  	  		"Content-Type":"application/json",		// 자료형
+	  	  		"X-HTTP-Method-Override":"DELETE"	// 요청방식
+	  	  		},
+	  	  		dataType:"text",
+	 	  		success:function(data){
+	 	  			$("#commentContent").val("");
+					var obj = JSON.parse(data);
+					var commentPager = obj.commentPager;		// 페이징 객체
+					var photoCommentList = obj.photoCommentList;	// 댓글 리스트
+					
+					reCreateCommentTable(photoCommentList);// 테이블 새로 만들기.
+					reCreatePaging(commentPager);	// 페이징 새로 만들기.
+					
+	 	       	}// success
+	  		});// ajax
+	  	}
+	  
+	  	// 댓글 수정 안하고 수정창 닫으면 모달 내용 원래 대로 회복.
+	  	function closeModal(photoComment_id, content) {
+	  		$("#edit_"+photoComment_id).val(content);
+	  	}
+	</c:if>
   </script>
 </head>
 <body>
@@ -186,9 +241,9 @@
 							<td style="width:15%; text-align:center">${commentDate}</td>
 						
 							<c:choose>
-								<c:when test="${loginMember.member_id == photoCommentDetail.member_id || loginMember.rank == 1}">
+								<c:when test="${loginMember.member_id == photoCommentDetail.member_id || loginMember.rank == 1}"><%-- 글쓴이거나, 관리자면 삭제하기 활성화. --%>
 									<td style="width:15%; text-align:center">
-										<c:if test="${loginMember.member_id == photoCommentDetail.member_id }"><%-- 본인 쓴글이면, 수정하기 활성화 --%>
+										<c:if test="${loginMember.member_id == photoCommentDetail.member_id }"><%-- 본인 쓴글이면, 수정하기랑 모달 활성화 --%>
 											<a data-toggle="modal" href="#modal_${photoCommentDetail.photoComment_id }">수정</a>&nbsp;|
 											<div id="modal_${photoCommentDetail.photoComment_id }" class="modal fade">
 											  <div class="modal-dialog">
@@ -201,8 +256,8 @@
 												        <textarea style="width:100%" class="form-control" rows="3" maxlength="50" id="edit_${photoCommentDetail.photoComment_id }">${photoCommentDetail.content }</textarea>
 												      </div>
 											      <div class="modal-footer">
-											        <input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment(${photoCommentDetail.photoComment_id})">
-											        <input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기">
+											        <input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment(${photoCommentDetail.photoComment_id})" data-dismiss="modal">
+											        <input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기" onClick="closeModal(${photoCommentDetail.photoComment_id},'${photoCommentDetail.content }')">
 											      </div>
 											    </div><!-- /.modal-content -->
 											  </div><!-- /.modal-dialog -->

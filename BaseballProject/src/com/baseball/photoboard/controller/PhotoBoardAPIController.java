@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baseball.photoboard.model.domain.PhotoComment;
 import com.baseball.photoboard.model.service.PhotoCommentService;
 
+/* 사진게시판 JSON 전용 처리. */
 @RestController
 public class PhotoBoardAPIController {
 	
@@ -40,6 +41,27 @@ public class PhotoBoardAPIController {
 		
 		int page = 1;
 		Map commentMap = photoCommentService.photoCommentList(photoBoard_id, page);
+		
+		return new ResponseEntity<>(commentMap, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/photo/{photoBoard_id}/comment/{photoComment_id}", method=RequestMethod.PUT, produces="application/json")// 댓글 수정
+	public ResponseEntity photoCommentUpdate(@PathVariable("photoBoard_id") int photoBoard_id, @PathVariable("photoComment_id") int photoComment_id, @RequestBody PhotoComment photoComment){
+		
+		photoComment.setPhotoComment_id(photoComment_id);
+		
+		photoCommentService.photoCommentUpdate(photoComment);
+		
+		return new ResponseEntity(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/photo/{photoBoard_id}/comment/{photoComment_id}", method=RequestMethod.DELETE, produces="application/json")// 댓글 삭제
+	public ResponseEntity<Map<String, Object>> photoCommentDelete(@PathVariable("photoBoard_id") int photoBoard_id, @PathVariable("photoComment_id") int photoComment_id){
+		
+		photoCommentService.photoCommentDelete(photoComment_id);	// 삭제.
+		
+		int page = 1;
+		Map commentMap = photoCommentService.photoCommentList(photoBoard_id, page);	// 목록 불러오기.
 		
 		return new ResponseEntity<>(commentMap, HttpStatus.OK);
 	}

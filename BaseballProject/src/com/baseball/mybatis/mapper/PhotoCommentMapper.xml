@@ -23,4 +23,14 @@
 		values(#{content}, #{member_id}, #{photoBoard_id})
 	</insert>
 	
+	<update id="photoCommentUpdate" parameterType="photoComment">
+		update photoComment set content=#{content}
+		where photoComment_id=#{photoComment_id}
+	</update>
+	
+	<delete id="photoCommentDelete" parameterType="int">
+		delete from photoComment
+		where photoComment_id=#{photoComment_id}
+	</delete>
+	
 </mapper>
