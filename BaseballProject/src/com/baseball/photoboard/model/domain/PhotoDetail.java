@@ -4,7 +4,14 @@ public class PhotoDetail extends PhotoBoard{
 	
 	private String nickname;
 	private String levelname;
+	private int count;
 	
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	public String getNickname() {
 		return nickname;
 	}

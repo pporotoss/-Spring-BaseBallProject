@@ -4,7 +4,26 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="PhotoBoard">
 	
-	<select id="photoBoardList">
+	<select id="photoBoardList" parameterType="Map" resultType="photoDetail">
+		select p.photoBoard_id as photoBoard_id, title, saveName, p.member_id as member_id, thumb1, thumb2, hit, p.regdate as regdate, nickname, levelname, count(photoComment_id) as count
+		from photoBoard p left outer join photoComment c on p.photoBoard_id=c.photoBoard_id
+		left outer join member m on p.member_id=m.member_id
+		left outer join level l on l.level_id=m.level_id
+		<if test="searching.keyword != null">
+			<if test="searching.searchType.equals('title')">where title like CONCAT('%', #{searching.keyword}, '%')</if>
+			<if test="searching.searchType.equals('writer')">where nickname like CONCAT('%', #{searching.keyword}, '%')</if>
+		</if>
+		group by p.photoBoard_id
+		order by p.photoBoard_id desc
+		limit #{startContent}, #{pageSize}
+	</select>
+	
+	<select id="photoBoardCounts" resultType="int" parameterType="Map">
+		select count(photoBoard_id) from photoBoard p, member m
+		<if test="keyword != null">
+			<if test="searchType.equals('title')">where title like CONCAT('%', #{keyword}, '%')</if>
+			<if test="searchType.equals('writer')">where p.member_id = m.member_id and nickname like CONCAT('%', #{keyword}, '%')</if>
+		</if>
 	</select>
 	
 	<select id="photoLoad" parameterType="int" resultType="photoDetail">

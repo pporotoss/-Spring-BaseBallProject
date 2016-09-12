@@ -2,7 +2,7 @@
 
 ** 페이징 처리 전에 반드시 아래와 같이 변수 선언 필요!!	**
 
-	<c:set var="url" value="/view/board?page="/> => 이동할 주소 + 페이지 번호까지 입력.
+	<c:set var="url" value="/view/board?page="/> => 이동할 주소만 입력. 페이지 번호는 입력 하면 안됨. 알아서 페이지 번호 할당됨.
 	<c:set var="url1" value="&pagesize=${pager.pageSize}"/>	=> 페이지당 보여질 게시물 갯수 지정했으면 갯수 지정. 안했으면 밑에꺼 땡겨다 쓰면 댐.
 	<c:set var="url2" value=""/>	=> 검색어 관련 입력.
 	<c:if test="${searching.keyword != null }">

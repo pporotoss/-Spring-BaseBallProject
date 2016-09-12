@@ -1,5 +1,6 @@
 package com.baseball.photoboard.model.repository;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Repository;
 import com.baseball.photoboard.model.domain.PhotoBoard;
 import com.baseball.photoboard.model.domain.PhotoDetail;
 
-import common.Searching;
-
 @Repository
 public class PhotoBoardDAOMybatis implements PhotoBoardDAO {
 	
@@ -18,9 +17,9 @@ public class PhotoBoardDAOMybatis implements PhotoBoardDAO {
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	@Override
-	public Map photoBoardList(String page, Searching searching) {
-		// TODO Auto-generated method stub
-		return null;
+	public List photoBoardList(Map parameterMap) {
+
+		return sqlSessionTemplate.selectList("PhotoBoard.photoBoardList", parameterMap);
 	}
 
 	@Override
@@ -51,6 +50,12 @@ public class PhotoBoardDAOMybatis implements PhotoBoardDAO {
 	public int photoBoardHitUp(int photoBoard_id) {
 		
 		return sqlSessionTemplate.update("PhotoBoard.photoBoardHitUp", photoBoard_id);		
+	}
+
+	@Override
+	public int photoBoardCounts(Map searchMap) {
+
+		return sqlSessionTemplate.selectOne("PhotoBoard.photoBoardCounts", searchMap);
 	}
 
 }

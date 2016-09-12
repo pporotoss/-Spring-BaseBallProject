@@ -2,6 +2,8 @@ package com.baseball.photoboard.model.service;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import com.baseball.photoboard.model.domain.PhotoBoard;
 import com.baseball.photoboard.model.domain.PhotoDetail;
 import com.baseball.photoboard.model.repository.PhotoBoardDAO;
 
+import common.Pager;
 import common.PhotoUploader;
 import common.Searching;
 
@@ -24,9 +27,27 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 	PhotoBoardDAO photoBoardDAO;
 	
 	@Override
-	public Map photoBoardList(String page, Searching searching) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map photoBoardList(int page, Searching searching) {
+		
+		int pageSize = 8;
+		Map<String, Object> searchMap = new HashMap<>();
+		searchMap.put("keyword", searching.getKeyword());
+		searchMap.put("searchType", searching.getSearchType());
+		int totalContents = photoBoardDAO.photoBoardCounts(searchMap);
+		int blockSize = 10;
+		
+		Pager pager = new Pager(page, pageSize, totalContents, blockSize);
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("startContent", pager.getStartContent()-1);
+		parameterMap.put("pageSize", pager.getPageSize());
+		parameterMap.put("searching", searching);
+		
+		List photoBoardList = photoBoardDAO.photoBoardList(parameterMap);
+		Map<String, Object> photoBoardMap = new HashMap<>();
+		photoBoardMap.put("photoBoardList", photoBoardList);
+		photoBoardMap.put("pager", pager);
+		
+		return photoBoardMap;
 	}
 
 	@Override

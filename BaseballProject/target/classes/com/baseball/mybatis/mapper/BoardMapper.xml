@@ -44,7 +44,8 @@
 			</if>
 		</if> 
 		group by b.title 
-		order by b.family desc, b.rank asc limit #{startContent}, #{pagesize}
+		order by b.family desc, b.rank asc 
+		limit #{startContent}, #{pagesize}
 	</select>
 	
 	<select id="selectOne" parameterType="int" resultType="BoardDetail">

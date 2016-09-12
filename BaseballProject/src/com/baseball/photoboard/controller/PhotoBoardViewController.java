@@ -33,8 +33,19 @@ public class PhotoBoardViewController {
 	@RequestMapping(value="/photo", method=RequestMethod.GET)	// 사진 목록
 	public String photoList(Model model, String page, Searching searching){
 		
+		if(page == null){
+			page = "1";
+		}
+		Map<String, Object> photoBoardMap = photoBoardService.photoBoardList(Integer.parseInt(page), searching);
+		List photoBoardList = (List)photoBoardMap.get("photoBoardList");
+		Pager pager = (Pager) photoBoardMap.get("pager");
 		
+		if(searching.getKeyword() != null){	// 검색어 있으면
+			model.addAttribute("searching", searching);
+		}
 		
+		model.addAttribute("photoBoardList", photoBoardList);
+		model.addAttribute("pager", pager);
 		return "photo/list";
 	}
 	

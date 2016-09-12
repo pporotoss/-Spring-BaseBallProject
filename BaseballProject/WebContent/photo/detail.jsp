@@ -200,12 +200,10 @@
 					<c:set var="imgName" value="${photoDetail.saveName }"/>
 					<c:set var="splitNames" value="${fn:split(imgName, \".\")}"/><%-- .을 기준으로 나눠서 문자열을 배열로 만들기. --%>
 					<c:set var="imgFormat" value="${splitNames[fn:length(splitNames)-1] }"/><%-- '.'을 기준으로 만든 배열의 마지막 값을 이용해 확장자 추출. --%>
-					<c:set var="cnt" value="0"/>
 					<c:set var="filename" />
 					
-					<c:forEach begin="0" end="${fn:length(splitNames)-2 }" step="1"><%-- 배열의 마지막 값을 제외하고 모두 합쳐서 파일명 완성. --%>
+					<c:forEach begin="0" end="${fn:length(splitNames)-2 }" step="1" var="cnt"><%-- 배열의 마지막 값을 제외하고 모두 합쳐서 파일명 완성. --%>
 						<c:set var="filename" value="${filename.concat(splitNames[cnt]) }"/>
-						<c:set var="cnt" value="${cnt = cnt + 1 }"/>
 					</c:forEach>
 					
 					<c:if test="${photoDetail.thumb1.equals(\"Y\") }"><%-- 저장된 썸네일이 있으면, 파일명 재정의. --%>
