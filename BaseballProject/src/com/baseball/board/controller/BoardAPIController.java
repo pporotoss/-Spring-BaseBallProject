@@ -44,23 +44,30 @@ public class BoardAPIController {
 	public ResponseEntity<Map<String,Object>> insertComment(@PathVariable("board_id") int board_id ,@RequestBody Comment comment){
 		
 		comment.setBoard_id(board_id);
-		commentService.insert(comment);
+		int totalPage = commentService.insert(comment);
 		
-		int page = 1;
-		commentService.selectAll(board_id, page);
+		Map<String, Object> commentMap = commentService.selectAll(board_id, totalPage);
 		
-		return new ResponseEntity<Map<String,Object>>(HttpStatus.OK);
+		return new ResponseEntity<>(commentMap, HttpStatus.OK);
 	}
 	
 	// ´ñ±Û ¼öÁ¤
 	@RequestMapping(value="/board/{board_id}/comment/{comment_id}", method=RequestMethod.PUT, produces="application/json")
-	public ResponseEntity<Comment> updateComment(@PathVariable("board_id") int board_id ,@PathVariable("comment_id") int comment_id, @RequestBody Comment comment){
+	public ResponseEntity updateComment(@PathVariable("board_id") int board_id ,@PathVariable("comment_id") int comment_id, @RequestBody Comment comment){
 		
 		comment.setComment_id(comment_id);
 		commentService.update(comment);
-		
-		return new ResponseEntity<Comment>(comment, HttpStatus.OK);
+		return new ResponseEntity(comment, HttpStatus.OK);
 	}
 	
-	
+	// ´ñ±Û »èÁ¦
+	@RequestMapping(value="/board/{board_id}/comment/{comment_id}", method=RequestMethod.DELETE, produces="application/json")
+	public ResponseEntity<Map<String, Object>> deleteComment(@PathVariable("board_id") int board_id, @PathVariable("comment_id") int comment_id){
+		
+		commentService.delete(comment_id);
+		int page = 1;
+		Map<String, Object> commentMap = commentService.selectAll(board_id, page);
+		
+		return new ResponseEntity<>(commentMap, HttpStatus.OK);
+	}
 }

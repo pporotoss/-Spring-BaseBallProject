@@ -28,12 +28,12 @@
 			var regdate = transToDateFormat(photoCommentDetail.regdate);	// 입력일 포멧 변경.
 			
 			var row = '<tr>';	// 행 시작
+			row += '<td style="width:20%">&nbsp;<img src="/images/member/'+photoCommentDetail.levelname+'.png">'+photoCommentDetail.nickname+'</td>';
+			row += '<td style="width:50%" id="content_'+photoCommentDetail.photoComment_id+'">&nbsp;&nbsp;'+photoCommentDetail.content+'</td>';
+			row += '<td style="width:15%; text-align:center">'+regdate+'</td>';
+			row += '<td style="width:15%; text-align:center">';
 			
-			if(loginMember_id == commentDetail.member_id){	// 댓글 쓴 사람이면,
-				row += '<td style="width:20%">&nbsp;<img src="/images/member/'+photoCommentDetail.levelname+'.png">'+photoCommentDetail.nickname+'</td>';
-				row += '<td style="width:50%" id="content_'+photoCommentDetail.photoComment_id+'">&nbsp;&nbsp;'+photoCommentDetail.content+'</td>';
-				row += '<td style="width:15%; text-align:center">'+regdate+'</td>';
-				row += '<td style="width:15%; text-align:center">';
+			if(loginMember_id == photoCommentDetail.member_id){	// 댓글 쓴 사람이면,
 				row += '<a data-toggle="modal" href="#modal_'+photoCommentDetail.photoComment_id+'">수정</a>&nbsp;|';	// modal 시작.
 				row += '<div id="modal_'+photoCommentDetail.photoComment_id+'" class="modal fade">';
 				row += '<div class="modal-dialog">';
@@ -47,14 +47,14 @@
 				row += '</div>';
 				row += '<div class="modal-footer">';
 				row += '<input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment('+photoCommentDetail.photoComment_id+')">';
-				row += '<input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기">';
+				row += '<input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기"  onClick="closeModal('+photoCommentDetail.comment_id+',\''+photoCommentDetail.content+'\')">';
 				row += '</div>';
 				row += '</div>';
 				row += '</div>';
 				row += '</div>';	// modal 끝.
 			}
-			if(loginMember_id == commentDetail.member_id || memberRank == 1){	// 댓글쓴 사람이거나 관리자면,
-				row += '<a href="javascript:deleteComment('+photoCommentDetail.photoComment_id+')">삭제</a>';
+			if(loginMember_id == photoCommentDetail.member_id || memberRank == 1){	// 댓글쓴 사람이거나 관리자면,
+				row += '<a href="javascript:deleteComment('+photoCommentDetail.photoComment_id+')">&nbsp;삭제</a>';
 			}
 			row += '</td>';
 			row += '</tr>';	// 행 끝

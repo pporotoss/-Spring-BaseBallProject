@@ -15,7 +15,10 @@ import common.Pager;
 
 @Service
 public class CommentServiceImpl implements CommentService{
-
+	
+	private int pageSize = 10;
+	private int blockSize = 10;
+	
 	@Autowired
 	private CommentDAO commentDAO;
 	
@@ -23,8 +26,7 @@ public class CommentServiceImpl implements CommentService{
 	public Map selectAll(int board_id, int commentPage) {
 		
 		int totalContents = commentDAO.countAll(board_id);
-		int pageSize = 10;
-		int blockSize = 10;
+		
 		
 		Pager commentPager = new Pager(commentPage, pageSize, totalContents, blockSize);
 		
@@ -61,12 +63,15 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	public int insert(Comment comment) {
 
-		int result = commentDAO.insertComment(comment);
+		int result = commentDAO.insertComment(comment);	// 댓글삽입
 		if(result == 0){
 			throw new RuntimeException("등록 실패!!");
 		}
 		
-		return result;
+		int totalContents = commentDAO.countAll(comment.getBoard_id());	// 삽입 후 총 갯수 반환.
+		int totalPage = (int)Math.ceil(totalContents/(double)pageSize);	// 마지막 페이지 반환.  
+		
+		return totalPage;
 	}
 
 }

@@ -37,10 +37,9 @@ public class PhotoBoardAPIController {
 	public ResponseEntity<Map> photoCommentInsert(@PathVariable("photoBoard_id") int photoBoard_id, @RequestBody PhotoComment photoComment){
 		
 		photoComment.setPhotoBoard_id(photoBoard_id);
-		photoCommentService.photoCommentInsert(photoComment);
+		int totalPage = photoCommentService.photoCommentInsert(photoComment);
 		
-		int page = 1;
-		Map commentMap = photoCommentService.photoCommentList(photoBoard_id, page);
+		Map commentMap = photoCommentService.photoCommentList(photoBoard_id, totalPage);
 		
 		return new ResponseEntity<>(commentMap, HttpStatus.OK);
 	}

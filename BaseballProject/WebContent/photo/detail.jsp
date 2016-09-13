@@ -53,8 +53,16 @@
 		$.get("/api/photo/${photoDetail.photoBoard_id}/comment?commentPage="+commentPage, function(data){
 	        var photoCommentList = data.photoCommentList;
 	        var commentPager = data.commentPager;
-			
-			reCreateCommentTable(photoCommentList);// 테이블 새로 만들기.
+
+	        var loginMember_id = 0;
+	        var memberRank = 0;
+	        
+	        <c:if test="${loginMember != null}">	// 로그인 했으면,
+        		loginMember_id = ${loginMember.member_id};
+        		memberRank = ${loginMember.rank};
+        	</c:if>
+	        
+			reCreateCommentTable(photoCommentList, loginMember_id, memberRank);// 테이블 새로 만들기.
 			
 			reCreatePaging(commentPager);	// 페이징 새로 만들기.
 	        
@@ -82,9 +90,6 @@
 	  	// 댓글 입력
 	  	function insertComment() {
 	  		
-	  		alert($("#currentPage").val());	
-	  		return;
-	  		
 	  		$.ajax({
 	  	  		type:"post",	// 요청방식
 	  	  		url:"/api/photo/${photoDetail.photoBoard_id}/comment",
@@ -101,9 +106,14 @@
 	 	  			$("#commentContent").val("");
 					var obj = JSON.parse(data);
 					var photoCommentList = obj.photoCommentList;	// 댓글 리스트
+					var commentPager = obj.commentPager;	// 페이징 객체
 					
-					reCreateCommentTable(photoCommentList);// 테이블 새로 만들기.
+	        		var loginMember_id = ${loginMember.member_id};
+	        		var memberRank = ${loginMember.rank};
+		        
+					reCreateCommentTable(photoCommentList, loginMember_id, memberRank);// 테이블 새로 만들기.
 					
+					reCreatePaging(commentPager);	// 페이징 새로 만들기.
 	 	       	}// success
 	  		});// ajax
 	  		
@@ -127,6 +137,7 @@
 	  			}),
 	 	  		success:function(data){
 					
+	 	  			$("#modal_"+photoComment_id).modal("hide");
 			  		$("#content_"+photoComment_id).html("&nbsp;&nbsp;"+content);	// 해당 댓글만 수정.	
 					
 	 	       	}// success
@@ -258,7 +269,7 @@
 												        <textarea style="width:100%" class="form-control" rows="3" maxlength="50" id="edit_${photoCommentDetail.photoComment_id }">${photoCommentDetail.content }</textarea>
 												      </div>
 											      <div class="modal-footer">
-											        <input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment(${photoCommentDetail.photoComment_id})" data-dismiss="modal">
+											        <input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment(${photoCommentDetail.photoComment_id})">
 											        <input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기" onClick="closeModal(${photoCommentDetail.photoComment_id},'${photoCommentDetail.content }')">
 											      </div>
 											    </div><!-- /.modal-content -->

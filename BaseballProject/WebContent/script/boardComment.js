@@ -47,14 +47,14 @@
 				row += '</div>';
 				row += '<div class="modal-footer">';
 				row += '<input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment('+commentDetail.comment_id+')">';
-				row += '<input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기">';
+				row += '<input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기" onClick="closeModal('+commentDetail.comment_id+',\''+commentDetail.content+'\')">';
 				row += '</div>';
 				row += '</div>';
 				row += '</div>';
 				row += '</div>';	// modal 끝.
 			}
 			if(loginMember_id == commentDetail.member_id || memberRank == 1){	// 댓글쓴 사람이거나 관리자면,
-				row += '<a href="javascript:deleteComment('+commentDetail.comment_id+')">삭제</a>';
+				row += '<a href="javascript:deleteComment('+commentDetail.comment_id+')">&nbsp;삭제</a>';
 			}
 			row += '</td>';
 			row += '</tr>';	// 행 끝

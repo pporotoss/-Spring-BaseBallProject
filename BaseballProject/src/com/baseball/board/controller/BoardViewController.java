@@ -119,7 +119,6 @@ public class BoardViewController {
 	// 글 삭제
 	@RequestMapping(value="/board/{board_id}", method=RequestMethod.DELETE)
 	public String delete(@PathVariable("board_id") int board_id){
-		
 		boardService.delete(board_id);
 		
 		return "redirect:/view/board";
@@ -143,14 +142,4 @@ public class BoardViewController {
 		
 		return "redirect:/view/board";
 	}
-	
-	// 댓글삭제!!
-	@RequestMapping(value="/board/{board_id}/comment/{comment_id}", method=RequestMethod.DELETE)
-	public String deleteComment(@PathVariable("board_id") int board_id, @PathVariable("comment_id") int comment_id){
-		
-		commentService.delete(comment_id);
-		
-		return "redirect:/view/board/"+board_id;
-	}
-	
 }

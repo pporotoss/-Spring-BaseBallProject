@@ -14,6 +14,8 @@ import common.Pager;
 
 @Service
 public class PhotoCommentServiceImpl implements PhotoCommentService{
+	int pageSize = 10;
+	int blockSize = 10;
 	
 	@Autowired
 	private PhotoCommentDAO photoCommentDAO;
@@ -21,9 +23,8 @@ public class PhotoCommentServiceImpl implements PhotoCommentService{
 	@Override
 	public Map photoCommentList(int photoBoard_id, int page) {
 		
-		int pageSize = 10;
 		int totalContents = photoCommentDAO.photoCommentCounts(photoBoard_id);
-		int blockSize = 10;
+		
 		Pager commentPager = new Pager(page, pageSize, totalContents, blockSize);
 		
 		Map<String, Integer> parameterMap = new HashMap<>();
@@ -53,8 +54,12 @@ public class PhotoCommentServiceImpl implements PhotoCommentService{
 
 	@Override
 	public int photoCommentInsert(PhotoComment photoComment) {
+		photoCommentDAO.photoCommentInsert(photoComment);
 		
-		return photoCommentDAO.photoCommentInsert(photoComment);
+		int totalContents = photoCommentDAO.photoCommentCounts(photoComment.getPhotoBoard_id());
+		int totalPage = (int)Math.ceil(totalContents/(double)pageSize);
+		
+		return totalPage;
 	}
 
 }
