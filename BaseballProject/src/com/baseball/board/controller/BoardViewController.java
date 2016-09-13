@@ -81,7 +81,7 @@ public class BoardViewController {
 		
 		Map<String, Object> map = commentService.selectAll(board_id, Integer.parseInt(commentPage));
 		
-		List commentList = (List)map.get("list");
+		List commentList = (List)map.get("commentList");
 		Pager commentPager = (Pager) map.get("commentPager");
 		
 		model.addAttribute("commentList", commentList);

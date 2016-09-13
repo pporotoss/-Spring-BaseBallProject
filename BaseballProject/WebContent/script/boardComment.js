@@ -1,5 +1,5 @@
 /**
- 	사진게시판 댓글 Ajax로 다시 생성할때 쓰는 것들.
+ 	자유게시판 댓글 Ajax로 다시 생성할때 쓰는 것들.
  */
 	
 	/* 날짜 yyyy-MM-dd HH:mm:ss 형태로 재구성하기 */
@@ -19,23 +19,23 @@
 	}
 	
 	/* 테이블 재구성하기 */
-	function reCreateCommentTable(photoCommentList, loginMember_id, memberRank){
+	function reCreateCommentTable(commentList, loginMember_id, memberRank){
 	
 		$("#commentTable").empty();	// 테이블에 딸린 기존 값 모두 제거.
 		// 테이블 만들기.
-		for(var i = 0; i < photoCommentList.length; i++){
-			var photoCommentDetail = photoCommentList[i];
-			var regdate = transToDateFormat(photoCommentDetail.regdate);	// 입력일 포멧 변경.
+		for(var i = 0; i < commentList.length; i++){
+			var commentDetail = commentList[i];
+			var regdate = transToDateFormat(commentDetail.regdate);	// 입력일 포멧 변경.
 			
 			var row = '<tr>';	// 행 시작
 			
+			row += '<td style="width:20%">&nbsp;<img src="/images/member/'+commentDetail.levelname+'.png">'+commentDetail.nickname+'</td>';
+			row += '<td style="width:50%" id="content_'+commentDetail.comment_id+'">&nbsp;&nbsp;'+commentDetail.content+'</td>';
+			row += '<td style="width:15%; text-align:center">'+regdate+'</td>';
+			row += '<td style="width:15%; text-align:center">';
 			if(loginMember_id == commentDetail.member_id){	// 댓글 쓴 사람이면,
-				row += '<td style="width:20%">&nbsp;<img src="/images/member/'+photoCommentDetail.levelname+'.png">'+photoCommentDetail.nickname+'</td>';
-				row += '<td style="width:50%" id="content_'+photoCommentDetail.photoComment_id+'">&nbsp;&nbsp;'+photoCommentDetail.content+'</td>';
-				row += '<td style="width:15%; text-align:center">'+regdate+'</td>';
-				row += '<td style="width:15%; text-align:center">';
-				row += '<a data-toggle="modal" href="#modal_'+photoCommentDetail.photoComment_id+'">수정</a>&nbsp;|';	// modal 시작.
-				row += '<div id="modal_'+photoCommentDetail.photoComment_id+'" class="modal fade">';
+				row += '<a data-toggle="modal" href="#modal_'+commentDetail.comment_id+'">수정</a>&nbsp;|';	
+				row += '<div id="modal_'+commentDetail.comment_id+'" class="modal fade">';	// modal 시작.
 				row += '<div class="modal-dialog">';
 				row += '<div class="modal-content">';
 				row += '<div class="modal-header">';
@@ -43,10 +43,10 @@
 				row += '<h4 class="modal-title">댓글수정</h4>';
 				row += '</div>';
 				row += '<div class="modal-body">';
-				row += '<textarea style="width:100%" class="form-control" rows="3" maxlength="50" id="edit_'+photoCommentDetail.photoComment_id+'">'+photoCommentDetail.content+'</textarea>';
+				row += '<textarea style="width:100%" class="form-control" rows="3" maxlength="50" id="edit_'+commentDetail.comment_id+'">'+commentDetail.content+'</textarea>';
 				row += '</div>';
 				row += '<div class="modal-footer">';
-				row += '<input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment('+photoCommentDetail.photoComment_id+')">';
+				row += '<input type="button" class="btn btn-primary" value="수정하기" onClick="updateComment('+commentDetail.comment_id+')">';
 				row += '<input type="button" class="btn btn-danger" data-dismiss="modal" value="닫기">';
 				row += '</div>';
 				row += '</div>';
@@ -54,7 +54,7 @@
 				row += '</div>';	// modal 끝.
 			}
 			if(loginMember_id == commentDetail.member_id || memberRank == 1){	// 댓글쓴 사람이거나 관리자면,
-				row += '<a href="javascript:deleteComment('+photoCommentDetail.photoComment_id+')">삭제</a>';
+				row += '<a href="javascript:deleteComment('+commentDetail.comment_id+')">삭제</a>';
 			}
 			row += '</td>';
 			row += '</tr>';	// 행 끝

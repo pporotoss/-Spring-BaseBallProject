@@ -138,7 +138,8 @@
 			  <input class="btn btn-success" type="button" value="검색" onClick="photoSearch()"> <input class="btn btn-warning" type="button" value="전체보기" onClick="location.href='/view/photo'">
 			</div>
 		</form>    
-    
+    	<br>
+    	<br>
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-2 sidenav" style="background-color:white">

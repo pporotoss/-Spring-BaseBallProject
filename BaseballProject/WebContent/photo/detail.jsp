@@ -47,40 +47,43 @@
   <script src="../script/photoComment.js"></script>
   <script src="../script/commentPaging.js"></script>
   <script>
-  	// 수정하기
-  	function goEdit() {
-  		detailForm.action="/view/photo/edit";
-  		detailForm.method="POST";
-  		detailForm.submit();
-  	}
-  	
-  	// 삭제하기
-  	function deletePhoto() {
-  		if(!confirm("삭제 하시겠습니까?"))return;
-  		detailForm._method.value = "DELETE";
-  		detailForm.action = "/view/photo/${photoDetail.photoBoard_id}";
-  		detailForm.method="POST";
-  		detailForm.submit();
-  	}
-  	
-  	// 댓글 불러오기
-  	function getCommentList(commentPage){
-  		
-  		$.get("/api/photo/${photoDetail.photoBoard_id}/comment?commentPage="+commentPage, function(data){
-  	        var photoCommentList = data.photoCommentList;
-  	        var commentPager = data.commentPager;
-  			
+	// 댓글 불러오기
+	function getCommentList(commentPage){
+		
+		$.get("/api/photo/${photoDetail.photoBoard_id}/comment?commentPage="+commentPage, function(data){
+	        var photoCommentList = data.photoCommentList;
+	        var commentPager = data.commentPager;
+			
 			reCreateCommentTable(photoCommentList);// 테이블 새로 만들기.
 			
 			reCreatePaging(commentPager);	// 페이징 새로 만들기.
-  	        
-  	    });
-  		
-  	}
+	        
+	    });
+		
+	}
   	
   	<c:if test="${loginMember != null}"><%-- 로그인 안했으면 표시 안함. --%>
+	 	// 수정하기
+	  	function goEdit() {
+	  		detailForm.action="/view/photo/edit";
+	  		detailForm.method="POST";
+	  		detailForm.submit();
+	  	}
+	  	
+	  	// 삭제하기
+	  	function deletePhoto() {
+	  		if(!confirm("삭제 하시겠습니까?"))return;
+	  		detailForm._method.value = "DELETE";
+	  		detailForm.action = "/view/photo/${photoDetail.photoBoard_id}";
+	  		detailForm.method="POST";
+	  		detailForm.submit();
+	  	}
+	  	
 	  	// 댓글 입력
 	  	function insertComment() {
+	  		
+	  		alert($("#currentPage").val());	
+	  		return;
 	  		
 	  		$.ajax({
 	  	  		type:"post",	// 요청방식
@@ -227,6 +230,7 @@
 				</c:if>
 				<input type="button" class="btn btn-primary" value="목록보기" onClick="location.href='/view/photo'">
 			</div>
+			<br>
 <!-- ///////////////////////////////////           댓글                  //////////////////////////////////////////////////////////// -->
 			<div>
 				
@@ -273,40 +277,7 @@
 					</c:forEach>
 				</table>
 <!-------------------------------- 댓글 페이징 ------------------------------------------------------>
-				<div align="center" id="commentPaging">
-				  	<nav>
-					  <ul class="pagination">
-					    <c:if test="${commentPager.prev }">
-						    <li>
-						      <a href="javascript:getCommentList(${(commentPager.startPage-1)})" aria-label="Previous">
-						        <span aria-hidden="true">&laquo;</span>
-						      </a>
-						    </li>
-					    </c:if>
-					    <c:forEach var="cnt" begin="${commentPager.startPage }" end="${commentPager.endPage }">
-					    	<c:choose>
-						    	<c:when test="${cnt == commentPager.page }">
-						    		<c:set var="pageClass" value="active"/>
-						    	</c:when>
-						    	<c:otherwise>
-						    		<c:set var="pageClass" value=""/>
-						    	</c:otherwise>
-					    	</c:choose>	
-					    
-					    	<li class="${pageClass }">
-					    		<a href="javascript:getCommentList(${cnt })">${cnt }</a>
-					    	</li>
-					    </c:forEach>
-					    <c:if test="${commentPager.next }">
-						    <li>
-						      <a href="javascript:getCommentList(${commentPager.endPage+1})" aria-label="Next">
-						        <span aria-hidden="true">&raquo;</span>
-						      </a>
-						    </li>
-					    </c:if>
-					  </ul>
-					</nav>
-				</div>
+	<%@ include file="/include/commentPaging.jsp" %>			
 <!-------------------------------- 댓글 입력 ------------------------------------------------------>				
 				<c:if test="${loginMember != null }">
 					<form name="commentForm">

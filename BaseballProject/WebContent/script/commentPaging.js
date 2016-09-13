@@ -19,6 +19,7 @@ function reCreatePaging(commentPager){
 	
 	for(var i = commentPager.startPage; i <= commentPager.endPage; i++){
 		if(commentPager.page == i){
+			nav += '<input type="hidden" id="currentPage" value="'+i+'">';
 			nav += '<li class="active">';
 		}else{
 			nav += '<li>';

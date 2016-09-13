@@ -19,7 +19,7 @@
 		<typeAlias type="com.baseball.photoboard.model.domain.PhotoComment" alias="PhotoComment"/>
 		<typeAlias type="com.baseball.photoboard.model.domain.PhotoCommentDetail" alias="PhotoCommentDetail"/>
 	</typeAliases>
-	
+
 	
 	<mappers>
 		<mapper resource="com/baseball/mybatis/mapper/BoardMapper.xml"/>

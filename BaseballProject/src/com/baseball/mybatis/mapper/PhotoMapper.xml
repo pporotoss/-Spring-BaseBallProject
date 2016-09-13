@@ -19,10 +19,10 @@
 	</select>
 	
 	<select id="photoBoardCounts" resultType="int" parameterType="Map">
-		select count(photoBoard_id) from photoBoard p, member m
+		select count(photoBoard_id) from photoBoard p
 		<if test="keyword != null">
 			<if test="searchType.equals('title')">where title like CONCAT('%', #{keyword}, '%')</if>
-			<if test="searchType.equals('writer')">where p.member_id = m.member_id and nickname like CONCAT('%', #{keyword}, '%')</if>
+			<if test="searchType.equals('writer')">,member m where p.member_id = m.member_id and nickname like CONCAT('%', #{keyword}, '%')</if>
 		</if>
 	</select>
 	

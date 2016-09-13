@@ -7,9 +7,9 @@ import com.baseball.board.model.domain.CommentDetail;
 
 public interface CommentService {
 	
-	public Map selectAll(int board_id, int page);
+	public Map selectAll(int board_id, int commentPage);
 	public int update(Comment comment);
 	public int delete(int comment_id);
-	public CommentDetail insert(Comment comment);
+	public int insert(Comment comment);
 	
 }

@@ -27,18 +27,34 @@ public class BoardAPIController {
 	@Autowired
 	CommentService commentService;
 	
-	// ´ñ±Û »ðÀÔ ¹× »ðÀÔ µÈ ´ñ±Û ¹ÝÈ¯.
-	@RequestMapping(value="/board/*/comment", method=RequestMethod.POST, produces="application/json")
-	public ResponseEntity<CommentDetail> insertComment(@RequestBody Comment comment){
+	// ´ñ±Û ¸ñ·Ï
+	@RequestMapping(value="/board/{board_id}/comment", method=RequestMethod.GET, produces="application/json")
+	public ResponseEntity<Map<String,Object>> commentList(@PathVariable("board_id") int board_id, String commentPage){
 		
-		CommentDetail commentDetail = commentService.insert(comment);
+		if(commentPage == null){
+			commentPage = "1";
+		}
+		Map<String, Object> commentMap = commentService.selectAll(board_id, Integer.parseInt(commentPage));
 		
-		return new ResponseEntity<CommentDetail>(commentDetail, HttpStatus.OK);
+		return new ResponseEntity<>(commentMap, HttpStatus.OK);
+	}
+	
+	// ´ñ±Û »ðÀÔ
+	@RequestMapping(value="/board/{board_id}/comment", method=RequestMethod.POST, produces="application/json")
+	public ResponseEntity<Map<String,Object>> insertComment(@PathVariable("board_id") int board_id ,@RequestBody Comment comment){
+		
+		comment.setBoard_id(board_id);
+		commentService.insert(comment);
+		
+		int page = 1;
+		commentService.selectAll(board_id, page);
+		
+		return new ResponseEntity<Map<String,Object>>(HttpStatus.OK);
 	}
 	
 	// ´ñ±Û ¼öÁ¤
-	@RequestMapping(value="/board/*/comment/{comment_id}", method=RequestMethod.PUT, produces="application/json")
-	public ResponseEntity<Comment> updateComment(@PathVariable("comment_id") int comment_id, @RequestBody Comment comment){
+	@RequestMapping(value="/board/{board_id}/comment/{comment_id}", method=RequestMethod.PUT, produces="application/json")
+	public ResponseEntity<Comment> updateComment(@PathVariable("board_id") int board_id ,@PathVariable("comment_id") int comment_id, @RequestBody Comment comment){
 		
 		comment.setComment_id(comment_id);
 		commentService.update(comment);

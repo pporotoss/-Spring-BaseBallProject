@@ -42,9 +42,35 @@
       .row.content {height:auto;} 
     }
   </style>
+  <script src="../script/boardComment.js"></script>
+  <script src="../script/commentPaging.js"></script>
   <script>
-  // 게시물
-  	function update(){
+  /* 댓글 목록 불러오기!! */
+  function getCommentList(commentPage){
+		
+		$.get("/api/board/${detail.board_id}/comment?commentPage="+commentPage, function(data){
+	        
+			var commentList = data.commentList;	// 넘어온 댓글 리스트.
+	        var commentPager = data.commentPager;	// 넘어온 페이징 객체.
+			
+	        var loginMember_id = 0;
+	        var memberRank = 0;
+	        
+	        <c:if test="${loginMember != null}">
+        		loginMember_id = ${loginMember.member_id};
+        		memberRank = ${loginMember.rank};
+        	</c:if>
+	        
+			reCreateCommentTable(commentList, loginMember_id, memberRank);// 테이블 새로 만들기.
+			
+			reCreatePaging(commentPager);	// 페이징 새로 만들기. 공통 사용 가능.
+	        
+	    });
+	}
+  
+  <c:if test="${loginMember != null}">
+  /* 게시물 */
+  	function update(){	// 수정
   		detailForm.action="/view/board/${detail.board_id}";
   		detailForm.method="POST";
   		detailForm.submit();
@@ -56,7 +82,7 @@
   		detailForm.submit();
   	}
   	
-  	function del(){
+  	function del(){	// 삭제
   		detailForm._method.value="DELETE";
   		
   		detailForm.action="/view/board/${detail.board_id}";
@@ -64,8 +90,8 @@
   		detailForm.submit();
   	}
   	
-  	// 댓글 삽입
-  	function insertComment(){
+  	/* 댓글 */
+  	function insertComment(){ // 댓글 삽입
   		var commentTable = document.getElementById("commentTable");
   		if(commentForm.content.value.trim().length == 0){
   			alert("댓글을 입력해 주세요.");	
@@ -84,7 +110,6 @@
   			dataType:"text",
   			data:JSON.stringify({
   					content : commentForm.content.value,
-  			        board_id: commentForm.board_id.value,
   			        member_id:commentForm.member_id.value
   			}),
   			success:function(data){
@@ -159,7 +184,7 @@
   		});// ajax
   			
 	}// updateComment
-  	
+  	</c:if>
   </script>
 </head>
 <body>
@@ -254,7 +279,6 @@
 					</c:forEach>
 				</table>
 <!-------------------------------- 댓글 페이징 ------------------------------------------------------>
-				<c:set var="url" value="/view/board/${detail.board_id }?commentPage="/>
 				<%@ include file="/include/commentPaging.jsp" %>
 <!-------------------------------- 댓글 입력 ------------------------------------------------------>				
 				<c:if test="${loginMember != null }">
