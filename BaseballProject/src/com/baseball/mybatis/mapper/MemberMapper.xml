@@ -7,7 +7,7 @@
 	<select id="selectAll" resultType="Member">
 		select * from member order by member_id desc
 	</select>
-
+	
 	<select id="memberAll" resultType="MemberDetail" parameterType="Map">
 		select member_id, id, nickname, levelname, username, email, point, t.name as teamname from member m, level l, team t
 		where m.level_id = l.level_id and m.team_id = t.team_id and id != 'admin'
@@ -42,9 +42,19 @@
 		</if>
 	</select>
 	
+	<select id="searchUserId" parameterType="String" resultType="Member">
+		select id, pwdHintQuestion from member
+		where email=#{email}
+	</select>
+	
+	<select id="searchPwd" parameterType="Member" resultType="String">
+		select pwd from member
+		where id=#{id} and pwdHintAnswer=#{pwdHintAnswer}
+	</select>
+	
 	<insert id="insert" parameterType="Member">
-		insert into member(id, nickname, pwd, username, email, team_id)
-		values(#{id}, #{nickname}, #{pwd}, #{username}, #{email}, #{team_id})
+		insert into member(id, nickname, pwd, username, email, team_id, pwdHintQuestion, pwdHintAnswer)
+		values(#{id}, #{nickname}, #{pwd}, #{username}, #{email}, #{team_id}, #{pwdHintQuestion}, #{pwdHintAnswer})
 	</insert>
 	
 	<update id="update" parameterType="Member">
