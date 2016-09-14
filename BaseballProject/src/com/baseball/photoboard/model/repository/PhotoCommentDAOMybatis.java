@@ -45,4 +45,16 @@ public class PhotoCommentDAOMybatis implements PhotoCommentDAO{
 		return sqlSessionTemplate.insert("PhotoComment.photoCommentInsert", photoComment);
 	}
 
+	@Override
+	public int photoCommentDeleteByPhotoBoard_id(int photoBoard_id) {
+
+		return sqlSessionTemplate.delete("PhotoComment.photoCommentDeleteByPhotoBoard_id", photoBoard_id);
+	}
+
+	@Override
+	public int photoCommentDeleteByMember_id(int member_id) {
+
+		return sqlSessionTemplate.delete("PhotoComment.photoCommentDeleteByMember_id", member_id);
+	}
+
 }

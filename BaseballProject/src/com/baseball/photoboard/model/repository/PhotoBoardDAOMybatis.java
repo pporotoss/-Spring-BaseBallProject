@@ -58,4 +58,10 @@ public class PhotoBoardDAOMybatis implements PhotoBoardDAO {
 		return sqlSessionTemplate.selectOne("PhotoBoard.photoBoardCounts", searchMap);
 	}
 
+	@Override
+	public int photoDeleteByMember_id(int member_id) {
+
+		return sqlSessionTemplate.delete("PhotoBoard.photoDeleteByMember_id", member_id);
+	}
+
 }

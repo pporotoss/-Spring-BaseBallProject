@@ -51,4 +51,8 @@
 		delete from photoBoard where photoBoard_id=#{photoBoard_id}
 	</delete>
 	
+	<delete id="photoDeleteByMember_id" parameterType="int">
+		delete from photoBoard where member_id=#{member_id}
+	</delete>
+	
 </mapper>

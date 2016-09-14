@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.baseball.photoboard.model.domain.PhotoBoard;
 import com.baseball.photoboard.model.domain.PhotoDetail;
 import com.baseball.photoboard.model.repository.PhotoBoardDAO;
+import com.baseball.photoboard.model.repository.PhotoCommentDAO;
 
 import common.Pager;
 import common.PhotoUploader;
@@ -22,19 +23,22 @@ import common.Searching;
 
 @Service
 public class PhotoBoardServiceImpl implements PhotoBoardService{
-
+	int pageSize = 8;
+	int blockSize = 10;
+	
 	@Autowired
 	PhotoBoardDAO photoBoardDAO;
+	
+	@Autowired
+	PhotoCommentDAO photoCommentDAO;
 	
 	@Override
 	public Map photoBoardList(int page, Searching searching) {
 		
-		int pageSize = 8;
 		Map<String, Object> searchMap = new HashMap<>();
 		searchMap.put("keyword", searching.getKeyword());
 		searchMap.put("searchType", searching.getSearchType());
 		int totalContents = photoBoardDAO.photoBoardCounts(searchMap);
-		int blockSize = 10;
 		
 		Pager pager = new Pager(page, pageSize, totalContents, blockSize);
 		Map<String, Object> parameterMap = new HashMap<>();
@@ -166,7 +170,8 @@ public class PhotoBoardServiceImpl implements PhotoBoardService{
 		
 		PhotoUploader.deleteDir(savePath);	// 파일 삭제 후 저장 폴더삭제. 폴더안에 파일 없을때만 폴더 삭제 됨.
 		
-		photoBoardDAO.photoDelete(photoBoard.getPhotoBoard_id());
+		photoBoardDAO.photoDelete(photoBoard.getPhotoBoard_id());	// 게시물 삭제.
+		photoCommentDAO.photoCommentDeleteByPhotoBoard_id(photoBoard.getPhotoBoard_id());// 게시물에 딸린 댓글 삭제
 		
 	}
 

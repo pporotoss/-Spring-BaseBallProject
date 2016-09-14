@@ -33,4 +33,13 @@
 		where photoComment_id=#{photoComment_id}
 	</delete>
 	
+	<delete id="photoCommentDeleteByPhotoBoard_id" parameterType="int">
+		delete from photoComment
+		where photoBoard_id=#{photoBoard_id}
+	</delete>
+
+	<delete id="photoCommentDeleteByMember_id" parameterType="int">
+		delete from photoComment
+		where member_id=#{member_id}
+	</delete>
 </mapper>
