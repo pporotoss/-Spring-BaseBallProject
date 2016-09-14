@@ -98,9 +98,14 @@
 		      </tr>
 		    </thead>
 		    <tbody>
-			   <c:choose>
-			   		<c:when test="${freeBoardList != null }"><!-- 자유게시판 내역 -->
-				      <c:forEach items="${freeBoardList }" var="boardDetail">
+		   		<c:if test="${freeBoardList != null || photoBoardList != null}"><!-- 게시판 내역 -->
+		   			<c:if test="${freeBoardList != null }">
+		   				<c:set var="boardList" value="${freeBoardList }"/>
+		   			</c:if>
+		   			<c:if test="${photoBoardList != null }">
+		   				<c:set var="boardList" value="#{photoBoardList }"/>
+		   			</c:if>
+					<c:forEach items="${boardList }" var="boardDetail">
 					      <tr>
 					        <td style="text-align:center">${boardDetail.board_id }</td>
 					        <td width="10%"><!-- 빈칸 --></td>
@@ -108,21 +113,27 @@
 					        <td><fmt:formatDate value="${boardDetail.regdate }" type="both" pattern="yyyy.MM.dd hh:mm:ss"/></td>
 					        <td style="text-align:center">${boardDetail.hit }</td>
 					      </tr>
-				      </c:forEach>
-			      	</c:when>
-			   		<c:when test="${freeCommentList != null }"><!-- 자유게시판 댓글 내역 -->
-			   		  <c:set var="commentNum" value="${pager.totalContents-(pager.startContent-1)  }"/>
-				      <c:forEach items="${freeCommentList }" var="commentDetail">
-					      <tr>
-					        <td style="text-align:center">${commentNum }</td>
+					</c:forEach>
+		      	</c:if>
+			      	
+		   		<c:if test="${freeCommentList != null || photoCommentList != null }"><!-- 댓글 내역 -->
+					<c:set var="commentNum" value="${pager.totalContents-(pager.startContent-1)  }"/>
+					<c:if test="${freeCommentList != null }">
+						<c:set var="commentList" value="${freeCommentList }"/>
+					</c:if>
+					<c:if test="${photoCommentList != null }">
+						<c:set var="commentList" value="${photoCommentList }"/>
+					</c:if>
+					<c:forEach items="${commentList }" var="commentDetail">
+						<tr>
+							<td style="text-align:center">${commentNum }</td>
 					        <td width="10%"><!-- 빈칸 --></td>
 					        <td>${commentDetail.content }</td>
 					        <td><fmt:formatDate value="${commentDetail.regdate }" type="both" pattern="yyyy.MM.dd hh:mm:ss"/></td>
-					      </tr>
-					      <c:set var="commentNum" value="${commentNum - 1 }"/>
-				      </c:forEach>
-			      	</c:when>
-			   	</c:choose>
+						</tr>
+						<c:set var="commentNum" value="${commentNum - 1 }"/>
+					</c:forEach>
+				</c:if>
 		    </tbody>
 		  </table>
 		  <!-----------------  페이징 ------------------------------------ -->
@@ -130,8 +141,14 @@
 	  		<c:if test="${freeBoardList != null }">
 	  			<c:set var="url" value="/view/member/activityList/${loginMember.member_id }/freeBoard?page="/>
 	  		</c:if>
+	  		<c:if test="${photoBoardList != null }">
+	  			<c:set var="url" value="/view/member/activityList/${loginMember.member_id }/photoBoard?page="/>
+	  		</c:if>
 	  		<c:if test="${freeCommentList != null }">
 	  			<c:set var="url" value="/view/member/activityList/${loginMember.member_id }/freeComment?page="/>
+	  		</c:if>
+	  		<c:if test="${photoCommentList != null }">
+	  			<c:set var="url" value="/view/member/activityList/${loginMember.member_id }/photoComment?page="/>
 	  		</c:if>
 	  		<%@ include file="/include/paging.jsp" %>
 		</div>
