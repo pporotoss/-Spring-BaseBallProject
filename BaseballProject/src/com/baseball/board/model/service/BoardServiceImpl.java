@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.baseball.board.model.domain.Board;
 import com.baseball.board.model.domain.BoardDetail;
 import com.baseball.board.model.repository.BoardDAO;
+import com.baseball.board.model.repository.CommentDAO;
 import com.baseball.exception.RegistFailException;
 
 import common.Pager;
@@ -20,6 +21,9 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Autowired
 	private BoardDAO boardDAO;
+	
+	@Autowired
+	private CommentDAO commentDAO;
 	
 	
 	@Override
@@ -107,7 +111,8 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void delete(int board_id) {
 		
-		boardDAO.delete(board_id);
+		boardDAO.delete(board_id);	// 게시물 삭제
+		commentDAO.deleteCommentByBoard_id(board_id);	// 게시물에 딸린 댓글 삭제
 		
 	}
 }

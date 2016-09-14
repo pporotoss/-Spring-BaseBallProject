@@ -39,7 +39,11 @@
 	</delete>
 	
 	<delete id="deleteByMember" parameterType="int">
-		delete form comment where member_id=${member_id}
+		delete from comment where member_id=#{member_id}
+	</delete>
+	
+	<delete id="deleteCommentByBoard_id" parameterType="int">
+		delete form comment where board_id=#{board_id}
 	</delete>
 	
 	<select id="userCommentCount" parameterType="int" resultType="int">

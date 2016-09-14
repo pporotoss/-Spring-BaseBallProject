@@ -15,6 +15,7 @@ public interface CommentDAO {
 	public int updateComment(Comment comment);
 	public int deleteComment(int comment_id);
 	public int deleteByMember(int member_id);
+	public int deleteCommentByBoard_id(int board_id);
 	public int userCommentCount(int member_id);
 	public List userCommentList(Map user);
 }

@@ -72,4 +72,10 @@ public class CommentDAOMybatis implements CommentDAO{
 		return sqlSessionTemplate.selectList("Comment.userCommentList", user);
 	}
 
+	@Override
+	public int deleteCommentByBoard_id(int board_id) {
+
+		return sqlSessionTemplate.delete("Comment.deleteCommentByBoard_id", board_id);
+	}
+
 }
