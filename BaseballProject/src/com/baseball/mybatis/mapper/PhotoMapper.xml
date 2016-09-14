@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="PhotoBoard">
 	
-	<select id="photoBoardList" parameterType="Map" resultType="photoDetail">
+	<select id="photoBoardList" parameterType="Map" resultType="PhotoDetail">
 		select p.photoBoard_id as photoBoard_id, title, saveName, p.member_id as member_id, thumb1, thumb2, hit, p.regdate as regdate, nickname, levelname, count(photoComment_id) as count
 		from photoBoard p left outer join photoComment c on p.photoBoard_id=c.photoBoard_id
 		left outer join member m on p.member_id=m.member_id
@@ -26,10 +26,28 @@
 		</if>
 	</select>
 	
-	<select id="photoLoad" parameterType="int" resultType="photoDetail">
+	<select id="photoLoad" parameterType="int" resultType="PhotoDetail">
 		select photoBoard_id, title, saveName, p.member_id, thumb1, thumb2, hit, regdate, nickname, levelname
 		from photoBoard p, member m, level l
 		where p.member_id = m.member_id and m.level_id = l.level_id and photoBoard_id = #{photoBoard_id}
+	</select>
+	
+	<select id="photoBoardCountsByMember_id" parameterType="int" resultType="int">
+		select count(photoBoard_id) from photoBoard
+		where member_id=#{member_id}
+	</select>
+	
+	<select id="userPhotoBoardList" parameterType="Map" resultType="PhotoBoard">
+		select * from photoBoard
+		where member_id=#{member_id}
+		order by photoBoard_id desc
+		limit #{startContent}, #{pageSize}
+	</select>
+	
+	<select id="userPhotoBoardListAll" parameterType="int" resultType="PhotoBoard">
+		select * from photoBoard
+		where member_id=#{member_id}
+		order by photoBoard_id desc
 	</select>
 	
 	<insert id="photoUpload" parameterType="PhotoBoard" useGeneratedKeys="true" keyProperty="photoBoard_id">

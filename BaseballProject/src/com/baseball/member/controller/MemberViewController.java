@@ -3,23 +3,29 @@ package com.baseball.member.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.baseball.board.model.domain.Board;
 import com.baseball.board.model.domain.Comment;
 import com.baseball.exception.LoginFailException;
 import com.baseball.member.model.domain.Member;
 import com.baseball.member.model.domain.MemberDetail;
 import com.baseball.member.model.service.MemberService;
+import com.baseball.photoboard.model.domain.PhotoBoard;
 import com.baseball.team.model.service.TeamService;
 
 import common.Pager;
@@ -55,21 +61,34 @@ public class MemberViewController {
 	
 	// 로그인 페이지 이동!!
 	@RequestMapping(value="/login", method=RequestMethod.GET)
-	public String gotoLogin(HttpServletRequest request){
+	public String gotoLogin(Model model, HttpServletRequest request, @CookieValue(value="REMEMBER", required=false) Cookie cookie){
 		
+		if(cookie != null){	// 저장된 쿠키중에서 REMEMBER라는 쿠키가 있으면, 
+			model.addAttribute("rememberId", cookie.getValue());
+		}
 		String referer = request.getHeader("Referer"); // 헤더의 referer 이용해서 이전에 보던 페이지 주소 얻어오기!!
 		HttpSession session = request.getSession();	// 이전에 보던 페이지 세션에 담기!!
 		session.setAttribute("referer", referer.substring(referer.lastIndexOf(":")+5));
-				
+		
 		return "member/login";
 	}
 	
 	// 로그인하기!!
 	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(Member member, HttpSession session){
+	public String login(Member member, String rememberId, HttpSession session, HttpServletResponse response){
 		
 		Member loginMember = memberService.loginMember(member);
 		session.setAttribute("loginMember", loginMember); // 로그인한 멤버 정보 세션에 담기!!
+		
+		Cookie rememberCoookie = new Cookie("REMEMBER", loginMember.getId());
+		rememberCoookie.setPath("/");
+		
+		if(rememberId != null){		// 아이디 저장하기 선택했으면,
+			rememberCoookie.setMaxAge(60*60*24*30); // 쿠키에 30일 동안 아이디 저장하기.
+		}else{
+			rememberCoookie.setMaxAge(0);	// 아이디 저장하기 선택 안했으면, 쿠키에 저장된 아이디 삭제하기.
+		}
+		response.addCookie(rememberCoookie);	// 응답객체에 생성한 쿠키 담기.
 		
 		String referer = (String)session.getAttribute("referer");	 // 세션에 담아놓은 로그인 이전에 보던 페이지 주소 얻어오기!!
 		session.removeAttribute("referer"); // 세션에서 페이지주소 제거!!
@@ -101,9 +120,10 @@ public class MemberViewController {
 	}
 	
 	// 회원정보 수정하기
-	@RequestMapping(value="/myinfo", method=RequestMethod.PUT)
-	public String updateInfo(Model model, Member member){
+	@RequestMapping(value="/myinfo/{member_id}", method=RequestMethod.PUT)
+	public String updateInfo(Model model, @PathVariable("member_id") int member_id, Member member){
 		
+		member.setMember_id(member_id);
 		memberService.updateMember(member);
 		
 		return "redirect:/view/member/myinfo/"+member.getMember_id();
@@ -111,9 +131,13 @@ public class MemberViewController {
 	
 	
 	// 회원 탈퇴
-	public String deleteMember(){
+	@RequestMapping(value="/myinfo/{member_id}", method=RequestMethod.DELETE)
+	public String deleteMember(HttpServletRequest request, @PathVariable("member_id") int member_id){
 		
-		return "";
+		memberService.deleteMember(request, member_id);
+		request.getSession().invalidate();
+		
+		return "redirect:/";
 	}
 	
 	/*  활동내역  */
@@ -123,7 +147,7 @@ public class MemberViewController {
 	public String freeBoardList(Model model, @PathVariable("member_id") int member_id, String page){
 		
 		Map map = memberService.freeBoardList(member_id, page);
-		List<MemberDetail> freeBoardList = (List)map.get("freeBoardList");
+		List<Board> freeBoardList = (List)map.get("freeBoardList");
 		Pager pager = (Pager) map.get("pager");
 		
 		model.addAttribute("freeBoardList", freeBoardList);
@@ -146,7 +170,33 @@ public class MemberViewController {
 		return "member/activityList";
 	}
 	
-
+	// 사진게시판 작성글
+		@RequestMapping(value="/activityList/{member_id}/photoBoard", method=RequestMethod.GET)
+		public String photoBoardList(Model model, @PathVariable("member_id") int member_id, String page){
+			
+			Map map = memberService.photoBoardList(member_id, page);
+			List<PhotoBoard> photoBoardList = (List)map.get("photoBoardList");
+			Pager pager = (Pager) map.get("pager");
+			
+			model.addAttribute("photoBoardList", photoBoardList);
+			model.addAttribute("pager", pager);
+		
+			return "member/activityList";
+		}
+		
+		// 사진게시판 댓글
+		@RequestMapping(value="/activityList/{member_id}/photoComment", method=RequestMethod.GET)
+		public String photoCommentList(Model model, @PathVariable("member_id") int member_id, String page){
+			
+			Map map = memberService.photoCommentList(member_id, page);
+			List<Comment> photoCommentList = (List)map.get("photoCommentList");
+			Pager pager = (Pager) map.get("pager");
+			
+			model.addAttribute("photoCommentList", photoCommentList);
+			model.addAttribute("pager", pager);
+			
+			return "member/activityList";
+		}
 	
 	
 	@ExceptionHandler(LoginFailException.class)

@@ -241,7 +241,9 @@
 		      		</c:if>
 		      		<input type="button" class="btn btn-primary" value="답글" onClick="reply()">
 	      		</c:if>
-				<a href="/view/board?page=${page }&pagesize=${pagesize}<c:if test="${searching.keyword != null }">&searchType=${searching.searchType }&keyword=${searching.keyword }</c:if>"><input type="button" class="btn btn-default" value="목록"></a>
+	      		
+	      		
+				<a href="/view/board<c:if test="${page != null }">?page=${page }&pagesize=${pagesize}</c:if><c:if test="${searching.keyword != null }">&searchType=${searching.searchType }&keyword=${searching.keyword }</c:if>"><input type="button" class="btn btn-default" value="목록"></a>
 			</div>
 <!-- ///////////////////////////////////           댓글                  //////////////////////////////////////////////////////////// -->
 			<div>

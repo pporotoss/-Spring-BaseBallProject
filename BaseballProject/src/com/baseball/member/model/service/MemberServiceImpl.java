@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,11 +17,17 @@ import com.baseball.member.model.domain.Member;
 import com.baseball.member.model.domain.MemberDetail;
 import com.baseball.member.model.repository.LevelDAO;
 import com.baseball.member.model.repository.MemberDAO;
+import com.baseball.photoboard.model.domain.PhotoBoard;
+import com.baseball.photoboard.model.repository.PhotoBoardDAO;
+import com.baseball.photoboard.model.repository.PhotoCommentDAO;
+import com.baseball.photoboard.model.service.PhotoBoardService;
 
 import common.Pager;
 
 @Service
 public class MemberServiceImpl implements MemberService{
+	int pageSize = 10;
+	int blockSize = 10;
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;	// 비밀번호 암호화용 객체
@@ -35,6 +43,15 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Autowired
 	CommentDAO commentDAO;
+	
+	@Autowired
+	PhotoBoardDAO photoBoardDAO;
+	
+	@Autowired
+	PhotoCommentDAO photoCommentDAO;
+	
+	@Autowired
+	PhotoBoardService photoBoardService;
 
 	@Override
 	public List memberList() {
@@ -152,30 +169,48 @@ public class MemberServiceImpl implements MemberService{
 	
 	// 회원 여러명 삭제
 	@Override
-	public void deleteMember(int[] member_id) {
+	public void deleteMember(HttpServletRequest request, int[] member_id) {
 		
 		for(int i = 0; i < member_id.length; i++){
 			
-			memberDAO.deleteMember(member_id[i]); // 해당 회원 정보 삭제
-			
 			boardDAO.deleteByMember(member_id[i]); // 해당 회원 작성글 삭제
 			
+			List<PhotoBoard> photoBoardList = photoBoardDAO.userPhotoBoardListAll(member_id[i]);
+			for(int pp = 0; pp < photoBoardList.size(); pp++){
+				PhotoBoard photoBoard = photoBoardList.get(pp);
+				photoBoardService.photoDelete(request, photoBoard);	// 해당 회원이 올린 사진 다 지우기.
+			}
+			
+			photoBoardDAO.photoDeleteByMember_id(member_id[i]);
+			
 			commentDAO.deleteByMember(member_id[i]);
+			
+			photoCommentDAO.photoCommentDeleteByMember_id(member_id[i]);
+			
+			memberDAO.deleteMember(member_id[i]); // 해당 회원 정보 삭제
 		}
 	}
 	
 	// 회원 한명만 삭제
 	@Override
-	public void deleteMember(int member_id) {
-		
-		System.out.println("회원 한명 삭제");
-		
-		/*memberDAO.deleteMember(member_id); // 해당 회원 정보 삭제
+	public void deleteMember(HttpServletRequest request, int member_id) {
 		
 		boardDAO.deleteByMember(member_id); // 해당 회원 작성글 삭제
 		
+		List<PhotoBoard> photoBoardList = photoBoardDAO.userPhotoBoardListAll(member_id);
+		for(int pp = 0; pp < photoBoardList.size(); pp++){
+			PhotoBoard photoBoard = photoBoardList.get(pp);
+			photoBoardService.photoDelete(request, photoBoard);	// 해당 회원이 올린 사진 다 지우기.
+		}
+		
+		photoBoardDAO.photoDeleteByMember_id(member_id);
+		
 		commentDAO.deleteByMember(member_id);	// 해당 회원 댓글 삭제
-*/		
+		
+		photoCommentDAO.photoCommentDeleteByMember_id(member_id);
+		
+		memberDAO.deleteMember(member_id); // 해당 회원 정보 삭제
+		
 	}
 	
 	// 로그인처리!!
@@ -235,27 +270,25 @@ public class MemberServiceImpl implements MemberService{
 			memberDAO.updateMemberLevel(member);
 		}
 		
-		
 	}
 
 	@Override
 	public Map freeBoardList(int member_id, String page) {
 		
-		int pageSize = 10;
+		
 		int totalContents = boardDAO.userContentsCount(member_id);
-		int blockSize = 10;
 		
 		if(page == null){
 			page = "1";
 		}
 		
 		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
-		Map user = new HashMap<>();
+		Map<String, Object> user = new HashMap<>();
 		user.put("member_id", member_id);
 		user.put("startContent", pager.getStartContent()-1);
 		user.put("pageSize", pager.getPageSize());
 		
-		Map result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		List freeBoardList = boardDAO.userContents(user);
 		result.put("freeBoardList", freeBoardList);
 		result.put("pager", pager);
@@ -266,9 +299,7 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public Map freeCommentList(int member_id, String page) {
 		
-		int pageSize = 10;
 		int totalContents = commentDAO.userCommentCount(member_id);
-		int blockSize = 10;
 		
 		if(page == null){
 			page = "1";
@@ -276,12 +307,12 @@ public class MemberServiceImpl implements MemberService{
 		
 		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
 		
-		Map user = new HashMap<>();
+		Map<String, Object> user = new HashMap<>();
 		user.put("member_id", member_id);
 		user.put("startContent", pager.getStartContent()-1);
 		user.put("pageSize", pager.getPageSize());
 		
-		Map result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		List freeCommentList = commentDAO.userCommentList(user);
 		result.put("freeCommentList", freeCommentList);
 		result.put("pager", pager);
@@ -291,14 +322,48 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public Map photoBoardList(int member_id, String page) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		int totalContents = photoBoardDAO.photoBoardCountsByMember_id(member_id);
+		if(page == null){
+			page = "1";
+		}
+		
+		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
+		
+		Map<String, Object> user = new HashMap<>();
+		user.put("member_id", member_id);
+		user.put("startContent", pager.getStartContent()-1);
+		user.put("pageSize", pager.getPageSize());
+		
+		Map<String, Object> result = new HashMap<>();
+		List photoBoardList = photoBoardDAO.userPhotoBoardList(user);
+		result.put("photoBoardList", photoBoardList);
+		result.put("pager", pager);
+		
+		return result;
 	}
 
 	@Override
 	public Map photoCommentList(int member_id, String page) {
-		// TODO Auto-generated method stub
-		return null;
+
+		int totalContents = photoCommentDAO.userPhotoCommentCounts(member_id);
+		if(page == null){
+			page = "1";
+		}
+		
+		Pager pager = new Pager(Integer.parseInt(page), pageSize, totalContents, blockSize);
+		
+		Map<String, Object> user = new HashMap<>();
+		user.put("member_id", member_id);
+		user.put("startContent", pager.getStartContent()-1);
+		user.put("pageSize", pager.getPageSize());
+		
+		Map<String, Object> result = new HashMap<>();
+		List photoCommentList = photoCommentDAO.userPhotoCommentList(user);
+		result.put("photoCommentList", photoCommentList);
+		result.put("pager", pager);
+		
+		return result;
 	}
 
 	

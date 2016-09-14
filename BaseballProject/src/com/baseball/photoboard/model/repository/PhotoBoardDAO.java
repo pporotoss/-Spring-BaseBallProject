@@ -16,4 +16,7 @@ public interface PhotoBoardDAO {
 	public int photoBoardHitUp(int photoBoard_id);
 	public int photoBoardCounts(Map searchMap);
 	public int photoDeleteByMember_id(int member_id);
+	public int photoBoardCountsByMember_id(int member_id);
+	public List userPhotoBoardList(Map user);
+	public List userPhotoBoardListAll(int member_id);
 }

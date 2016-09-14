@@ -68,7 +68,7 @@
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-8 text-left"> 
-      <h1>사진게시판  &nbsp;&nbsp;<c:if test="${loginMember != null }"><input type="button" value="사진올리기" class="btn btn-warning" onClick="location.href='/photo/upload.jsp'" ></c:if></h1> 
+      <h1>사진게시판  &nbsp;&nbsp;<c:if test="${loginMember != null }"><input type="button" value="사진올리기" class="btn btn-warning" onClick="location.href='/view/photo/upload'" ></c:if></h1> 
       <br>
       <br>
       <div class="row">

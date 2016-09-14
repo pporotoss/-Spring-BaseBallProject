@@ -3,6 +3,8 @@ package com.baseball.member.model.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.baseball.member.model.domain.Member;
 import com.baseball.member.model.domain.MemberDetail;
 
@@ -15,8 +17,8 @@ public interface MemberService {
 	public MemberDetail selectMember(int member_id);
 	public void registMember(Member member);
 	public void updateMember(Member member);
-	public void deleteMember(int[] member_id);
-	public void deleteMember(int member_id);
+	public void deleteMember(HttpServletRequest request, int[] member_id);
+	public void deleteMember(HttpServletRequest request, int member_id);
 	public Member loginMember(Member member);
 	public boolean chkId(String id);
 	public boolean chkNickname(String nickname);

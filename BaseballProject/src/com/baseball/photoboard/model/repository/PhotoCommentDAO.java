@@ -13,4 +13,6 @@ public interface PhotoCommentDAO {
 	public int photoCommentInsert(PhotoComment photoComment);
 	public int photoCommentDeleteByPhotoBoard_id(int photoBoard_id);
 	public int photoCommentDeleteByMember_id(int member_id);
+	public int userPhotoCommentCounts(int member_id);
+	public List userPhotoCommentList(Map user);
 }

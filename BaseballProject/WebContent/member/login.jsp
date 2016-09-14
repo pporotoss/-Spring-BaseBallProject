@@ -85,11 +85,16 @@
 	    <form name="loginForm">
 		    <div class="form-group">
 			    <label class="control-label" for="id">ID :</label>
-			    <input type="text" class="form-control" id="id" placeholder="아이디를 입력해주세요." name="id">
+			    <input type="text" class="form-control" id="id" placeholder="아이디를 입력해주세요." name="id" value='<c:if test="${rememberId != null }">${rememberId }</c:if>'>
 	    	</div>
 		    <div class="form-group">
 			    <label class="control-label" for="pwd">비밀번호 :</label>
 			    <input type="password" class="form-control" id="pwd" placeholder="비밀번호를 입력해주세요." name="pwd">
+			    <div class="checkbox">
+				    <label>
+				      <input type="checkbox" name="rememberId" <c:if test="${rememberId != null }">checked</c:if>> 아이디 저장하기
+				    </label>
+				</div>
 	    	</div>
 		    <div class="form-group">
 		    	<label class="control-label"></label>        

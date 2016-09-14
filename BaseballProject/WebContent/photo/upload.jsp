@@ -43,9 +43,6 @@
     }
   </style>
   <script>
-  	<c:if test="${loginMember == null}">	// 로그인 안하고 접근시.
-		location.href = "/member/login.jsp";
-	</c:if>
   
   	$(document).ready(function(){
   		
@@ -199,6 +196,7 @@
 			</form>
 			<div align="right">
 				<input type="button" class="btn btn-primary" value="올리기" onClick="upload()">
+				<input type="button" class="btn btn-danger" value="취소" onClick="history.back()">
 			</div>
       	</div>
     </div>

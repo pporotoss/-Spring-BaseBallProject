@@ -8,11 +8,24 @@ public class Member {
 	private String nickname;
 	private String username;
 	private String email;
+	private String pwdHintQuestion;
+	private String pwdHintAnswer;
 	private int team_id;
-	private int point;
 	private int level_id;
 	private int rank;
 	
+	public String getPwdHintQuestion() {
+		return pwdHintQuestion;
+	}
+	public void setPwdHintQuestion(String pwdHintQuestion) {
+		this.pwdHintQuestion = pwdHintQuestion;
+	}
+	public String getPwdHintAnswer() {
+		return pwdHintAnswer;
+	}
+	public void setPwdHintAnswer(String pwdHintAnswer) {
+		this.pwdHintAnswer = pwdHintAnswer;
+	}
 	public int getRank() {
 		return rank;
 	}
@@ -60,12 +73,6 @@ public class Member {
 	}
 	public void setTeam_id(int team_id) {
 		this.team_id = team_id;
-	}
-	public int getPoint() {
-		return point;
-	}
-	public void setPoint(int point) {
-		this.point = point;
 	}
 	public int getLevel_id() {
 		return level_id;

@@ -45,7 +45,7 @@
   </style>
 </head>
 <script>
-	var pwdFlag = false;
+	var pwdFlag = false;	// 비번 수정여부 확인용.
 	
 	$(document).ready(function(){
 		$("#dupleNick").change(function(){
@@ -122,12 +122,24 @@
 			
 			return;
 		}
-		
-		updateForm.action="/view/member/myinfo";
+		updateForm._method.value="PUT";
+		updateForm.action="/view/member/myinfo/${memberDetail.member_id}";
 		updateForm.method="POST";
 		updateForm.submit();
 		
-	} // 폼전송.
+	} // update()
+	
+	function deleteMemer(){
+		
+		if(!confirm("탈퇴하시겠습니까?")){
+			return;
+		}
+		
+		updateForm._method.value="DELETE";
+		updateForm.action="/view/member/myinfo/${memberDetail.member_id}";
+		updateForm.method="POST";
+		updateForm.submit();
+	}
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	
@@ -201,9 +213,8 @@
 	    <div class="col-sm-6 text-left"> 
 	      <h1>회원정보</h1>
 	      	<form name="updateForm">
-		      	<input type="hidden" name="_method" value="PUT">
+		      	<input type="hidden" name="_method" value="">
 		      	<input type="hidden" id="dupleNick" value="false">
-		      	<input type="hidden" name="member_id" value="${memberDetail.member_id }">
 		      	<div class="form-group">
 				  <label for="usr">ID:</label>
 					<input type="text" class="form-control" id="usr" maxlength="15" name="id" readonly value="${memberDetail.id }">
@@ -247,8 +258,9 @@
 			</form>
 	      	<div class="form-group">
 			  <label></label>
-			  <input type="button" class="btn btn-primary" value="수정하기" onClick="update()">
-			  <input type="button" class="btn btn-danger" value="취소" onClick="history.back()">
+			  <input type="button" class="btn btn-primary" value="즉시수정하기" onClick="update()">
+			  <input type="button" class="btn btn-danger" value="탈퇴하기" onClick="deleteMemer()">
+			  <input type="button" class="btn btn-default" value="취소" onClick="history.back()">
 			</div>
 			
 	    </div>

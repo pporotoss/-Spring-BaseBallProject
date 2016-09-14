@@ -3,6 +3,8 @@ package com.baseball.admin.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,9 +63,9 @@ public class AdminController {
 	
 	// 회원 삭제
 	@RequestMapping(value="/admin/member", method=RequestMethod.DELETE)
-	public String deleteMember(int[] member_id){
+	public String deleteMember(HttpServletRequest request, int[] member_id){
 		
-		memberService.deleteMember(member_id);
+		memberService.deleteMember(request, member_id);
 		
 		return "redirect:/view/admin/member";
 	}

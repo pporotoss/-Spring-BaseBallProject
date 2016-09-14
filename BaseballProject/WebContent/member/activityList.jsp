@@ -66,16 +66,16 @@
       	<c:if test="${freeCommentList != null }">
       		<c:set var="freeCommentMenu" value="active"/>
       	</c:if>
-      	<c:if test="${photoList != null }">
+      	<c:if test="${photoBoardList != null }">
       		<c:set var="photoBoardMenu" value="active"/>
       	</c:if>
-      	<c:if test="${photoCommnetList != null }">
+      	<c:if test="${photoCommentList != null }">
       		<c:set var="photoCommentMenu" value="active"/>
       	</c:if>
 		<li role="presentation" class="${freeBoardMenu }"><a href="/view/member/activityList/${loginMember.member_id }/freeBoard">자유게시판</a></li>
 		<li role="presentation" class="${freeCommentMenu }"><a href="/view/member/activityList/${loginMember.member_id }/freeComment">자유게시판 댓글</a></li>
-		<li role="presentation" class="${photoBoardMenu }"><a href="javascript:goPhoto()">사진게시판</a></li>
-		<li role="presentation" class="${photoCommentMenu }"><a href="javascript:goPhotoComment()">사진게시판 댓글</a></li>
+		<li role="presentation" class="${photoBoardMenu }"><a href="/view/member/activityList/${loginMember.member_id }/photoBoard">사진게시판</a></li>
+		<li role="presentation" class="${photoCommentMenu }"><a href="/view/member/activityList/${loginMember.member_id }/photoComment">사진게시판 댓글</a></li>
 	  </ul>
       <table class="table table-hover">
 		    <thead>
@@ -98,38 +98,53 @@
 		      </tr>
 		    </thead>
 		    <tbody>
-		   		<c:if test="${freeBoardList != null || photoBoardList != null}"><!-- 게시판 내역 -->
-		   			<c:if test="${freeBoardList != null }">
-		   				<c:set var="boardList" value="${freeBoardList }"/>
-		   			</c:if>
-		   			<c:if test="${photoBoardList != null }">
-		   				<c:set var="boardList" value="#{photoBoardList }"/>
-		   			</c:if>
-					<c:forEach items="${boardList }" var="boardDetail">
-					      <tr>
-					        <td style="text-align:center">${boardDetail.board_id }</td>
-					        <td width="10%"><!-- 빈칸 --></td>
-					        <td><a href="/view/board/${boardDetail.board_id }?page=${pager.page}&pagesize=${pager.pageSize}"> ${boardDetail.title }</a></td>
-					        <td><fmt:formatDate value="${boardDetail.regdate }" type="both" pattern="yyyy.MM.dd hh:mm:ss"/></td>
-					        <td style="text-align:center">${boardDetail.hit }</td>
-					      </tr>
+		    <!-- 게시글 내역 -->
+	   			<c:if test="${freeBoardList != null }">
+	   				<c:forEach items="${freeBoardList }" var="board">
+				      <tr>
+				        <td style="text-align:center">${board.board_id }</td>
+				        <td width="10%"><!-- 빈칸 --></td>
+				        <td><a href="/view/board/${board.board_id }" target="_blank"> ${board.title }</a></td>
+				        <td><fmt:formatDate value="${board.regdate }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+				        <td style="text-align:center">${board.hit }</td>
+				      </tr>
 					</c:forEach>
-		      	</c:if>
-			      	
-		   		<c:if test="${freeCommentList != null || photoCommentList != null }"><!-- 댓글 내역 -->
+	   			</c:if>
+	   			
+	   			<c:if test="${photoBoardList != null }">
+	   				<c:forEach items="${photoBoardList }" var="photo">
+				      <tr>
+				        <td style="text-align:center">${photo.photoBoard_id }</td>
+				        <td width="10%"><!-- 빈칸 --></td>
+				        <td><a href="/view/photo/${photo.photoBoard_id }" target="_blank"> ${photo.title }</a></td>
+				        <td><fmt:formatDate value="${photo.regdate }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+				        <td style="text-align:center">${photo.hit }</td>
+				      </tr>
+					</c:forEach>
+	   			</c:if>
+	   			
+			<!-- 댓글 내역 -->					
+		   		<c:if test="${freeCommentList != null}">
 					<c:set var="commentNum" value="${pager.totalContents-(pager.startContent-1)  }"/>
-					<c:if test="${freeCommentList != null }">
-						<c:set var="commentList" value="${freeCommentList }"/>
-					</c:if>
-					<c:if test="${photoCommentList != null }">
-						<c:set var="commentList" value="${photoCommentList }"/>
-					</c:if>
-					<c:forEach items="${commentList }" var="commentDetail">
+					<c:forEach items="${freeCommentList }" var="comment">
 						<tr>
 							<td style="text-align:center">${commentNum }</td>
 					        <td width="10%"><!-- 빈칸 --></td>
-					        <td>${commentDetail.content }</td>
-					        <td><fmt:formatDate value="${commentDetail.regdate }" type="both" pattern="yyyy.MM.dd hh:mm:ss"/></td>
+					        <td><a href="/view/board/${comment.board_id }" target="_blank">${comment.content }</a></td>
+					        <td><fmt:formatDate value="${comment.regdate }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+						</tr>
+						<c:set var="commentNum" value="${commentNum - 1 }"/>
+					</c:forEach>
+				</c:if>
+				
+		   		<c:if test="${photoCommentList != null }">
+					<c:set var="commentNum" value="${pager.totalContents-(pager.startContent-1)  }"/>
+					<c:forEach items="${commentList }" var="photoComment">
+						<tr>
+							<td style="text-align:center">${commentNum }</td>
+					        <td width="10%"><!-- 빈칸 --></td>
+					        <td><a href="/view/photo/${photoComment.photoBoard_id }">${photoComment.content }</a></td>
+					        <td><fmt:formatDate value="${photoComment.regdate }" type="both" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 						</tr>
 						<c:set var="commentNum" value="${commentNum - 1 }"/>
 					</c:forEach>

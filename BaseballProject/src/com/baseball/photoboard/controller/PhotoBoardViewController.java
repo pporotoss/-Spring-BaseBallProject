@@ -49,6 +49,12 @@ public class PhotoBoardViewController {
 		return "photo/list";
 	}
 	
+	@RequestMapping(value="/photo/upload")
+	public String goPhotoUpload(){
+		
+		return "photo/upload";
+	}
+	
 	@RequestMapping(value="/photo", method=RequestMethod.POST)	// 게시물 등록
 	public String photoUpload(HttpServletRequest request ,MultipartFile uploadFile, PhotoBoard photoBoard){
 		

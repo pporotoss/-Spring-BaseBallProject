@@ -52,6 +52,10 @@
 			<mvc:mapping path="/board/*/comment/*"/>
 			<mvc:mapping path="/board/reply"/>
 			<mvc:mapping path="/admin/*"/>
+			<mvc:mapping path="/member/activityList/*"/>
+			<mvc:mapping path="/member/myinfo/*"/>
+			<mvc:mapping path="/notice/write"/>
+			<mvc:mapping path="/photo/upload"/>
 			<bean class="common.intercepter.LoginCheckInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>

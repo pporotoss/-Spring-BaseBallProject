@@ -18,6 +18,18 @@
 		limit #{startContent}, #{pageSize}
 	</select>
 	
+	<select id="userPhotoCommentCounts" parameterType="int" resultType="int">
+		select count(photoComment_id) from photoComment
+		where member_id=#{member_id}
+	</select>
+	
+	<select id="userPhotoCommentList" parameterType="Map" resultType="PhotoComment">
+		select * from photoComment
+		where member_id=#{member_id}
+		order by photoComment_id desc
+		limit #{startContent}, #{pageSize}
+	</select>
+	
 	<insert id="photoCommentInsert" parameterType="PhotoComment">
 		insert into photocomment(content, member_id, photoBoard_id)
 		values(#{content}, #{member_id}, #{photoBoard_id})
