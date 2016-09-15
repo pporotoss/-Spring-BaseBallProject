@@ -43,32 +43,40 @@
   </style>
   
   <script>
-	 <c:if test="${msg != null }">
-		alert("${msg}");
-	 </c:if>
 
    	 function login(){
-  		
+		  		
+   		var param1 = $("#userId").val().trim();
+   		var param2 = $("#pwd").val().trim();
+   		if (!$('#rememberId').is(":checked")){
+   			$("#rememberId").val("");
+		}
+   		var param3 = $("#rememberId").val();
+   		 
   		// 빈칸검사
-  		if(loginForm.id.value.length < 1){
+  		if(param1.length < 1){
   			alert("아이디를 입력해주세요.");
-  			loginForm.id.focus();
+  			 $("#userId").focus();
   			return;
   		}
-  		if(loginForm.pwd.value.length < 1){
+  		if(param2.length < 1){
   			alert("비밀번호를 입력해주세요.");
-  			loginForm.pwd.focus();
+  			$("#pwd").focus();
   			return;
   		}
   		
-  		loginForm.action="/view/member/login";
-  		loginForm.method="POST";
-  		loginForm.submit();
+  		$.get("/api/member/login?id="+param1+"&pwd="+param2+"&rememberId="+param3, function(data){
+  	        
+  			if(data == ""){
+  	        	alert("아이디 또는 비밀번호를 확인해 주세요.");
+  	        }else{
+  	        	location.href=data;
+  	        }
+  			
+  	    });
+  		
   	}
   	
-  	function back(){
-  		history.back();
-  	}
   </script>
 </head>
 <body>
@@ -84,22 +92,24 @@
 	    <h1 align="center">로그인</h1>
 	    <form name="loginForm">
 		    <div class="form-group">
-			    <label class="control-label" for="id">ID :</label>
-			    <input type="text" class="form-control" id="id" placeholder="아이디를 입력해주세요." name="id" value='<c:if test="${rememberId != null }">${rememberId }</c:if>'>
+			    <label class="control-label" for="userId">아이디 :</label>
+			    <input type="text" class="form-control" id="userId" placeholder="아이디를 입력해주세요." name="id" value='<c:if test="${rememberId != null }">${rememberId }</c:if>'>
 	    	</div>
 		    <div class="form-group">
 			    <label class="control-label" for="pwd">비밀번호 :</label>
 			    <input type="password" class="form-control" id="pwd" placeholder="비밀번호를 입력해주세요." name="pwd">
-			    <div class="checkbox">
-				    <label>
-				      <input type="checkbox" name="rememberId" <c:if test="${rememberId != null }">checked</c:if>> 아이디 저장하기
-				    </label>
-				</div>
 	    	</div>
+	    	<div class="checkbox">
+				    <label>
+				      <input type="checkbox" id="rememberId" name="rememberId" <c:if test="${rememberId != null }">checked</c:if> > 아이디 저장하기
+				    </label>
+			</div>
+	    	<a href="/view/member/find_user">아이디/비밀번호 찾기</a><br>
+	    	<br>
 		    <div class="form-group">
 		    	<label class="control-label"></label>        
 		   		<input type="button" class="btn btn-success" value="로그인" onClick="login()">
-		   		<input type="button" class="btn btn-danger" value="취소" onClick="back()">
+		   		<input type="button" class="btn btn-danger" value="취소" onClick="history.back()">
 		    </div>
 	    </form>
     </div>

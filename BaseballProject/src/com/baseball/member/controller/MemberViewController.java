@@ -50,51 +50,42 @@ public class MemberViewController {
 		return "member/regist";
 	}
 	
-	// 회원 가입하기!!
-	@RequestMapping(value="/regist", method=RequestMethod.POST)
-	public String memberInsert(Member member){
-		
-		memberService.registMember(member);
-		
-		return "redirect:/"; // 메인페이지로 이동!!
-	}
-	
 	// 로그인 페이지 이동!!
-	@RequestMapping(value="/login", method=RequestMethod.GET)
+	@RequestMapping(value="/loginPage", method=RequestMethod.GET)
 	public String gotoLogin(Model model, HttpServletRequest request, @CookieValue(value="REMEMBER", required=false) Cookie cookie){
 		
 		if(cookie != null){	// 저장된 쿠키중에서 REMEMBER라는 쿠키가 있으면, 
 			model.addAttribute("rememberId", cookie.getValue());
 		}
 		String referer = request.getHeader("Referer"); // 헤더의 referer 이용해서 이전에 보던 페이지 주소 얻어오기!!
-		HttpSession session = request.getSession();	// 이전에 보던 페이지 세션에 담기!!
-		session.setAttribute("referer", referer.substring(referer.lastIndexOf(":")+5));
+		
+		String[] refererArray = referer.split("/");
+		
+		if(refererArray.length <= 3){	// 메인페이지면,
+			referer = "/";
+		}else{
+			StringBuffer refererBuffer = new StringBuffer();
+			
+			for(int i = 3; i < refererArray.length; i++){
+				refererBuffer.append("/");
+				refererBuffer.append(refererArray[i]);
+			}
+			referer = refererBuffer.toString();
+		}
+		
+		HttpSession session = request.getSession();	
+		session.setAttribute("referer", referer); // 이전에 보던 페이지주소 세션에 담기!!
 		
 		return "member/login";
 	}
 	
-	// 로그인하기!!
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(Member member, String rememberId, HttpSession session, HttpServletResponse response){
+	// 아이디 비번 찾기 페이지 이동
+	@RequestMapping(value="/find_user", method=RequestMethod.GET)
+	public String find_user(){
 		
-		Member loginMember = memberService.loginMember(member);
-		session.setAttribute("loginMember", loginMember); // 로그인한 멤버 정보 세션에 담기!!
-		
-		Cookie rememberCoookie = new Cookie("REMEMBER", loginMember.getId());
-		rememberCoookie.setPath("/");
-		
-		if(rememberId != null){		// 아이디 저장하기 선택했으면,
-			rememberCoookie.setMaxAge(60*60*24*30); // 쿠키에 30일 동안 아이디 저장하기.
-		}else{
-			rememberCoookie.setMaxAge(0);	// 아이디 저장하기 선택 안했으면, 쿠키에 저장된 아이디 삭제하기.
-		}
-		response.addCookie(rememberCoookie);	// 응답객체에 생성한 쿠키 담기.
-		
-		String referer = (String)session.getAttribute("referer");	 // 세션에 담아놓은 로그인 이전에 보던 페이지 주소 얻어오기!!
-		session.removeAttribute("referer"); // 세션에서 페이지주소 제거!!
-		
-		return "redirect:"+referer; // 로그인 이전에 보던 페이지로 이동!!
+		return "member/find_user";
 	}
+	
 	
 	// 로그아웃!!
 	@RequestMapping("/logout")

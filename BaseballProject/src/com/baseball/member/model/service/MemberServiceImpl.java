@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +25,7 @@ import com.baseball.photoboard.model.repository.PhotoBoardDAO;
 import com.baseball.photoboard.model.repository.PhotoCommentDAO;
 import com.baseball.photoboard.model.service.PhotoBoardService;
 
+import common.GenerateTempPwd;
 import common.Pager;
 
 @Service
@@ -143,7 +147,7 @@ public class MemberServiceImpl implements MemberService{
 
 	// 회원 등록
 	@Override
-	public void registMember(Member member){
+	public int registMember(Member member){
 		
 		String pwd = passwordEncoder.encode(member.getPwd());	// 넘어온 비밀번호 암호화
 		member.setPwd(pwd);
@@ -151,25 +155,26 @@ public class MemberServiceImpl implements MemberService{
 		String id = member.getId();
 		member.setId(id.toLowerCase());// 입력받은 id를 소문자로 변환.
 		
-		memberDAO.insertMember(member);
-		
+		return memberDAO.insertMember(member);
 	}
 	
 	// 회원정보 변경
 	@Override
-	public void updateMember(Member member) {
+	public int updateMember(Member member) {
 		
 		if(member.getPwd() != null){	// 비밀번호 변경했으면,
 			String pwd = passwordEncoder.encode(member.getPwd());	// 넘어온 비밀번호 암호화
 			member.setPwd(pwd);
 		}
 		
-		memberDAO.updateMember(member);
+		return memberDAO.updateMember(member);
 	}
 	
 	// 회원 여러명 삭제
 	@Override
-	public void deleteMember(HttpServletRequest request, int[] member_id) {
+	public boolean deleteMember(HttpServletRequest request, int[] member_id) {
+		
+		int successCount = 0;
 		
 		for(int i = 0; i < member_id.length; i++){
 			
@@ -187,13 +192,19 @@ public class MemberServiceImpl implements MemberService{
 			
 			photoCommentDAO.photoCommentDeleteByMember_id(member_id[i]);
 			
-			memberDAO.deleteMember(member_id[i]); // 해당 회원 정보 삭제
+			successCount += memberDAO.deleteMember(member_id[i]); // 해당 회원 정보 삭제
 		}
+		boolean result = false;
+		if(successCount == member_id.length){
+			result = true;
+		}
+		
+		return result;
 	}
 	
 	// 회원 한명만 삭제
 	@Override
-	public void deleteMember(HttpServletRequest request, int member_id) {
+	public int deleteMember(HttpServletRequest request, int member_id) {
 		
 		boardDAO.deleteByMember(member_id); // 해당 회원 작성글 삭제
 		
@@ -209,23 +220,45 @@ public class MemberServiceImpl implements MemberService{
 		
 		photoCommentDAO.photoCommentDeleteByMember_id(member_id);
 		
-		memberDAO.deleteMember(member_id); // 해당 회원 정보 삭제
-		
+		return memberDAO.deleteMember(member_id); // 해당 회원 정보 삭제
 	}
 	
 	// 로그인처리!!
 	@Override
-	public Member loginMember(Member member){
+	public String loginMember(Member member, String rememberId, HttpSession session, HttpServletResponse response){
 		
-		Member repositoryMember = memberDAO.loginMember(member);
+		String referer = null;
+		Member loginMember = memberDAO.loginMember(member.getId());
 		
-		boolean result = passwordEncoder.matches(member.getPwd(), repositoryMember.getPwd());	// 패스워드 일치여부 확인.
+		boolean result = passwordEncoder.matches(member.getPwd(), loginMember.getPwd());	// 패스워드 일치여부 확인.
 		
-		if(!result){	// 비밀번호가 일치하지 않으면,
-			throw new LoginFailException("아이디 또는 비밀번호를 확인해 주세요.");
-		}
+		if(result){	// 비밀번호가 일치하면,
+			
+			session.setAttribute("loginMember", loginMember); // 로그인한 멤버 정보 세션에 담기!!
+			
+			Cookie rememberCoookie = new Cookie("REMEMBER", loginMember.getId());
+			rememberCoookie.setPath("/");
+			
+			if(rememberId.equals("on")){		// 아이디 저장하기 선택했으면,
+				
+				rememberCoookie.setMaxAge(60*60*24*30); // 쿠키에 30일 동안 아이디 저장하기.
+			
+			}else{
+				
+				rememberCoookie.setMaxAge(0);	// 아이디 저장하기 선택 안했으면, 쿠키에 저장된 아이디 삭제하기.
+				
+			}
+			response.addCookie(rememberCoookie);	// 응답객체에 생성한 쿠키 담기.
+			
+			referer = (String)session.getAttribute("referer");	 // 세션에 담아놓은 로그인 이전에 보던 페이지 주소 얻어오기!!
+			session.removeAttribute("referer"); // 세션에서 페이지주소 제거!!
+			
+			if(referer.equals("/view/member/find_user")){	// 아이디 찾기해서 로그인했으면,
+				referer = "/";	// 메인으로 이동.
+			}
+		}// if result
 		
-		return repositoryMember;
+		return referer;
 	}
 
 	// 아이디 중복 검사
@@ -364,6 +397,44 @@ public class MemberServiceImpl implements MemberService{
 		result.put("pager", pager);
 		
 		return result;
+	}
+
+	@Override
+	public String searchUserId(String email) {
+		
+		return memberDAO.searchUserId(email);
+	}
+
+	@Override
+	public String searchUserPwd(String id, String pwdHintAnswer) {
+		
+		Map<String, Object> user = new HashMap<>();
+		user.put("id", id);
+		user.put("pwdHintAnswer", pwdHintAnswer);
+		
+		String pwd = null;
+		int resultCount = memberDAO.searchUserPwd(user);
+		
+		if(resultCount == 1){	// 일치하면,
+			 pwd = GenerateTempPwd.generatePwd(10);	// 임시비밀번호 10자리수 생성.
+			
+			String encodingPwd = passwordEncoder.encode(pwd);
+			
+			Map<String, Object> pwdParam = new HashMap<>();
+			pwdParam.put("id", id);
+			pwdParam.put("pwdHintAnswer", pwdHintAnswer);
+			pwdParam.put("pwd", encodingPwd);
+			
+			memberDAO.saveTempPwd(pwdParam);	// 생성한 임시 비번 저장.
+		}
+		
+		return pwd;
+	}
+
+	@Override
+	public String getPwdHintQuestion(String id) {
+
+		return memberDAO.getPwdHintQuestion(id);
 	}
 
 	

@@ -123,9 +123,36 @@
 			return;
 		}
 		
-		registForm.action="/view/member/regist";
-		registForm.method="POST";
-		registForm.submit();
+		
+		$.ajax({
+	  		type:"post",	// 요청방식
+	  		url:"/api/member/regist",
+	  		headers:{	// 헤더값 세팅.
+	  		"Content-Type":"application/json",
+	  		"X-HTTP-Method-Override":"POST"
+	  		 },
+	  			dataType:"text",
+	  			data:JSON.stringify({
+	  					"id":$("#usr").val(),
+						"pwd":$("#pwd").val(),
+						"pwdHintQuestion":$("#pwdHintQuestion").val(),
+						"pwdHintAnswer":$("#pwdHintAnswer").val(),
+						"username":$("#username").val(),
+						"nickname":$("#nickname").val(),
+						"email":$("#email").val(),
+						"team_id":$("#team_id").val()
+	  			}),
+	  			success:function(data){
+	  			   
+	  				if(data){
+	  				   alert("가입 성공!!");
+	  				   location.href = "/";
+	  			   }else{
+	  				   alert(alert("가입 실패!!"));
+	  			   }
+	       }
+		});
+		
 		
 	}// 폼전송.
 	
@@ -202,13 +229,21 @@
 				  <input type="password" class="form-control" id="repwd" maxlength="15" placeholder="패스워드를 다시한번 입력해주세요." name="repwd">
 				</div>
 		      	<div class="form-group">
+				  <label for="pwdHintQuestion">비밀번호 질문:</label>
+				  <input type="text" class="form-control" id="pwdHintQuestion" maxlength="10" name="pwdHintQuestion">
+				</div>
+		      	<div class="form-group">
+				  <label for="pwdHintAnswer">비밀번호 답:</label>
+				  <input type="text" class="form-control" id="pwdHintAnswer" maxlength="10" name="pwdHintAnswer">
+				</div>
+		      	<div class="form-group">
 				  <label for="username">이 름:</label>
 				  <input type="text" class="form-control" id="username" maxlength="10" name="username">
 				</div>
 		      	<div class="form-group">
 				  <label for="nickname">별 명:</label>
 				  <div class="form-inline">
-					  <input type="text" class="form-control" id="name" maxlength="10" name="nickname" placeholder="별명은 10자 이내로 입력해주세요." style="width:85%">
+					  <input type="text" class="form-control" id="nickname" maxlength="10" name="nickname" placeholder="별명은 10자 이내로 입력해주세요." style="width:85%">
 					  <input type="button" class="btn" value="별명중복확인" onClick="nickChk()">
 				  </div>
 				</div>

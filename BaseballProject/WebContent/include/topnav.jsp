@@ -51,7 +51,7 @@
         <c:choose>
         	<c:when test="${loginMember == null }">
         		<li><a href="/view/member/regist"><span class="glyphicon glyphicon-user"></span> 회원가입</a></li>
-        		<li><a href="/view/member/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        		<li><a href="/view/member/loginPage"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
         	</c:when>
         	<c:otherwise>
         		<li class="dropdown">

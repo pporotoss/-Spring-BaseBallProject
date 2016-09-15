@@ -18,8 +18,13 @@ public interface MemberDAO {
 	public int insertMember(Member member);
 	public int updateMember(Member member);
 	public int deleteMember(int member_id);
-	public Member loginMember(Member member);
+	public Member loginMember(String id);
 	public List getId();
 	public List getNickname();
 	public int updateMemberLevel(Member member);
+	public String searchUserId(String email);
+	public int searchUserPwd(Map user);
+	public String getPwdHintQuestion(String id);
+	public int saveTempPwd(Map pwdParam);
+	
 }

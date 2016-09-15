@@ -80,13 +80,9 @@ public class MemberDAOMybatis implements MemberDAO{
 	}
 
 	@Override
-	public Member loginMember(Member member) {
+	public Member loginMember(String id) {
 		
-		Member repositoryMember = sqlSessionTemplate.selectOne("Member.login", member);
-		
-		if(repositoryMember == null){	// 해당 아이디가 존재하지 않으면,
-			throw new LoginFailException("아이디 또는 비밀번호를 확인해주세요.");
-		}
+		Member repositoryMember = sqlSessionTemplate.selectOne("Member.login", id);
 		
 		return repositoryMember;
 	}
@@ -119,6 +115,30 @@ public class MemberDAOMybatis implements MemberDAO{
 	public int totalMember() {
 		
 		return sqlSessionTemplate.selectOne("Member.totalMember");
+	}
+
+	@Override
+	public String searchUserId(String email) {
+
+		return sqlSessionTemplate.selectOne("Member.searchUserId", email);
+	}
+
+	@Override
+	public int searchUserPwd(Map user) {
+
+		return sqlSessionTemplate.selectOne("Member.searchUserPwd", user);
+	} 
+
+	@Override
+	public String getPwdHintQuestion(String id) {
+		
+		return sqlSessionTemplate.selectOne("Member.getPwdHintQuestion", id);
+	}
+
+	@Override
+	public int saveTempPwd(Map pwdParam) {
+
+		return sqlSessionTemplate.update("Member.saveTempPwd", pwdParam);
 	}
 
 }

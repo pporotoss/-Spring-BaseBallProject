@@ -231,6 +231,14 @@
 				  <label for="repwd">Password 확인:</label>
 				  <input type="password" class="form-control" id="repwd" maxlength="15" name="repwd" disabled>
 				</div>
+				<div class="form-group">
+				  <label for="pwdHintQuestion">비밀번호 질문:</label>
+				  <input type="text" class="form-control" id="pwdHintQuestion" maxlength="20" name="pwdHintQuestion" value="${memberDetail.pwdHintQuestion }">
+				</div>
+		      	<div class="form-group">
+				  <label for="pwdHintQuestion">비밀번호 답:</label>
+				  <input type="text" class="form-control" id="pwdHintQuestion" maxlength="20" name="pwdHintAnswer" value="${memberDetail.pwdHintAnswer }">
+				</div>
 		      	<div class="form-group">
 				  <label for="username">이 름:</label>
 				  <input type="text" class="form-control" id="username" maxlength="10" name="username" value="${memberDetail.username }">
