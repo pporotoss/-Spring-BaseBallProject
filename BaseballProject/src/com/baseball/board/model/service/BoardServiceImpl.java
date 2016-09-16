@@ -70,34 +70,45 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public void regist(Board board) {
-		boardDAO.insert(board);
+		
+		boardDAO.insert(board);	// 글 등록.
+		
 		if(board.getBoard_id() == 0){
 			throw new RegistFailException("등록 실패!!");
 		}
-		boardDAO.insertKey(board.getBoard_id());
+		boardDAO.setFamily(board.getBoard_id());	//	등록 글 family 세팅. 
 	}
 	
 	// 답글 삽입
 	@Override
 	public void replyResist(Board board) {
-		int result = -1;
 		
-		// 원글과 동일한 depth의 답글의 갯수 얻어오기!!
-		int depthCount = boardDAO.countDepth(board);  
+		int depthCount = boardDAO.countDepth(board); // 원글과 동일한 depth의 답글의 갯수 얻어오기!!  
 
-		if(depthCount > 1){	// 원글과 동일한 단계의 depth가 있으면,
-
-			int minDepthRank = boardDAO.minDepthRank(board);	// 원글과 동일한 depth들 중에서 원글 바로 다음의 rank 가져오기. 
-			board.setRank(minDepthRank-1);	// 원글과 동일한 depth들 중에서 원글 바로 다음의 rank인 글부터 rank를 +1 해주기 위해 rank 세팅.
-																// 뒤에서 삽입할때 얻어온 rank +1을 해주기때문에 원래의 얻어온 rank로 세팅 안해도 된다.
-			boardDAO.rankUpdate(board);
-		}else{
-			int dPlusOneMaxRank = boardDAO.dPlusOneMaxRank(board);
-			board.setRank(dPlusOneMaxRank);
+		if(depthCount > 1){	// 원글과 동일한 단계(depth)의 글이 있으면,
 			
+			// 원글과 동일 단계의 글들을 모두 rank +1 시키기. 
+			int minDepthRank = boardDAO.minDepthRank(board);	// 원글과 같은 단계(depth)의 답글들 중에서 원글 바로 다음의 rank 가져오기.
+			board.setRank(minDepthRank);
+			boardDAO.rankUpdate(board);		// 얻어온 rank부터 모두 rank+1 시키기.
+			
+		}else{
+			
+			int dPlusOneMaxRank = boardDAO.dPlusOneMaxRank(board);	// 삽입하려는 답글과 같은 단계(원글 한단계 밑)의 답글 중에서 제일 높은 rank값 얻기.
+			if(dPlusOneMaxRank != 0){	// 원글 한단계 밑 답글이 존재하면,
+				board.setRank(dPlusOneMaxRank+1);
+				boardDAO.rankUpdate(board);		// 얻어온 rank+1부터 모두 rank+1 시키기.
+				
+			}else{
+				int maxRank = boardDAO.maxRank(board.getFamily());	// 원글과 같은 소속의 답글 중에 가장마지막 글의 rank값 얻기.
+				if(maxRank != 0){	// 원글과 같은 소속의 답글이 존재하면,
+					board.setRank(maxRank+1);	// 마지막 글 다음으로 입력.
+				}
+			}
+						
 		}
 		
-		boardDAO.replyInsert(board);
+		boardDAO.replyInsert(board);	// 답글 삽입하기.
 		
 	}
 

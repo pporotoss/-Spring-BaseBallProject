@@ -44,24 +44,19 @@ public class  BoardDAOMybatis implements BoardDAO{
 	@Override
 	public int insert(Board board) {
 		
-		int result = sqlSessionTemplate.insert("Board.insert", board);
-		return 0;
+		return sqlSessionTemplate.insert("Board.insert", board);
 	}
 
 	@Override
 	public int update(Board board) {
 		
-		sqlSessionTemplate.update("Board.update", board);
-		
-		return 0;
+		return sqlSessionTemplate.update("Board.update", board);
 	}
 
 	@Override
 	public int delete(int board_id) {
 		
-		sqlSessionTemplate.delete("Board.delete", board_id);
-		
-		return 0;
+		return sqlSessionTemplate.delete("Board.delete", board_id);
 	}
 	
 	@Override
@@ -78,9 +73,9 @@ public class  BoardDAOMybatis implements BoardDAO{
 	}
 
 	@Override
-	public void insertKey(int board_id) {
+	public void setFamily(int board_id) {
 		
-		sqlSessionTemplate.update("Board.insertKey", board_id);
+		sqlSessionTemplate.update("Board.setFamily", board_id);
 	}
 
 	@Override
@@ -98,7 +93,15 @@ public class  BoardDAOMybatis implements BoardDAO{
 	@Override
 	public int maxRank(int family) {
 		
-		return sqlSessionTemplate.selectOne("Board.maxRank", family);
+		int result = 0;
+
+		Object obj = sqlSessionTemplate.selectOne("Board.maxRank", family); 
+				
+		if(obj != null){
+			result = (int)obj;
+		}
+		
+		return result;
 	}
 	
 	@Override
@@ -118,7 +121,13 @@ public class  BoardDAOMybatis implements BoardDAO{
 	@Override
 	public int dPlusOneMaxRank(Board board) {
 		
-		int result = sqlSessionTemplate.selectOne("Board.dPlusOneMaxRank", board);
+		int result = 0;
+		
+		Object obj = sqlSessionTemplate.selectOne("Board.dPlusOneMaxRank", board);
+		
+		if(obj != null){
+			result = (int)obj;
+		}
 		
 		return result;
 	}

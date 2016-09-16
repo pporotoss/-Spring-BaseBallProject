@@ -58,7 +58,7 @@ public class BoardViewController {
 		
 		boardService.regist(board);
 		
-		return "redirect:/view/board";
+		return "redirect:/view/board/"+board.getBoard_id();	// 상세페이지 이동.
 	}
 	
 	// 글 등록페이지로 이동

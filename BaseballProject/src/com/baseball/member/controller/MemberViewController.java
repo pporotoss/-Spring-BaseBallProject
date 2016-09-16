@@ -59,18 +59,21 @@ public class MemberViewController {
 		}
 		String referer = request.getHeader("Referer"); // 헤더의 referer 이용해서 이전에 보던 페이지 주소 얻어오기!!
 		
-		String[] refererArray = referer.split("/");
-		
-		if(refererArray.length <= 3){	// 메인페이지면,
-			referer = "/";
-		}else{
-			StringBuffer refererBuffer = new StringBuffer();
-			
-			for(int i = 3; i < refererArray.length; i++){
-				refererBuffer.append("/");
-				refererBuffer.append(refererArray[i]);
+		if(referer != null){
+			String[] refererArray = referer.split("/");
+			if(refererArray.length <= 3){	// 메인페이지면,
+				referer = "/";
+			}else{
+				StringBuffer refererBuffer = new StringBuffer();
+				
+				for(int i = 3; i < refererArray.length; i++){
+					refererBuffer.append("/");
+					refererBuffer.append(refererArray[i]);
+				}
+				referer = refererBuffer.toString();
 			}
-			referer = refererBuffer.toString();
+		}else{
+			referer = "/";
 		}
 		
 		HttpSession session = request.getSession();	

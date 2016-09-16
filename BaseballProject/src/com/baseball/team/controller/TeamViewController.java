@@ -28,7 +28,6 @@ public class TeamViewController {
 		ArrayList<String[]> rgt;
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-		//SimpleDateFormat week = new SimpleDateFormat("EEE");
 		
 		int gap = 0;
 		if(day.equals("yesterday")){

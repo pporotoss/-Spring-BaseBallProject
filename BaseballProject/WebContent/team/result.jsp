@@ -16,7 +16,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
@@ -52,9 +54,45 @@
     }
   </style>
   <script>
-  	function getResult(day){
-		location.href="/view/team/result/"+day;
+  	function getResult(){
+  		
+  		var param = $("#datePicker").val();
+  		
+  		if(param == ""){
+  			alert("경기 날짜를 선택해 주세요.");
+  			return;
+  		}
+  			console.log(param);// 넘어가는 파라미터 가공 필요. "/" 제외해야 함.
+  		
+  		return;
+		location.href="/view/team/result/"+param;
   	}
+  	/* 달력 설정 */
+  	$.datepicker.setDefaults({
+        dateFormat: 'yy/mm/dd',
+        prevText: '이전 달',
+        nextText: '다음 달',
+        monthNames: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        monthNamesShort: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+        dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+        dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+        showMonthAfterYear: true,
+        showButtonPanel: true,
+        changeMonth: true,
+      	changeYear: true,
+        autoSize: true,
+        showOn: "button",
+        buttonImage: "/images/team/calendar.png",
+        buttonImageOnly: true,
+        buttonText: "날짜 선택"
+    });
+
+    $(function() {
+        $("#datePicker").datepicker();
+    });
+  	
+  	
   </script>
 </head>
 <body>
@@ -68,11 +106,12 @@
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-10 text-left"> 
       <h1 align="center"><%=today %> 경기</h1>
-      <input type="hidden" value="<%=today%>">
+	    <div class="form-group form-inline" align="center">
+	  		<label for="datePicker">날짜선택 : </label>
+	  		<input type="text" class="form-control" id="datePicker" disabled><br>
+      		<input class="btn btn-warning" type="button" value="경기결과 보기" onClick="getResult()">
+  	  	</div>
       	<div class="form-inline" align="center">
-      		<input class="btn btn-warning" type="button" value="어제" onClick="getResult('yesterday')">
-      		<input class="btn btn-success" type="button" value="오늘" onClick="getResult('today')">
-      		<input class="btn btn-warning" type="button" value="내일" onClick="getResult('tomorrow')">
       	</div>
 	     <%if(states != null){ %>
 		     <table class="table table-bordered table-hover table-responsive">

@@ -78,7 +78,7 @@
 	      		<input type="hidden" value="${board.rank}" name="rank">
 			    <div class="form-group">
 			    	<label for="writer" class="control-label">작성자 : </label>
-		      		<input type="text" class="form-control" id="writer" value="${loginMember.nickname}%>" readonly>
+		      		<input type="text" class="form-control" id="writer" value="${loginMember.nickname}" readonly>
 				</div>
 			    <div class="form-group">
 				    <label for="title" class="control-label">제 목 :</label>

@@ -187,7 +187,7 @@
   	
   	
   	function goLogin() {
-  		location.href="/view/member/login";
+  		location.href="/view/member/loginPage";
   	}
   	
  	// 이메일 양식확인 메서드

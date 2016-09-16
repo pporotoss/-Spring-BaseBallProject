@@ -50,7 +50,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/board/write"/>
 			<mvc:mapping path="/board/*/comment/*"/>
-			<mvc:mapping path="/board/reply"/>
+			<mvc:mapping path="/board/reply/*"/>
 			<mvc:mapping path="/admin/*"/>
 			<mvc:mapping path="/member/activityList/*"/>
 			<mvc:mapping path="/member/myinfo/*"/>

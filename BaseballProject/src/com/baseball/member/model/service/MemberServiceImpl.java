@@ -253,7 +253,8 @@ public class MemberServiceImpl implements MemberService{
 			referer = (String)session.getAttribute("referer");	 // 세션에 담아놓은 로그인 이전에 보던 페이지 주소 얻어오기!!
 			session.removeAttribute("referer"); // 세션에서 페이지주소 제거!!
 			
-			if(referer.equals("/view/member/find_user")){	// 아이디 찾기해서 로그인했으면,
+			
+			if(referer == null || referer.equals("/view/member/find_user")){	// 아이디 찾기해서 로그인했으면,
 				referer = "/";	// 메인으로 이동.
 			}
 		}// if result

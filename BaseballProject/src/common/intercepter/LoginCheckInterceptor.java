@@ -22,7 +22,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 				return true;	// 리턴값이 true이면 메서드 실행.
 			}
 		}
-		response.sendRedirect(request.getContextPath()+"/member/login.jsp");	// 서버에 등록된 Context 경로/admin/index.jsp로 이동.
+		response.sendRedirect("/view/member/loginPage");	// 로그인 페이지로 이동.
 		
 		return false; // 리턴값이 false이면 메서드 실행 안함.
 	}

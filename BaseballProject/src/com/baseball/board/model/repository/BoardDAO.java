@@ -20,7 +20,7 @@ public interface BoardDAO {
 	public int delete(int board_id);
 	public void deleteByMember(int member_id);	// 멤버아이디로 삭제하기.
 	public int countFamily(Board board);
-	public void insertKey(int board_id);
+	public void setFamily(int board_id);
 	public int rankUpdate(Board board);	// 답글삽입시 나머지 답글들 랭크 하나씩 증가
 	public void replyInsert(Board board);	// 답글 삽입하기!!
 	public int maxRank(int family);	// 원글소속 글 중에서 가장큰 랭크 얻어오기!!
