@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -34,13 +35,14 @@
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">야구<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
-              <li><a href="/view/team/result/today">경기 결과</a></li>
+              <jsp:useBean id="toDay" class="java.util.Date"/>
+              <li><a href="/view/team/result/<fmt:formatDate value="${toDay }" pattern="yyyyMMdd"/>">경기 결과</a></li>
               <li class="divider"></li>
-              <li><a href="/view/team/ranking">팀 순위</a></li>
+              <li><a href="/view/team/teamRanking">팀 순위</a></li>
               <li class="divider"></li>
-              <li><a href="/view/team/pitcher">투수 순위</a></li>
+              <li><a href="/view/team/pitcherRanking">투수 순위</a></li>
               <li class="divider"></li>
-              <li><a href="/view/team/hitter">타자 순위</a></li>
+              <li><a href="/view/team/hitterRanking">타자 순위</a></li>
             </ul>
           </li>
 	      <c:if test="${loginMember.rank == 1}">

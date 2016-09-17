@@ -178,19 +178,11 @@ public class MemberServiceImpl implements MemberService{
 		
 		for(int i = 0; i < member_id.length; i++){
 			
-			boardDAO.deleteByMember(member_id[i]); // 해당 회원 작성글 삭제
-			
 			List<PhotoBoard> photoBoardList = photoBoardDAO.userPhotoBoardListAll(member_id[i]);
 			for(int pp = 0; pp < photoBoardList.size(); pp++){
 				PhotoBoard photoBoard = photoBoardList.get(pp);
 				photoBoardService.photoDelete(request, photoBoard);	// 해당 회원이 올린 사진 다 지우기.
 			}
-			
-			photoBoardDAO.photoDeleteByMember_id(member_id[i]);
-			
-			commentDAO.deleteByMember(member_id[i]);
-			
-			photoCommentDAO.photoCommentDeleteByMember_id(member_id[i]);
 			
 			successCount += memberDAO.deleteMember(member_id[i]); // 해당 회원 정보 삭제
 		}
@@ -206,19 +198,13 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int deleteMember(HttpServletRequest request, int member_id) {
 		
-		boardDAO.deleteByMember(member_id); // 해당 회원 작성글 삭제
+		//boardDAO.deleteByMember(member_id); // 해당 회원 작성글 삭제
 		
-		List<PhotoBoard> photoBoardList = photoBoardDAO.userPhotoBoardListAll(member_id);
+		List<PhotoBoard> photoBoardList = photoBoardDAO.userPhotoBoardListAll(member_id);	// 해당 회원이 올린 사진 리스트 불러오기.
 		for(int pp = 0; pp < photoBoardList.size(); pp++){
 			PhotoBoard photoBoard = photoBoardList.get(pp);
 			photoBoardService.photoDelete(request, photoBoard);	// 해당 회원이 올린 사진 다 지우기.
 		}
-		
-		photoBoardDAO.photoDeleteByMember_id(member_id);
-		
-		commentDAO.deleteByMember(member_id);	// 해당 회원 댓글 삭제
-		
-		photoCommentDAO.photoCommentDeleteByMember_id(member_id);
 		
 		return memberDAO.deleteMember(member_id); // 해당 회원 정보 삭제
 	}
@@ -230,34 +216,35 @@ public class MemberServiceImpl implements MemberService{
 		String referer = null;
 		Member loginMember = memberDAO.loginMember(member.getId());
 		
-		boolean result = passwordEncoder.matches(member.getPwd(), loginMember.getPwd());	// 패스워드 일치여부 확인.
+		if(loginMember != null) {
+			boolean result = passwordEncoder.matches(member.getPwd(), loginMember.getPwd());	// 패스워드 일치여부 확인.
 		
-		if(result){	// 비밀번호가 일치하면,
-			
-			session.setAttribute("loginMember", loginMember); // 로그인한 멤버 정보 세션에 담기!!
-			
-			Cookie rememberCoookie = new Cookie("REMEMBER", loginMember.getId());
-			rememberCoookie.setPath("/");
-			
-			if(rememberId.equals("on")){		// 아이디 저장하기 선택했으면,
+			if(result){	// 비밀번호가 일치하면,
 				
-				rememberCoookie.setMaxAge(60*60*24*30); // 쿠키에 30일 동안 아이디 저장하기.
-			
-			}else{
+				session.setAttribute("loginMember", loginMember); // 로그인한 멤버 정보 세션에 담기!!
 				
-				rememberCoookie.setMaxAge(0);	// 아이디 저장하기 선택 안했으면, 쿠키에 저장된 아이디 삭제하기.
+				Cookie rememberCoookie = new Cookie("REMEMBER", loginMember.getId());
+				rememberCoookie.setPath("/");
 				
-			}
-			response.addCookie(rememberCoookie);	// 응답객체에 생성한 쿠키 담기.
-			
-			referer = (String)session.getAttribute("referer");	 // 세션에 담아놓은 로그인 이전에 보던 페이지 주소 얻어오기!!
-			session.removeAttribute("referer"); // 세션에서 페이지주소 제거!!
-			
-			
-			if(referer == null || referer.equals("/view/member/find_user")){	// 아이디 찾기해서 로그인했으면,
-				referer = "/";	// 메인으로 이동.
-			}
-		}// if result
+				if(rememberId.equals("on")){		// 아이디 저장하기 선택했으면,
+					
+					rememberCoookie.setMaxAge(60*60*24*30); // 쿠키에 30일 동안 아이디 저장하기.
+				
+				}else{
+					
+					rememberCoookie.setMaxAge(0);	// 아이디 저장하기 선택 안했으면, 쿠키에 저장된 아이디 삭제하기.
+					
+				}
+				response.addCookie(rememberCoookie);	// 응답객체에 생성한 쿠키 담기.
+				
+				referer = (String)session.getAttribute("referer");	 // 세션에 담아놓은 로그인 이전에 보던 페이지 주소 얻어오기!!
+				session.removeAttribute("referer"); // 세션에서 페이지주소 제거!!
+				
+				if(referer == null || referer.equals("/view/member/find_user")){	// 아이디 찾기해서 로그인했으면,
+					referer = "/";	// 메인으로 이동.
+				}
+			}// if result
+		}
 		
 		return referer;
 	}

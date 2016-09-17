@@ -125,14 +125,14 @@ public class MemberViewController {
 	
 	
 	// È¸¿ø Å»Åð
-	@RequestMapping(value="/myinfo/{member_id}", method=RequestMethod.DELETE)
+	/*@RequestMapping(value="/myinfo/{member_id}", method=RequestMethod.DELETE)
 	public String deleteMember(HttpServletRequest request, @PathVariable("member_id") int member_id){
 		
 		memberService.deleteMember(request, member_id);
 		request.getSession().invalidate();
 		
 		return "redirect:/";
-	}
+	}*/
 	
 	/*  È°µ¿³»¿ª  */
 

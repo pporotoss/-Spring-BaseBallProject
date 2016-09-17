@@ -129,16 +129,34 @@
 		
 	} // update()
 	
-	function deleteMemer(){
+	function deleteMemer(){	// 회원탈퇴
 		
 		if(!confirm("탈퇴하시겠습니까?")){
 			return;
 		}
 		
-		updateForm._method.value="DELETE";
+	
+		$.ajax({
+	  		type:"DELETE",	// 요청방식
+	  		url:"/api/member/myinfo/${memberDetail.member_id}",
+	  		headers:{	// 헤더값 세팅.
+	  		"Content-Type":"application/json",
+	  		"X-HTTP-Method-Override":"DELETE"
+	  		 },
+  			dataType:"text",
+  			success:function(data){
+  			   if(data != 0){
+  				   alert("탈퇴되었습니다.");
+  				   location.href="/";
+  			   }else{
+  				   alert("실패하였습니다.");
+  			   }
+	       }
+		});
+		/* updateForm._method.value="DELETE";
 		updateForm.action="/view/member/myinfo/${memberDetail.member_id}";
 		updateForm.method="POST";
-		updateForm.submit();
+		updateForm.submit(); */
 	}
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////	

@@ -2,6 +2,7 @@
 <%@page import="org.jsoup.select.Elements"%>
 <%@page import="org.jsoup.nodes.Element"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String today = (String)request.getAttribute("today");
 	Elements states = (Elements)request.getAttribute("states");
@@ -62,10 +63,8 @@
   			alert("경기 날짜를 선택해 주세요.");
   			return;
   		}
-  			console.log(param);// 넘어가는 파라미터 가공 필요. "/" 제외해야 함.
   		
-  		return;
-		location.href="/view/team/result/"+param;
+		location.href="/view/team/result/"+param.replace(/\//gi,"");	// "/" 표시 전부 없애고 이동.
   	}
   	/* 달력 설정 */
   	$.datepicker.setDefaults({
@@ -105,25 +104,22 @@
     </div>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
     <div class="col-sm-10 text-left"> 
-      <h1 align="center"><%=today %> 경기</h1>
+      <h1 align="center">${day } 경기 결과</h1>
 	    <div class="form-group form-inline" align="center">
-	  		<label for="datePicker">날짜선택 : </label>
-	  		<input type="text" class="form-control" id="datePicker" disabled><br>
-      		<input class="btn btn-warning" type="button" value="경기결과 보기" onClick="getResult()">
+	  		<label for="datePicker">조회할 날짜 : </label>
+	  		<input type="text" class="form-control" id="datePicker" disabled value="${day }"><br>
+      		<input class="btn btn-warning" type="button" value="경기결과 조회" onClick="getResult()">
   	  	</div>
       	<div class="form-inline" align="center">
       	</div>
 	     <%if(states != null){ %>
 		     <table class="table table-bordered table-hover table-responsive">
 			    <%for(int i = 0; i < states.size(); i++){ %>
-			    <%
-			    	Element state = states.get(i);
-			    	String[] lft_team = lft.get(i);
-			    	String[] rgt_team = rgt.get(i);
-			    %>
-			    <thead>
-			    </thead>
-			    <tbody>
+				    <%
+				    	Element state = states.get(i);
+				    	String[] lft_team = lft.get(i);
+				    	String[] rgt_team = rgt.get(i);
+				    %>
 				    <!-- 상태 -->
 				    <tr align="center">
 				      <td colspan="2" ><%=state.text() %></td>
@@ -136,10 +132,11 @@
 					    </tr>
 				    <%} %>
 				<%} %>
-				</tbody>
 			</table>
 		<%}else{ %>
-		<h1>경기가 없는 날 입니다.</h1>
+			<br>
+			<br>
+			<h1 style="text-align:center">오늘은 경기가 없는 날 입니다.</h1>
 		<%} %>
 <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->    
 	    <div class="col-sm-1 sidenav" style="background-color:white">

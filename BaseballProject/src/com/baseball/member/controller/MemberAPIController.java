@@ -1,6 +1,7 @@
 package com.baseball.member.controller;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -37,6 +38,16 @@ public class MemberAPIController {
 		}
 		
 		return isSuccess;
+	}
+	
+	// È¸¿øÅ»Åð
+	@RequestMapping(value="/myinfo/{member_id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Integer> deleteMember(HttpServletRequest request, @PathVariable("member_id") int member_id){
+		
+		int result = memberService.deleteMember(request, member_id);
+		request.getSession().invalidate();
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	// ·Î±×ÀÎÇÏ±â!!
