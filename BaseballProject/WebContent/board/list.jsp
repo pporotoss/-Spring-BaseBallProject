@@ -112,14 +112,14 @@
 		     <c:forEach items="${boardDetailList }" var="boardDetail">
 		     	<tr>
 					<td style="text-align:center">${boardDetail.board_id}</td>
-					<td width="5%"><!-- 빈칸 --></td>
+					<td width="5%"><%--  빈칸  --%></td>
 					<td>
-						<c:if test="${boardDetail.ishidden.equals(\"no\") }"><!-- 비밀글이 아니면, -->
+						<c:if test="${boardDetail.ishidden.equals(\"no\") }"><%-- 비밀글이 아니면, --%>
 							<c:choose>
-								<c:when test="${boardDetail.depth == 0}"><!-- 원글이면 -->
+								<c:when test="${boardDetail.depth == 0}"><%-- 원글이면 --%>
 									&nbsp;	
 								</c:when>
-								<c:otherwise><!-- 답글이면  -->
+								<c:otherwise><%-- 답글이면  --%>
 									<c:forEach begin="0" end="${boardDetail.depth }">
 										&nbsp;&nbsp;&nbsp;
 									</c:forEach>
@@ -128,14 +128,14 @@
 							</c:choose>
 							<a href="${detailUrl }${boardDetail.board_id}${detailUrl1}${detailUrl2}">${boardDetail.title }</a>&nbsp;[${boardDetail.count }]
 						</c:if>
-						<c:if test="${boardDetail.ishidden.equals(\"yes\") }"><!-- 비밀글이면  -->
+						<c:if test="${boardDetail.ishidden.equals(\"yes\") }"><%-- 비밀글이면  --%>
 							<c:choose>
-								<c:when test="${boardDetail.member_id == loginMember.member_id || loginMember.rank == 1}"><!-- 작성자이거나 관리자이면, -->
+								<c:when test="${boardDetail.member_id == loginMember.member_id || loginMember.rank == 1}"><%-- 작성자이거나 관리자이면, --%>
 									<c:choose>
-										<c:when test="${boardDetail.depth == 0}"><!-- 비밀글 원글이면 -->
+										<c:when test="${boardDetail.depth == 0}"><%-- 비밀글 원글이면 --%>
 											&nbsp;<img src="/images/board/lock.png">
 										</c:when>
-										<c:otherwise><!-- 비밀글 답글이면  -->
+										<c:otherwise><%-- 비밀글 답글이면  --%>
 											<c:forEach begin="0" end="${boardDetail.depth }">
 												&nbsp;&nbsp;&nbsp;
 											</c:forEach>
@@ -144,12 +144,12 @@
 									</c:choose>
 									<a href="${detailUrl }${boardDetail.board_id}${detailUrl1}${detailUrl2}">${boardDetail.title }</a>&nbsp;[${boardDetail.count }]
 								</c:when>
-								<c:otherwise><!--  작성자나 관리자가 아니면,  -->
+								<c:otherwise><%--  작성자나 관리자가 아니면,  --%>
 									<c:choose>
-										<c:when test="${boardDetail.depth == 0}"><!-- 비밀글 원글이면 -->
+										<c:when test="${boardDetail.depth == 0}"><%-- 비밀글 원글이면 --%>
 											&nbsp;<img src="/images/board/lock.png">
 										</c:when>
-										<c:otherwise><!-- 비밀글 답글이면  -->
+										<c:otherwise><%-- 비밀글 답글이면  --%>
 											<c:forEach begin="0" end="${boardDetail.depth }">
 												&nbsp;&nbsp;&nbsp;
 											</c:forEach>

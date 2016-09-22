@@ -71,7 +71,7 @@
 					<td style="text-align:center">${notice.notice_id }</td>
 					<td width="5%"><!-- 빈칸 --></td>
 					<td><a href="/view/notice/${notice.notice_id }">${notice.title }</a></td>
-					<td>&nbsp;<img src="/images/member/관리자.png">${notice.writer }</td>
+					<td>&nbsp;<img src="/images/member/운영자.png">${notice.writer }</td>
 					<td>&nbsp;${notice.regdate }</td>
 					<td style="text-align:center">${notice.hit }</td>
 				</tr>
