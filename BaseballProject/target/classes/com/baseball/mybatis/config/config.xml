@@ -4,6 +4,10 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	
+	<settings>
+		<setting name="callSettersOnNulls" value="true"/><!-- null값 불러오기 가능. 3.3.2 이후부터 가능. -->
+	</settings>
+	
 	<typeAliases>
 		<typeAlias type="com.baseball.board.model.domain.Board" alias="Board"/>
 		<typeAlias type="com.baseball.board.model.domain.BoardDetail" alias="BoardDetail"/>

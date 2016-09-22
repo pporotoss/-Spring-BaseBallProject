@@ -43,6 +43,18 @@
   </style>
   
   <script>
+  	$(document).ready(function(){
+  		$("#userId").keyup(function(event){
+  			if(event.which == 13){		// 엔터키 눌렀다가 띄면,
+  				login();
+  			}
+  		});
+  		$("#pwd").keyup(function(event){
+  			if(event.which == 13){		// 엔터키 눌렀다가 띄면,
+  				login();
+  			}
+  		});
+  	});
 
    	 function login(){
 		  		

@@ -31,7 +31,7 @@
 	</context:component-scan>
 	
 	<!--  mybatis  -->
-	<jee:jndi-lookup jndi-name="jdbc/androidproject" id="dataSource" resource-ref="true"/>
+	<jee:jndi-lookup jndi-name="jdbc/baseballproject" id="dataSource" resource-ref="true"/>
 	
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean"
 		p:dataSource-ref="dataSource"

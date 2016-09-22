@@ -53,9 +53,9 @@
 	function regist(){
 		
 		// id 글자수 확인
-		if(registForm.id.value.length < 4 || registForm.id.value.length > 15){
+		if($("#usr").val().trim().length < 4 || $("#usr").val().trim().length > 15){
 			alert("ID글자수를 확인해주세요.");
-			registForm.id.focus();
+			$("#usr").focus();
 			return;
 		}
 		
@@ -68,58 +68,72 @@
 		
 		
 		// password 글자수 확인
-		if(registForm.pwd.value.length < 4 || registForm.pwd.value.length > 15){
+		if($("#pwd").val().trim().length < 4 || $("#pwd").val().trim().length > 15){
 			alert("비밀번호 글자수를 확인해주세요.");
-			registForm.pwd.focus();
+			$("#pwd").focus();
 			return;
 		}
 		
 		// password 일치여부 확인
-		if(registForm.pwd.value != registForm.repwd.value){
+		if($("#pwd").val().trim() != $("#repwd").val().trim()){
 			alert("비밀번호가 일치하지 않습니다.");
-			registForm.repwd.focus();
+			 $("#repwd").focus();
+			return;
+		}
+		
+		// 비밀번호 질문 입력 여부 확인.
+		if($("#pwdHintQuestion").val().trim().length < 1 ){
+			alert("비밀번호 질문을 입력해 주세요.");
+			$("#pwdHintQuestion").focus();
+			return;
+		}
+		
+		// 비밀번호 답 입력 여부 확인.
+		if($("#pwdHintAnswer").val().trim().length < 1 ){
+			alert("비밀번호 답을 입력해 주세요.");
+			$("#pwdHintAnswer").focus();
 			return;
 		}
 		
 		// 이름 공백여부확인
-		if(registForm.username.value.length < 1){
+		if($("#username").val().trim().length < 1){
 			alert("이름을 입력해주세요.");
-			registForm.username.focus();
+			$("#username").focus();
 			return;
 		}
 		
 		// 별명 입력여부 확인
-		if(registForm.nickname.value.length < 1){
+		if($("#nickname").val().trim().length < 1){
 			alert("별명을 입력해주세요.");
-			registForm.nickname.focus();
+			$("#nickname").focus();
 			return;
 		}
 		
 		// 별명 중복검사여부 확인
 		if($("#dupleNick").val() == "true"){
 			alert("별명 중복검사를 해주세요.");
-			registForm.nickname.focus();
+			$("#nickname").focus();
 			return;
 		}
 		
 		// 이메일 입력확인
-		if(registForm.email.value.length < 1){
+		if($("#email").val().trim().length < 1){
 			alert("이메일을 입력해주세요.");
-			registForm.email.focus();
+			$("#email").focus();
 			return;
 		}
 		
 		// 이메일 양식확인
-		if(!isEmail(registForm.email.value)){
+		if(!isEmail($("#email").val().trim())){
 			alert("올바른 이메일을 입력해 주세요.");
-			registForm.email.focus();
+			$("#email").focus();
 			return;
 		}
 		
 		// 팀 선택여부 확인
-		if(registForm.team_id.value == 0){
+		if($("#team_id").val() == 0){
 			alert("응원하는 팀을 선택해 주세요.");
-			registForm.team_id.focus();
+			$("#team_id").focus();
 			return;
 		}
 		
@@ -133,13 +147,13 @@
 	  		 },
 	  			dataType:"text",
 	  			data:JSON.stringify({
-	  					"id":$("#usr").val(),
-						"pwd":$("#pwd").val(),
-						"pwdHintQuestion":$("#pwdHintQuestion").val(),
-						"pwdHintAnswer":$("#pwdHintAnswer").val(),
-						"username":$("#username").val(),
-						"nickname":$("#nickname").val(),
-						"email":$("#email").val(),
+	  					"id":$("#usr").val().trim(),
+						"pwd":$("#pwd").val().trim(),
+						"pwdHintQuestion":$("#pwdHintQuestion").val().trim(),
+						"pwdHintAnswer":$("#pwdHintAnswer").val().trim(),
+						"username":$("#username").val().trim(),
+						"nickname":$("#nickname").val().trim(),
+						"email":$("#email").val().trim(),
 						"team_id":$("#team_id").val()
 	  			}),
 	  			success:function(data){
@@ -171,30 +185,30 @@
 	function idChk(){
 		
 		// id 글자수 확인
-		if(registForm.id.value.length < 4 || registForm.id.value.length > 15){
+		if($("#usr").val().trim().length < 4 || $("#usr").val().trim().length > 15){
 			alert("ID글자수를 확인해주세요.");
-			registForm.id.focus();
+			$("#usr").focus();
 			return;
 		}
 		
-		$.getJSON("/api/member/chkid/"+registForm.id.value, function(result){
+		$.getJSON("/api/member/chkid/"+$("#usr").val().trim(), function(result){
 			alert(result.msg);
-			$("#dupleID").val(result.result);
+			$("#dupleID").val(result.result);	// 중복 확인 결과를 dupleID에 반영.
 	    });
 	}
 	
 	// 별명 중복 확인
 	function nickChk(){
 		// 별명 입력여부 확인
-		if(registForm.nickname.value.length < 1){
+		if($("#nickname").val().trim().length < 1){
 			alert("별명을 입력해주세요.");
-			registForm.nickname.focus();
+			$("#nickname").focus();
 			return;
 		}
 		
 		$.getJSON("/api/member/chknick/"+registForm.nickname.value, function(result){
 			alert(result.msg);
-			$("#dupleNick").val(result.result);
+			$("#dupleNick").val(result.result);	// 중복 확인 결과를 반영.
 	    });		
 	}
 	

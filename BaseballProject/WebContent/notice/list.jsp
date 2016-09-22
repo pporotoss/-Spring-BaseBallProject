@@ -79,7 +79,7 @@
 			
 	    </tbody>
 	  </table>
-	  	<c:if test="${loginMember.level_id == 4 }">
+	  	<c:if test="${loginMember.rank == 1 }">
 	  		<div align="right">
 		  	<a href="/view/notice/write"><input type="button" value="글쓰기" class="btn btn-info"></a>
 		  </div>

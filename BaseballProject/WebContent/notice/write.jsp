@@ -45,7 +45,7 @@
 	<script>
 		function regist(){
 			// 제목 입력여부 확인
-			if(writeForm.title.value.length < 1){
+			if(writeForm.title.value.trim().length < 1){
 				alert("제목을 입력해주세요.");
 				writeForm.title.focus();
 				return;			

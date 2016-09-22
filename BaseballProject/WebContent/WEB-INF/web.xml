@@ -61,4 +61,6 @@
     <servlet-name>webServlet</servlet-name>
     <url-pattern>/view/*</url-pattern>
   </servlet-mapping>
+  
 </web-app>
+
