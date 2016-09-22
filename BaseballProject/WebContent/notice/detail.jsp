@@ -91,7 +91,7 @@
 				</div>		
 			</form>
 	      	<div class="form-group" align="right">
-	      		<c:if test="${loginMember.level_id == 4 }">
+	      		<c:if test="${loginMember.rank == 1 }">
 	      			<input type="button" class="btn btn-warning" value="수정" onClick="update()">
 		  			<input type="button" class="btn btn-danger" value="삭제" onClick="del()">
 	      		</c:if>
