@@ -42,8 +42,8 @@
       .row.content {height:auto;} 
     }
   </style>
-  <script src="../script/boardComment.js"></script>
-  <script src="../script/commentPaging.js"></script>
+  <script src="/script/boardComment.js"></script>
+  <script src="/script/commentPaging.js"></script>
   <script>
   /* 댓글 목록 불러오기!! */
   function getCommentList(commentPage){
@@ -65,7 +65,10 @@
 			
 			reCreatePaging(commentPager);	// 페이징 새로 만들기. 공통 사용 가능.
 	        
-	    });
+	    })
+   	    .fail(function() {	// 오류나면,
+   			location.href="/error.html"
+   		});
 	}
   
   <c:if test="${loginMember != null }">

@@ -121,7 +121,10 @@
 	   			
 	   			$("#searchDIV").html(content);
    			}
-   	    });
+   	    })
+   	 	.fail(function() {	// 오류나면,
+   			location.href="/error.html"
+   		});
    	}
   	
   	// 비밀번호 질문 불러오기
@@ -142,7 +145,10 @@
    			}else{
    				$("#pwdHintQuestion").val(data);
    			}
-   	    });
+   	    })
+   	 	.fail(function() {	// 오류나면,
+   			location.href="/error.html"
+   		});
 		
   	}// getPwdHintQuestion
   	
@@ -181,8 +187,10 @@
    	   			$("#searchDIV").html(content);
    			}
    			
-   	    });
-  		
+   	    })
+   	    .fail(function() {	// 오류나면,
+   			location.href="/error.html"
+   		});
   	}
   	
   	

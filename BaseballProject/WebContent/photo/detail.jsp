@@ -44,8 +44,8 @@
       .row.content {height:auto;} 
     }
   </style>
-  <script src="../script/photoComment.js"></script>
-  <script src="../script/commentPaging.js"></script>
+  <script src="/script/photoComment.js"></script>
+  <script src="/script/commentPaging.js"></script>
   <script>
 	// 댓글 불러오기
 	function getCommentList(commentPage){
@@ -66,7 +66,10 @@
 			
 			reCreatePaging(commentPager);	// 페이징 새로 만들기.
 	        
-	    });
+	    })
+   	    .fail(function() {	// 오류나면,
+   			location.href="/error.html"
+   		});
 		
 	}
   	

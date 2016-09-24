@@ -165,7 +165,10 @@
 	  				   alert(alert("가입 실패!!"));
 	  			   }
 	       }
-		});
+		})
+   	    .fail(function() {	// 오류나면,
+   			location.href="/error.html"
+   		});
 		
 		
 	}// 폼전송.
@@ -209,7 +212,10 @@
 		$.getJSON("/api/member/chknick/"+registForm.nickname.value, function(result){
 			alert(result.msg);
 			$("#dupleNick").val(result.result);	// 중복 확인 결과를 반영.
-	    });		
+	    })
+   	    .fail(function() {	// 오류나면,
+   			location.href="/error.html"
+   		});
 	}
 	
 </script>

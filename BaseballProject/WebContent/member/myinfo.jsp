@@ -152,11 +152,11 @@
   				   alert("실패하였습니다.");
   			   }
 	       }
-		});
-		/* updateForm._method.value="DELETE";
-		updateForm.action="/view/member/myinfo/${memberDetail.member_id}";
-		updateForm.method="POST";
-		updateForm.submit(); */
+		})
+   	    .fail(function() {	// 오류나면,
+   			location.href="/error.html"
+   		});
+		
 	}
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////	

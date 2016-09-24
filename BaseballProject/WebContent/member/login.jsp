@@ -76,16 +76,18 @@
   			$("#pwd").focus();
   			return;
   		}
-  		
-  		$.get("/api/member/login?id="+param1+"&pwd="+param2+"&rememberId="+param3, function(data){
-  	        
-  			if(data == ""){
-  	        	alert("아이디 또는 비밀번호를 확인해 주세요.");
-  	        }else{
-  	        	location.href=data;
-  	        }
-  			
-  	    });
+  		  		
+  		$.get("/api/member/login",{id:param1, pwd:param2, rememberId:param3})
+  			.done(function(data){	// 성공하면,
+	  			if(data == ""){
+	  	        	alert("아이디 또는 비밀번호를 확인해 주세요.");
+	  	        }else{
+	  	        	location.href=data;	// 아이디 비번 일치하면 이전에 보던 페이지로 이동.
+	  	        }
+  	    	})
+  	    	.fail(function() {	// 오류나면,
+  	    		location.href="/error.html"
+  	    	});
   		
   	}
   	

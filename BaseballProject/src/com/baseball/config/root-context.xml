@@ -20,10 +20,9 @@
 		p:maxUploadSize="1048576"/>
 	
 	<mvc:default-servlet-handler/>
-	<!-- image 등의 정적 자원의 위치 등록!!  -->
-	<mvc:resources location="/images/" mapping="/images/**"/><!--  사진 저장 폴더  -->
-	<mvc:resources location="/script/" mapping="/script/**"/><!--  자바스크립트 파일 폴더  -->
-							<!-- location : 자원의 실제 위치. 폴더이기 때문에 /생략 하면 안된다.   -->
+	<!-- image 등의 정적 자원의 위치 등록!! 등록해야지 맵핑한경로로 접근 가능. 또는 브라우저 캐쉬에 저장할때도 쓴다.-->
+	<mvc:resources location="/images/" mapping="/images/**" cache-period="604800" /><!--  사진 저장 폴더. 캐쉬 일주일간 저장.  -->
+							<!-- location : 자원의 실제 위치 여러곳 등록시 각 폴더 콤마(,)로 구분.. WebContent폴더에 속한 폴더이므로 '/'생략 하면 안된다.   -->
 	
 	<context:component-scan base-package="com.baseball.*">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>

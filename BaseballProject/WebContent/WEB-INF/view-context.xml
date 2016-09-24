@@ -25,6 +25,9 @@
 
 	<mvc:annotation-driven/>
 	
+	<!-- 컨트롤러 공통 예외처리 용 클래스 등록. -->
+	<bean id="commonExceptionHandler" class="common.exception.CommonExceptionHandler" />
+	
 	<!--  트랜잭션 처리는 컨트롤러를 읽어들이는 곳에서 해야 한다.  -->
 	
 	<!-- TranSactionManager 설정 -->
